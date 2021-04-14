@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_content %}
+<title>@{{ request.user.username }} | Actualizar Perfil</title>
+
+{% endblock %}
+
+{% block container %}
+
+<div class="container">
+
+    <div class="row justify-content-md-center">
+        <div class="col-6 p-4" id="profile-box">
+
+            <!-- <form action="{% url 'perfil-edit'  %}" method="POST" enctype="multipart/form-data"> -->
+            <form>
+                {% csrf_token %}
+
+                <div class="media">
+                    {% if perfil.foto %}
+                        <img src="{{ perfil.foto.url }}" 
+                             class="rounded-circle" 
+                             height="50"
+                             width="50" />
+                    {% else%}
+                        <img src="{% static 'img/default-profile.png' %}" 
+                             class="rounded-circle" 
+                             height="50"
+                             width="50" />
+                    {% endif %}
+
+                    <div class="media-body">
+                        <h5 class="ml-4">@{{ user.username }} | {{ user.get_full_name }}</h5>
+                        <!-- <p class="ml-4"><input type="file" name="picture"></p> -->
+                    </div>
+                </div>
+                <div style="padding-left: 75px">
+	                <p>
+                        <i class="fa fa-id-card"></i> {{perfil.usuario.username}}
+                        <i class="fa fa-address-book"></i>  {{perfil.legajo|stringformat:"i"}}
+                        <hr>
+                        <i class="fa fa-industry"></i> {{perfil.get_sede_display}}
+                        <br/>
+                        <i class="fa fa-building"></i> {{perfil.dependencia}}
+                        <br/>
+                        <i class="fa fa-hard-hat"></i> {{perfil.cargo}}
+                        <br/>
+                        <i class="fa fa-calendar-alt"></i>  {{perfil.fec_vinculacion|date:'d/m/Y'}} Fecha vinculación Función Pública
+	                	<hr>
+		                <i class="fa fa-envelope"></i> {{perfil.usuario.email}} 
+		                <i class="fa fa-phone"></i>  {{perfil.telefono}}
+                        <hr>
+                        <i class="fas fa-flag"></i> {{perfil.nacionalidad}}
+                        <hr>
+                        <i class="fa fa-birthday-cake"></i> {{perfil.fec_nacimiento|date:'d/m/Y'}}
+                        <i class="fa fa-venus-mars"></i> {{ perfil.get_genero_display }}
+                        <i class="fas fa-church"></i> {{ perfil.get_estado_civil_display }}
+                        <hr>
+                        
+                        <i class="fa fa-map-marker"></i> {{perfil.direccion}}
+                        <br>
+                            {{perfil.departamento}} -
+                            {{perfil.ciudad}}
+                        <br/>	                
+		                
+	                </p>
+                    <hr>
+                        {% if perfil.documento_identidad %}
+                        <p>Documento de Identidad: <a href="{{ perfil.documento_identidad.url }}">{{ perfil.documento_identidad.url }}</a></p>
+                        {% endif %}
+	            </div>
+               <!--  <button type="submit" class="btn btn-primary btn-block mt-5">Editar Perfil</button> -->
+               <a id="btnEditar" class="btn btn-outline-secondary btn-sm btn-block mt-5" href="{% url 'perfil-edit' %}">Editar Perfil</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

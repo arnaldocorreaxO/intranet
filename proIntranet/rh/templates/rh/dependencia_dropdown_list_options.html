@@ -1,0 +1,4 @@
+<!-- <option value="">---------</option> -->
+{% for dep in dependencias %}
+	<option value="{{ dep.pk }}">{{ dep.denominacion }}</option>
+{% endfor %}

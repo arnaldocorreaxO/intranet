@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+
+{% block head_content %}
+	<title>Dependencias</title>
+		<style type="text/css">
+			.th-accion{
+		    width: 15%;
+		}
+		</style>
+
+{% endblock%}
+
+{% load static %}
+{% block container %}
+
+		
+		 	
+
+			<div class="col-10" style="padding-left: 150px; padding-bottom: 5px;">
+
+			<div class="row" style="padding-bottom: 5px;">
+				{% if perms.rh.add_dependencia %}
+					<div id="btnPublicar">	
+						<form action="{% url 'dependencia-new' %}">
+							<button type="submit" class="btn btn-outline-primary btn-sm">
+								<i class="fas fa-plus"></i> Agregar
+							</button>
+						</form>
+					</div>
+				{% endif %}	
+			</div>	
+
+			<div class="row">
+				<div class="table table-responsive">
+			 		<!-- <div style="padding-left: 50px; padding-bottom: 5px;"> -->
+						<table id="dataTable1" class="table table-bordered table-striped table-hover table-sm" cellspacing="0" cellpadding="0" style="font-size:14px">
+							<div class="card card-primary">
+								<div class="card-header">
+									<h6 class="card-title">Dependencias</h6>
+
+								</div>
+							</div>
+							<thead>
+			                	
+			                    <tr>									
+			                        <th class="th-sm">Id</th>
+			                        <th class="th-sm">Denominacion</th>
+			                        <th class="th-accion">Acciones</th>									
+			                    </tr>
+			                </thead>
+	                		<tbody>
+	                			{% for obj in object_list %}
+	                    		<tr>
+									<td>
+										<a href="{% url 'dependencia-detail' obj.id %}	">{{obj.id}}</a>
+									</td>
+									<td>
+										{{obj.denominacion}}
+									</td>
+									<td>
+										<a id="btnVer" class="btn btn-outline-info btn-sm" href="{% url 'dependencia-detail' obj.id %}">
+										<i class="fa fa-eye"></i></a>
+								        {% if perms.rh.change_dependencia %}
+								    		<a id="btnEditar" class="btn btn-outline-secondary btn-sm" href="{% url 'dependencia-edit' obj.id %}"><i class="fa fa-edit"></i></a>
+										{% endif %}
+										{% if perms.rh.delete_dependencia %}
+											<a id="btnEliminar" class="btn btn-outline-danger btn-sm" href="{% url 'dependencia-delete' obj.id %}">
+											<i class="fa fa-trash"></i></a>
+										{% endif %}												
+									</td>
+
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		
+	
+{% endblock %}
+
+{% block js%}
+{% endblock js%}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8">
+ 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  
+  {% load static %}
+  <!-- Custom fonts for this template-->
+  <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}">
+
+  <!-- Custom styles for this template-->
+  <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" >
+
+</head>
+<div><br></div>
+
+<div class="container">
+	<div class="row">	
+		<div class="col-md-1"></div>
+			<div class="col-md-10">
+				
+				<div class="row"> 
+					<div class="col text-right">
+						<a class="button btn btn-outline-primary" href="javascript:history.back()">
+						<i class="fa fa-undo" aria-hidden="true"></i> Atrás</a>
+						<button type="button" class="btn btn-outline-danger" onclick="window.print();">
+						<i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
+					</div>  
+				</div>
+
+				<div class="row">
+					<div class="col-6">
+						 <img src="{% static 'img/logo_inc.png' %}" width="65%" height="70%">
+						 <div style="padding: 3px 30px"><b>RUC: 80000089-7</b></div>
+					</div>						 
+					<div class="col-6 text-right">
+						<div><b>Recibo de Pago</b></div>
+						<div><b>Original</b></div> 
+						<div><b> Mes {{recibos.0.nombre_mes}} de {{recibos.0.aano}} - {{recibos.0.fecha}}</b></div>
+						<div>Sueldo Basico: {{recibos.0.suel_basi|floatformat:"0"}}</div> 
+					</div>
+					
+				</div>
+
+				<div class="row">    
+					<div class="col text-left"><b>Legajo:</b> {{recibos.0.lega}} - {{recibos.0.nomb}}, {{recibos.0.apel}} <p style="color:#FF0000";>{{recibos.0.mensaje}}</p></div>     
+				</div>
+			    	<div class="row">        
+						            <div class="table-responsive">
+						              <table id="dataTable1" class="table table-sm table-bordered" width="100%" cellspacing="0" >
+						                <thead>
+						                	<tr class="th-lg">
+						                		<th colspan="2"></th>
+						                		<th colspan="2" class="text-center">Haberes</th>
+						                		<th colspan="1"></th>
+							                  <tr>
+							                    <th class="th-lg">Concepto</th>
+							                    <th class="th-sm">Unidades</th>
+							                    <th class="th-sm">Deducibles</th>
+							                    <th class="th-sm">No deducibles</th>			                    
+							                    <th class="th-sm">Deducciones</th>
+							                    <th class="th-sm" hidden="true">Todo</th>
+							                  </tr>
+						                  </tr>
+						                </thead>
+						                
+						                <tbody>
+						                	
+						                	{% for recibo in recibos %}
+							                	
+							                	<tr>
+								                	<td>{{recibo.conl}} -- {{recibo.nomb_conl}}</td>
+								                	<td>{% if recibo.unid > '0.00' %}
+								                		{{recibo.unid}}{% endif %}</td>					                	
+								                	<td>{% if recibo.dedu == 'S' %}	
+								                		{{recibo.impo_oper|floatformat:"0"}} {% endif %}</td> 
+													<td>{% if recibo.dedu == 'N' and recibo.impo_oper > '0' %} 
+														{{recibo.impo_oper|floatformat:"0"}} {% endif %}</td> 
+								                	<td>{% if recibo.dbcr == 'D' %}
+								                		{{recibo.impo_oper|floatformat:"0"|cut:"-"}} {% endif %}</td>
+
+								                	<td hidden="true">{{recibo.impo_oper|floatformat:"0"}}</td> 
+								                	<!--
+								                	<td hidden="true">{% if recibo.dedu == 'S' %}	
+								                		{{recibo.impo_oper}} {% endif %}</td> 
+													<td hidden="true">{% if recibo.dedu == 'N' %} 
+														{{recibo.impo_oper}} {% endif %}</td> 
+								                	<td hidden="true">{% if recibo.dbcr == 'D' %}
+								                		{{recibo.impo_oper}} {% endif %}</td> 
+								                	-->
+
+							                	</tr>
+							                	
+						                	{% endfor %}
+						                	
+						               
+						                </tbody>
+											<tfoot>
+												<tr>
+														
+													<th colspan="1" style="text-align:right"></th>
+													<th colspan="1" style="text-align:right"></th>	
+													<th colspan="1" style="text-align:right"></th>
+													<th colspan="1" style="text-align:left"></th>	
+													
+												<th></th>
+												</tr>
+											</tfoot>
+						              </table>						              
+						            </div>
+						            <div class="row">
+										<p class="col-sm-12">Usuario: {{request.user.get_full_name}}</p>
+									</div>
+					</div>
+				</div>		      
+			</div>	    
+			<div class="col-md-1"></div>
+		</div>
+</div>
+
+ 
+
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Page level plugin JavaScript-->
+  <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+  <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{% static 'js/sb-admin.min.js' %}"></script>
+
+  <!-- Demo scripts for this page-->
+  <!-- <script src="{% static 'js/demo/datatables-demo.js' %}"></script> -->
+  <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+
+  <script type="text/javascript">
+$(document).ready(function() {
+    $('#dataTable1').DataTable( {
+    	 "paging": false,
+		"ordering": false,
+		"searching": false,
+		"language": {
+		"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+		"decimal": ".",
+		"thousands": ",",
+
+      },
+
+		  columnDefs: [
+		    { className: 'text-right', targets: [1,2,3,4,5] },
+		    { className: 'text-left', targets: [0] },
+		  ],
+
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,.]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            tot_dedu = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            tot_nodedu = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 			tot_debi = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            total = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 5, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            /*$( api.column( 4 ).footer() ).html(
+                'Gs.'+ pageTotal +' ( Gs.'+ total +' total)'
+            );*/
+            $( api.column( 2 ).footer() ).html(
+                tot_dedu.format(0, 3, '.', ',')
+            );
+            $( api.column( 3 ).footer() ).html(
+                tot_nodedu.format(0, 3, '.', ',')
+            );
+            $( api.column( 4 ).footer() ).html(
+                 tot_debi.format(0, 3, '.', ',') 
+                	  + '<br><br> Neto a Cobrar Gs.<br> '+ total.format(0, 3, '.', ',')
+            );
+            $( api.column( 5 ).footer() ).html(
+                'Gs.'+ total.format(2, 3, '.', ',')
+            );
+
+        }
+    } );
+
+
+} );
+
+
+
+/**
+ * Number.prototype.format(n, x, s, c)
+ * 
+ * @param integer n: length of decimal
+ * @param integer x: length of whole part
+ * @param mixed   s: sections delimiter
+ * @param mixed   c: decimal delimiter
+ */
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+
+</script>
+
+  </body>
+</html>
+
+

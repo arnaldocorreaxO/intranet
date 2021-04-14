@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>Registro de Usuario en Intranet INC</title>
+{% endblock %}
+
+{% block container %}
+
+{% load static %}
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-5 col-lg-5 pt-2 pl-5 pr-5 pb-5" id="auth-container">
+            <img src="{% static 'img/logo_hd.png' %}" class="img-fluid rounded mx-auto d-block pb-4" style="max-width: 30%;">    
+                <form action="{% url 'signup' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endif %}
+
+                    {# SEDE #}
+                    <div class="form-group">                    
+                        <select class="form-control" name="sede" required>
+                            <option  value="" selected="selected">---Seleccionar Sede---</option>
+                            {% for k,v in form.fields.sede.choices %}
+                                <option value="{{ k }}"{% if form.fields.sede.value == k %} selected {% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>                    
+                    </div>
+
+                    <div class="form-group">
+                        <input id="cedula" class="form-control" type="number" placeholder="Cédula" name="username" required="true" 
+                        onkeypress="return isNumberKey(event)" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="number" placeholder="Legajo" name="legajo" required="true" 
+                        onkeypress="return isNumberKey(event)" maxlength="4" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="password" placeholder="Contraseña" name="password" required="true" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="password" placeholder="Repetir Contraseña" name="password_confirmation" required="true" />
+                    </div>
+
+                    <div class="form-group">
+                        <input id="nombre" class="form-control" type="text" placeholder="Nombres" name="first_name" required="true" 
+                        onkeypress="return isNumericKey(event)" minlength="2" readonly="true" />
+                    </div>
+
+                    <div class="form-group">
+                        <input id="apellido" class="form-control" type="text" placeholder="Apellidos" name="last_name" required="true" onkeypress="return isNumericKey(event)" minlength="2" readonly="true" />
+                    </div>
+
+                    {# GENERO #}
+                    <div class="form-group">                    
+                        <select class="form-control" name="genero" required>
+                            <option  value="" selected="selected">---Seleccionar Genero---</option>
+                            {% for k,v in form.fields.genero.choices %}
+                                <option value="{{ k }}"{% if form.genero.value == k %} selected {% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>                    
+                    </div>
+
+                    <div class="form-group">
+                        <input id="fec_nacimiento" class="form-control" type="date" placeholder="Fecha Nacimiento" name="fec_nacimiento" required="true" readonly="true" data-toggle="tooltip" data-placement="right" title="Fecha de Nacimiento" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Teléfono" name="telefono" required="true" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" type="email" placeholder="Correo Electrónico" name="email" required="true" />
+                    </div>
+
+                    <div>
+                       <p class="alert alert-info">
+                           Al crear una cuenta, acepto los Términos de Uso y la Política de Privacidad de Identidad de la INC
+                       </p>
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-5" type="submit">Registrarme!</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    
+            $(document).ready(function(){
+                 $('#cedula').blur(function () {
+                     var vCi = $(this).val();
+                     console.log(vCi);
+                        $.ajax({
+                        url: '/bs/ajax/get-persona',                    
+                        data: {
+                        'ci': vCi       
+                        },
+                        success: function (result) {
+                            // console.log(result);
+                            $('#nombre').val(result[0].per_nombres);
+                            $('#apellido').val(result[0].per_apynom);
+                            $('#fec_nacimiento').val(result[0].per_fchnaci);                       
+                        }
+                        });
+
+                 });
+            });
+        
+</script>
+{% endblock %}

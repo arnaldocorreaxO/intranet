@@ -1,0 +1,518 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- ESTO ES NECESARIO PARA QUE FUNCIONE DATETIMEPICKER -->
+{% block extrahead %}   {# Extra Resources Start #}
+    {{ form.media }}        {# Form required JS and CSS #}
+
+<style type="text/css">
+/*OCULTA EL FILE UPLOPAD BOTON Y CAJA DE TEXTO POR DEFAULT*/
+.file-upload input[id='id_foto'] {
+  display: none;
+}
+</style>
+{% endblock %}          {# Extra Resources End #}
+
+{% block head_content %}
+<title>@{{ request.user.username }} | Actualizar Perfil</title>
+        
+{% endblock %}
+
+{% block container %}
+
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-8 p-4" id="profile-box">
+            <form id="perfilForm" data-ciudades-url="{% url 'ajax_load_ciudades' %}" data-dependencias-url="{% url 'ajax_load_dependencias' %}" action="{% url 'perfil-edit'  %}" method="POST" enctype="multipart/form-data">
+                
+                {% csrf_token %}
+
+                <div class="media">
+                    {#FOTO#}
+                    <div>
+                    {% if perfil.foto %}
+                        <img id="img_prev"
+                             src="{{ perfil.foto.url }}" 
+                             class="rounded-circle" 
+                             height="50"
+                             width="50" />
+                    {% else%}
+                        <img id="img_prev"
+                             src="{% static 'img/default-profile.png' %}" 
+                             class="rounded-circle" 
+                             height="50"
+                             width="50" />
+                    {% endif %}
+                    </div>
+                    {# INFORMACION DEL USUARIO #}
+                    <div class="media-body">
+                        <h5 class="ml-4">@{{ user.username }} | {{ user.get_full_name }}</h5>
+                        {#AGREGAR FOTO#}
+                        <div class="custom-file mb-3 col-md-3" lang="es">
+                            <label for="id_foto" class="file-upload btn btn-secondary btn-block rounded-pill shadow">
+                                <i class="fa fa-upload mr-2"></i>Foto
+                                <input id="id_foto" name="foto" type="file" data-toggle="popover" 
+                                       data-trigger="hover" data-placement="right"
+                                       onchange="readURL(this);">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                {% for error in form.picture.errors %}
+                <div class="alert alert-danger">
+                    <b>Picture: </b>{{ error }}
+                </div>
+                {% endfor %}
+
+                <hr><!-- <br> -->
+
+                <div class="form-row">
+                    {# SEDE #}
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Sede*</span></label>
+                            <select id="selectsede" class="selectpicker form-control" name="sede" required>
+                                {% for k,v in form.fields.sede.choices %}
+                                    <option value="{{ k }}"{% if form.sede.value == k %} selected {% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {# DEPENDENCIA #}
+                    <div class="col-md-9">
+                      <div class="form-group">                    
+                        <label>Dependencia</label>
+                            <select id="selectdependencia" class="selectpicker form-control" name="dependencia"        data-header="Seleccione su Dependencia" data-live-search="true"  data-size="5"
+                                    required>
+                                {% for k,v in form.fields.dependencia.choices %}
+                                    <option value="{{ k }}"{% if form.dependencia.value == k %} selected {% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>       
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">      
+                    {#TIPO DE EMPLEADO CON SELECT FIELD #}
+                    <div class="form-group col-md-4">
+                        <label>Tipo Empleado</label>
+                        <select class="form-control" name="tip_empleado" required>
+                            {% for k,v in form.fields.tip_empleado.choices %}
+                                <option value="{{ k }}"{% if form.tip_empleado.value == k %} selected {% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>                          
+                    </div>
+
+
+                    {# CARGO #}                
+                    <div class="form-group col-md-8">
+                        <label>Cargo</label>
+                        <select class="selectpicker form-control" name="cargo" data-live-search="true" required>
+                            {% for k,v in form.fields.cargo.choices %}
+                                <option value="{{ k }}"{% if form.cargo.value == k %} selected {% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>                       
+                    </div>
+                </div>
+
+                <div class="form-row">      
+                    {# CEDULA #}                
+                    <div class="form-group col-md-4">
+                        <label>Cedula*</label>
+                        <input
+                            class="form-control {% if form2.username.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="username"
+                            placeholder="Cedula"
+                            value="{% if form2.errors %}{{ form2.username.value }}{% else %}{{ perfil.usuario.username }}{% endif %}"
+                            onkeypress="return isNumberKey(event)"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form2.username.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+                    {# LEGAJO #}
+                    <div class="form-group col-md-2">
+                        <label>Legajo*</label>
+                        <input
+                            class="form-control {% if form.legajo.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="legajo"
+                            placeholder="Legajo"
+                            value="{% if form.errors %}{{ form.legajo.value }}{% else %}{{ perfil.legajo|stringformat:"i" }}{% endif %}"
+                            onkeypress="return isNumberKey(event)"
+                            maxlength="4"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form.legajo.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+
+                    {# GENERO #}
+                    <div class="form-group cod-md-6">   
+                    <label>Genero</label>                 
+                        <select class="form-control" name="genero" required>
+                            <option  value="" selected="selected">---Por favor seleccione---</option>
+                            {% for k,v in form.fields.genero.choices %}
+                                <option value="{{ k }}"{% if form.genero.value == k %} selected {% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>                    
+                    </div>                   
+                </div>
+
+                {#Tipo de Empleado con Radio Button Field#}
+          <!--       <div class="form-row">
+                    <div class="form-group col-md-12">
+                        
+                            {# {% for k,v in form.fields.tip_empleado.choices %} #}
+                            <div class="form-check">
+                                <option  value="" selected="selected">---Tipo Empleado---</option>
+                                <input class="form-check-input-inline" type="radio" name="tip_empleado" id="gridRadios" 
+                              value="" checked="checked"
+                              >
+                             <label class="form-check-label" for="gridRadios">
+                                Ninguno
+                              </label>
+                            {% for k,v in form.fields.tip_empleado.choices %}
+                              <input class="form-check-input-inline" type="radio" name="tip_empleado" id="gridRadios" 
+                              value="{{ k }}"{% if form.tip_empleado.value == k %} checked {% endif %}
+                              >
+                             <label class="form-check-label" for="gridRadios">
+                                {{ v }}
+                              </label>
+                            {% endfor %}
+                            </div>                         
+                    </div>
+                </div> -->
+
+                <div class="form-row">
+                    {# NOMBRES #}
+                    <div class="form-group col-md-6">
+                        <label>Nombres*</label>
+                        <input
+                            class="form-control {% if form2.first_name.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="first_name"
+                            placeholder="Nombres"
+                            value="{% if form2.errors %}{{ form2.first_name.value }}{% else %}{{ perfil.usuario.first_name }}{% endif %}"
+                            onkeypress="return isNumericKey(event)" minlength="2"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form2.username.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+
+                    {# APELLIDOS #}
+                    <div class="form-group col-md-6">
+                        <label>Apellidos*</label>
+                        <input
+                            class="form-control {% if form2.last_name.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="last_name"
+                            placeholder="Apellidos"
+                            value="{% if form2.errors %}{{ form2.last_name.value }}{% else %}{{ perfil.usuario.last_name }}{% endif %}"
+                            onkeypress="return isNumericKey(event)" minlength="2"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form2.username.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>           
+                </div>
+
+                    
+                <div class="form-row">
+                    {#FECHA NACIMIENTO#}
+                    <div class="form-group col-md-6">
+                        <label>Fecha de Nacimiento</label>
+                        <!-- <div class='input-group date'  > -->
+                            <input
+                            type='text' 
+                            name="fec_nacimiento"
+                            id='id_fec_nacimiento'
+                            value="{% if form.errors %}{{ form.fec_nacimiento.value }}{% else %}{{ perfil.fec_nacimiento|date:'d/m/Y'}}{% endif %}"                            
+                            
+                            />
+                        <!-- </div> -->
+            
+                        <div class="invalid-feedback">
+                            {% for error in form.fec_nacimiento.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+                    
+                    {#FECHA VINCULACION#}                
+                    <div class="form-group col-md-6">
+                        <label>Fecha Vinculación(Nombramiento o Contrato)</label>
+                        <!-- <div class='input-group date'  > -->
+                            <input
+                            type='text' 
+                            name="fec_vinculacion"
+                            id='id_fec_vinculacion'                            
+                            value="{% if form.errors %}{{ form.fec_vinculacion.value }}{% else %}{{ perfil.fec_vinculacion|date:'d/m/Y'}}{% endif %}"
+                            />
+                        <!-- </div> -->
+            
+                        <div class="invalid-feedback">
+                            {% for error in form.fec_vinculacion.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="row">
+                    {# NACIONALIDAD #}
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Nacionalidad</label>
+                            <select id="selectnac" class="form-control" name="nacionalidad" required>
+                                {% for k,v in form.fields.nacionalidad.choices %}
+                                    <option value="{{ k }}"{% if form.nacionalidad.value == k %} selected {% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {# ESTADO CIVIL #}
+                    <div class="form-group col-md-7">
+                        <label>Estado Civil</label>
+                            {# {% for k,v in form.fields.estado_civil.choices %} #}
+                            <div class="form-check">
+                            {% for k,v in form.fields.estado_civil.choices %}
+                              <input class="form-check-input-inline" type="radio" name="estado_civil" id="gridRadios" 
+                              value="{{k}}"{% if form.estado_civil.value == k %} checked {% endif %}
+                              >
+                             <label class="form-check-label" for="gridRadios">
+                                {{v}}
+                              </label>
+                            {% endfor %}
+                            </div>                         
+                    </div>
+                </div>
+                <div class="form-row">
+                    {#DEPARTAMENTO#}
+                    <div class="col-md-6">
+                      <div class="form-group">                    
+                        <label>Departamento</label>
+                            <select id="selectdpto" class="selectpicker form-control" name="departamento" data-header="Por favor seleccione" data-live-search="true"  data-size="5" required>                                
+                                {% for k,v in form.fields.departamento.choices %}
+                                    <option value="{{ k }}"{% if form.departamento.value == k %} selected {% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>       
+                        </div>
+                    </div>                
+                
+                    {#CIUDAD#}
+                    <div class="col-md-6">
+                      <div class="form-group">                    
+                        <label>Ciudad</label>
+                            <select id="selectciudad" class="selectpicker form-control" name="ciudad" data-header="Por favor seleccione" data-live-search="true"  data-size="5" required>                                
+                                {% for k,v in form.fields.ciudad.choices %}
+                                    <option value="{{ k }}"{% if form.ciudad.value == k %} selected {% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>       
+                        </div>
+                    </div>                
+                </div>
+                                    
+                <div class="form-row">
+                    {# DIRECCION #} 
+                    <div class="form-group col-md-12">
+                        <label>Direccion</label>
+                        <input
+                            class="form-control {% if form.direccion.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="direccion"
+                            placeholder="Direccion Particular"
+                            value="{% if form.errors %}{{ form.telefono.value }}{% else %}{{ perfil.direccion }}{% endif %}"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form.direccion.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+                </div>
+
+                    
+                <div class="form-row">
+                    {# TELEFONO #}
+                    <div class="form-group col-md-4">
+                        <label>Telefono</label>
+                        <input
+                            class="form-control {% if form.telefono.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="telefono"
+                            placeholder="Telefono"
+                            value="{% if form.errors %}{{ form.telefono.value }}{% else %}{{ perfil.telefono }}{% endif %}"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form.telefono.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+
+                    {# CORREO ELECTRONICO #}
+                    <div class="form-group col-md-8">
+                        <label>Email</label>
+                        <input
+                            class="form-control {% if form2.email.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="email"
+                            placeholder="Email"
+                            value="{% if form2errors %}{{ form2.email.value }}{% else %}{{ perfil.usuario.email }}{% endif %}"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form2.email.errors %}
+                                {{ error }}
+                            {% endfor%}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    {#DOCUMENTO DE IDENTIDAD FILE#}
+                     <div class="custom-file mb-12 col-md-12" lang="es">
+                        <b>Documento de Identidad: </b>                        
+                        <input id="id_documento" name="documento_identidad" type="file" data-toggle="popover" data-trigger="hover" data-placement="right">
+                       
+                    </div>
+                </div>
+                    {% if perfil.documento_identidad %}
+                    <p>Actualmente: <a href="{{ perfil.documento_identidad.url }}">{{ perfil.documento_identidad.url }}</a></p>
+                    {% endif %}
+                
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <a class="btn btn-secondary float-left btn-block" href="#" data-toggle="modal" data-target="#cancelModal">Cancelar</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-primary float-right btn-block">Actualizar Perfil!</button>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Cancelar Modal-->
+  <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">¿Está seguro que desea cancelar?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Presione "Sí" para confirmar.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+          <a class="btn btn-primary" href="{% url 'perfil-detail' request.user.id %}">Sí</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+      <script>
+        $('#id_fec_nacimiento').datepicker({
+            uiLibrary: 'bootstrap4',
+            locale: 'es-es',
+            format: 'dd/mm/yyyy'
+        });
+         $('#id_fec_vinculacion').datepicker({
+            uiLibrary: 'bootstrap4',
+            locale: 'es-es',
+            format: 'dd/mm/yyyy'
+        });
+         // POPOVER
+        $(function() {
+                $('[data-toggle="popover"]').popover()
+        });
+    </script>
+
+
+    {#SELECT SEDE DEPENDIENTE DEPENDENCIAS#}
+    <script>
+        $("#selectsede").change(function () {
+          var url = $("#perfilForm").attr("data-dependencias-url");  // get the url of the `load_cities` view
+          var sedeId = $(this).val()||0;  // get the selected country ID from the HTML input
+          //In Javascript this can actually be handled by the || operator, that returns the first "valid" value.
+          console.log(sedeId);
+          $("#selectdependencia option").remove();
+          $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+              'sede': sedeId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+              console.log(data);
+              $("#selectdependencia").html(data);  // replace the contents of the city input with the data that came from the server
+              $("#selectdependencia").selectpicker('refresh');    
+            }
+          });
+            
+        });
+    </script>
+
+    {#SELECT DPTO DEPENDIENTE CIUDADES#}
+    <script>
+        $("#selectdpto").change(function () {
+          var url = $("#perfilForm").attr("data-ciudades-url");  // get the url of the `load_cities` view
+          var dptoId = $(this).val()||0;  // get the selected country ID from the HTML input
+          //In Javascript this can actually be handled by the || operator, that returns the first "valid" value.
+          console.log(dptoId);
+          $("#selectciudad option").remove();
+          $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+              'dpto': dptoId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+              console.log(data);
+              $("#selectciudad").html(data);  // replace the contents of the city input with the data that came from the server
+              $("#selectciudad").selectpicker('refresh');    
+            }
+          });
+            
+        });
+    </script>
+
+{#VISTA PREVIA DE FOTO#}
+    <!-- Assume jQuery is loaded --> 
+    <script> 
+     function readURL(input) { 
+     if (input.files && input.files[0]) { 
+      var reader = new FileReader(); 
+
+      reader.onload = function (e) { 
+      $('#img_prev') 
+       .attr('src', e.target.result) 
+       .width(50)
+       .height(50)
+      }; 
+
+      reader.readAsDataURL(input.files[0]); 
+     } 
+     } 
+    </script> 
+{% endblock js%}

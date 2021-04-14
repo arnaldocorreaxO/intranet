@@ -1,0 +1,174 @@
+<ul class="sidebar navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'publicacion:list' %}">
+          <i class="fas fa-sync"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Publicaciones Internas de la Institución">Publicaciones
+        </span>
+        </a>
+      </li>
+       <!--MIS DATOS-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Consultar Recibos y Asistencias"> Consultar</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Consultar:</h6>
+              <a class="dropdown-item" href="{% url 'intranet:ver_recibo' %}" >Mi Recibo</a>
+              <a class="dropdown-item" href="{% url 'intranet:ver_asistencia' %}" >Mi Asistencia</a>           
+            </div>
+      </li>
+       <!--SAP-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-building" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Sistemas, Aplicaciones y Productos ">SAP</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header"></h6>
+              <a class="dropdown-item" href="http://inc-prd:8080/sap/bc/gui/sap/its/webgui" target="_blank">SAP GUI</a>
+              <a class="dropdown-item" href="http://inc-bo:8080/BOE/BI" target="_blank">SAP BI</a>
+             <!--  <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--CORREO-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Correo Electrónico Institucional Zimbra">Correo</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Zimbra</h6>
+              <a class="dropdown-item" href="https://incasu.inc.gov.py:8443/" target="_blank">Ingresar:</a>
+              <a class="dropdown-item" href="https://incasu.inc.gov.py:7071/" target="_blank">Administrar:</a>
+             <!--  <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--SGDI-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-address-book" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Sistema de Gestion de Expedientes Digital SGDi">Expedientes</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">SGDi</h6>
+              <a class="dropdown-item" href="http://sgdi.inc.gov.py:8080/xre/login/auth" target="_blank">Ingresar:</a>
+              <a class="dropdown-item" href="http://sgdi.inc.gov.py:8080/xre/consultas" target="_blank">Consultar:</a>
+            <!--  <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--NUBE-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-cloud" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Alojamiento de Archivos">Nube</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Nextcloud</h6>
+              <a class="dropdown-item" href="https://nube.inc.gov.py/index.php/login?clear=1" target="_blank">Ingresar:</a>
+              <!-- <a class="dropdown-item" href="https://nube.inc.gov.py/login?clear=1" target="_blank">Administrar:</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--SGDO-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-book" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Repositorio Documental">Documental</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">SGDoc</h6>
+              <a class="dropdown-item" href="http://sgdo.inc.gov.py/authentication/login/?next=/" target="_blank">Ingresar:</a>
+             <!--  <a class="dropdown-item" href="http://sgdo.inc.gov.py/authentication/login/?next=/" target="_blank">Administrar:</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+
+      <!--SGProyectos-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-project-diagram" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Gestor de Proyectos">Proyectos</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">SGPro</h6>
+              <a class="dropdown-item" href="http://proyectos.inc.gov.py:8085/login?back_url=http%3A%2F%2Fproyectos.inc.gov.py%3A8085%2F" target="_blank">Ingresar:</a>
+              <!-- <a class="dropdown-item" href="http://proyectos.inc.gov.py:8085/login?back_url=http%3A%2F%2Fproyectos.inc.gov.py%3A8085%2F" target="_blank">Administrar:</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--GLPI-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-tools" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Soporte GLPI">Soporte</span>
+        </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Accesos</h6>
+              <a class="dropdown-item" href="http://soporte.inc.gov.py/" target="_blank">GLPI:</a>
+              <a class="dropdown-item" href="https://sgdu.inc.gov.py:9082/itim/console/jsp/logon/Login.jsp" target="_blank">SGDU Admin:</a>              
+              <!-- <a class="dropdown-item" href="https://nube.inc.gov.py/login?clear=1" target="_blank">Administrar:</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="forgot-password.html">Olvidé mi contraseña:</a> -->
+            </div>
+      </li>
+      <!--SITIOS-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-link" aria-hidden="true"></i>
+          <span data-toggle="tooltip" data-placement="top" title="Sitios frecuentemente utilizados">Sitios de Interes</span>      
+      </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Ingresar a:</h6>
+              <a class="dropdown-item" href="https://servicios.ips.gov.py/consulta_asegurado/comprobacion_de_derecho_externo.php" target="_blank">IPS Consulta</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="https://www.contrataciones.gov.py/" target="_blank">DNCP</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="https://www.set.gov.py/" target="_blank">SET</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="http://websiare.hacienda.gov.py/" target="_blank">SIARE</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="http://djbr.contraloria.gov.py/djb/" target="_blank">DECLARACION JURADA</a>
+              
+            </div>
+      </li>
+
+      {% if request.user.is_staff %}
+      <!-- CONFIGURACIONES -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" 
+           href="#" 
+           id="pagesDropdown" 
+           role="button" 
+           data-toggle="dropdown" 
+           aria-haspopup="true" 
+           aria-expanded="false">
+          <i class="fa fa-cog" aria-hidden="true"></i><span> Configuraciones</span>
+        </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="/admin">Administración</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Usuarios</a></li>                -->
+              <li class="dropdown-submenu">
+                <a href="#" role="button" data-toggle="dropdown" class="dropdown-item dropdown-toggle">Institucional</a>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item">
+                    <a href="{% url 'dependencia-list' %}"> Dependencias </a>
+                  </li>
+                 <li class="dropdown-item">
+                    <a href="{% url 'cargo-list' %}"> Cargos </a>
+                  </li>
+                  <!-- <li class="dropdown-item">
+                    <a href="#"> Link1</a>
+                  </li> -->
+                </ul>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>

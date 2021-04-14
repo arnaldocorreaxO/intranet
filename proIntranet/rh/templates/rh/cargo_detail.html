@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block head_content %}
+	<title>Cargos</title>
+{% endblock%}
+
+{% load static %}
+
+<!-- CONTAINER -->
+{% block container %}
+ <!-- Main content -->
+    <div class="row"> 
+		<div class="col-md-12" style="padding-left: 50px; padding-bottom: 5px;">
+			<div class="row">
+			<div class="col-md-12 text-left" style="padding-bottom: 5px;">	
+				<form action="{% url 'cargo-list' %}">
+					<button type="submit" class="btn btn-outline-secondary btn-sm">
+						<i class="fas fa-undo"></i> Volver
+					</button>
+				</form>
+			</div>
+			</div>	
+			<div class="card">				
+				<div class="card-header">
+					<div class="card mb-3" style="max-width: 1300px;">
+					  	<div class="row no-gutters">
+						    <div class="col-md-8">
+								<label><b>ID:			</b> {{object.id}}  </label><br>
+								<label><b>Denominacion: </b> {{object.denominacion}}	  </label><br>
+								<label><b>Estado:		</b> {{object.get_estado_display}}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+ 			</div> 
+ 		</div> 
+ 	</div> 
+  		
+{% endblock %}
+
+<!-- JAVASCRIPTS -->
+{% block js%}
+
+{% endblock js%}
+

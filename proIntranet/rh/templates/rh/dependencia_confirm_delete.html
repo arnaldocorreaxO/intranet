@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block head_content %}
+	<title>Dependencias</title>
+{% endblock%}
+
+{% load static %}
+{% block container %}
+	<div class="row">
+   		<div class="col-md-11" style="padding-left: 50px; padding-bottom: 5px;">
+			<form method="post">
+				{% csrf_token %}
+			    <p>¿Estás seguro que deseas borrar la dependencia "{{ object }}"?</p>
+			    <button class="btn btn-outline-danger btn-sm" type="submit">Sí, estoy seguro</button>
+				<a class="btn btn-outline-secondary btn-sm" href="{% url 'dependencia-list' %}">No, cancelar!</a>
+			</form>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block js%}
+<!-- <script type="text/javascript">
+	$(document).ready(function() {
+	    $('#dataTable').DataTable( {
+	    	"retrieve":true,
+	    	
+	    } );		
+	} );
+</script> -->
+<script type="text/javascript">
+	$(function() {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
+{% endblock js%}
+

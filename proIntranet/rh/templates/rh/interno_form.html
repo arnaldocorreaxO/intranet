@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block extrahead %}   {# Extra Resources Start #}
+	{{ form.media }}        {# Form required JS and CSS #}
+{% endblock %}          {# Extra Resources End #}
+
+{% block head_content %}
+	<title>Extensiones</title>
+{% endblock%}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+<!-- CONTAINER -->
+{% block container %}
+ <!-- Main content -->
+    <section class="content">
+    	
+    	
+		<div class="row">
+			<div class="col-md-11" style="padding-left: 50px; padding-bottom: 5px;">
+		  		<div class="card card-primary">
+		   	 		<div class="card-header">
+		     	 		<h5 class="card-title">Numero de Internos</h5>
+
+		    		</div>
+		    <div class="card-body">
+		    	<!-- <form  class ="form-horizontal" action="{% url 'intranet:new' %}" method="POST" enctype="multipart/form-data"> -->
+		    		<!-- Si no le coloca el action el request sucede en el mismo lugar del que llamó -->
+				<form  class ="form-horizontal"  method="POST" enctype="multipart/form-data">
+					{% csrf_token %}  
+					{% if form.errors %}
+						<p class="alert alert-danger">{{ form.errors}}</p>
+					{% endif %}
+					<!-- CRISPY APLICA ESTILOS BOOTSTRAP DE UNA VEZ  -->
+					{{ form|crispy}}
+
+					<div class="form-group row">
+					    <div class="col-sm-6">
+					      <a class="btn btn-secondary float-left" href="#" data-toggle="modal" data-target="#cancelModal">Cancelar</a>
+					      <!-- <input type="submit" value="Publicar" class="btn btn-success float-right"> -->
+					    </div>
+					<!-- </div> -->
+					<!-- <div class="form-group"> -->
+						<div class="col-sm-6">
+							<button type="submit" class="btn btn-success float-right">Grabar!</button>
+						</div>
+					<!-- </div> -->
+				</form>
+		   
+		    </div>
+		    <!-- /.card-body -->
+		  </div>
+		  <!-- /.card -->
+		</div>
+
+		</div>
+      
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+   <!-- Cancelar Modal-->
+  <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">¿Está seguro que desea cancelar?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Presione "Sí" para confirmar.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+          <a class="btn btn-primary" href="{% url 'interno-list' %}">Sí</a>
+        </div>
+      </div>
+    </div>
+  </div>
+		
+{% endblock %}
+
+<!-- JAVASCRIPTS -->
+{% block js%}
+
+{% endblock js%}
+

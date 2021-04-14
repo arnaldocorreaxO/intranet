@@ -1,0 +1,114 @@
+ 		<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8">
+ 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  
+  {% load static %}
+  <!-- Custom fonts for this template-->
+  <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}">
+
+  <!-- Custom styles for this template-->
+  <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" >
+
+</head>
+<div><br></div>
+
+<div class="container">
+	<div class="row">	
+		<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<div class="row"> 
+					<div class="col text-right">
+						<a class="button btn btn-outline-primary" href="{% url 'intranet:ver_asistencia' %}">
+						<i class="fa fa-undo" aria-hidden="true"></i> Atrás</a>
+						<button type="button" class="btn btn-outline-danger" onclick="window.print();">
+						<i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
+						<button type="button" class="btn btn-outline-success" id="btnExportExcel">
+						<i class="fa fa-file-excel" aria-hidden="true"></i> Descargar</button>
+							<!-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> -->						
+					</div>  
+				</div>
+
+				<div class="row">
+					<div class="col-6">
+						 <img src="{% static 'img/logo_inc.png' %}" width="50%" height="70%">
+						 <div style="padding: 3px 30px"><b>RUC: 80000089-7</b></div>
+					</div>						 
+					<div class="col-12">
+						<div class="text-center"><h3>INDUSTRIA NACIONAL DEL CEMENTO</h3></div>
+						<div class="text-center"><b>GERENCIA DE TECNOLOGIAS DE LA INFORMACIÓN Y DE LA COMUNICACIÓN</b></div>
+						<hr>
+						<div class="text-center"><b>FORMULARIO SOLICITUD DE ALTA INTRANET</b></div>
+						<div class="text-center"><p style="color:#FF0000";>ADJUNTAR FOTOCOPIA DE CÉDULA DE IDENTIDAD DEL FUNCIONARIO</p></div>
+						<hr>
+						{% for p in perfil %}
+						<div><b><br>ID: {{p.usuario.id}}  - Fecha: {{p.creacion|date:"d/m/Y"}}</b></div> 
+						<div><b><br>SOLICITANTE: {{p.usuario.get_full_name}}</b></div> 
+						<div><b>CIN°: {{p.usuario.username}}</b></div> 
+						<div><b>Sede: {{p.get_sede_display}}</b></div> 
+						<div><b>Email: {{p.usuario.email}}</b></div> 
+						<div><b>Telefono: {{p.telefono}}</b></div> 
+						<div>Por medio de la presente solicito la activacion de mi usuario para ingresar a la Intranet de la Industria Nacional del Cemento. 
+						<p>Al crear una cuenta, Acepto los Términos de uso y la Política de Privacidad de la INC.</p>
+						</div>
+						{% endfor %}
+						<div class="text-align"> 
+							Términos de utilización de las cuentas de Usuarios de la INC
+							Cláusulas de servicio
+							<br>1. La cuenta de usuario es asignada para su uso exclusivo en los sistemas de información administrados por
+							la INC. Cualquier otro método de acceso (utilitarios SQL, ODBC, etc.) está prohibido, salvo que sea
+							debidamente autorizado.
+							<br>2. Está prohibida la copia o divulgación de la información accedida con este usuario a los sistemas, salvo
+							que exista una autorización explícita del propietario del sistema.
+							<br>3. Todo acceso que no esté explícitamente asignado en este formulario, está prohibido.
+							<br>4. El usuario debe notificar a la Gerencia de TIC las inexactitudes en la información de los sistemas, así como
+							violaciones a la seguridad que sean detectadas.
+							<br>5. La Gerencia de TIC se reserva el derecho de revocar cualquier acceso sin previo aviso, en el caso de que
+							se detecte que la seguridad de la cuenta ha sido violada.
+							<br>6. El Usuario está obligado a solicitar la baja de su cuenta de usuario, cuando ya no vaya a utilizar en sus
+							funciones.
+							<br>7. La cuenta de usuario es personal, y la contraseña no debe ser compartida con otra persona.
+							<br>8. Las operaciones realizadas en la base de datos con la cuenta de usuario solicitada son de exclusiva
+							responsabilidad del usuario.
+							<div class="row">
+								<div class="col-6">
+									<hr>
+									<br>Aceptación de las cláusulas
+									<hr>
+									<br>FIRMA:........................................................
+									<br>
+									<br>ACLARACIÓN:...................................................
+								</div>
+								<div class="col-6">
+									<hr>
+									<br>V° B° RR.HH.
+									<hr>
+									<br>FIRMA:........................................................
+									<br>
+								</div>
+							</div>
+						</div>
+
+						
+					</div>
+					
+				</div>
+				
+
+				   	
+
+  </body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+	<title>Activar Cuenta</title>
+{% endblock %}
+
+{% block container%}	
+
+<!-- FORMAS DE ACTION DE UN FORMULARIO -->
+<!-- <form method="POST" action="."></form> 	EL PUNTO INDICA QUE VA A EJECUTAR LA MISMA URL ACTUAL EN ESTE CASO /usuario/login-->
+<!-- <form method="POST" action="usuarios/login"></form> EXPLICITAMENTE LE DECIMOS QUE URL EJECUTAR-->
+<!-- <form method="POST" action="{% url 'login' %}"> UTILIDAD DE DJANGO TAG URL -->
+
+{% load static %}
+		<div class="container h-100">
+        	<div class="row h-100 justify-content-center align-items-center">
+            	<div class="col-sm-12 col-md-5 col-lg-5 pt-2 pl-5 pr-5 pb-5" id="auth-container">
+            		  <img src="{% static 'img/logo_hd.png' %}" class="img-fluid rounded mx-auto d-block pb-4" style="max-width: 50%;">
+					
+                        <p class="alert alert-success">
+                        	Su cuenta ha sido creada satisfactoriamente!
+                        </p>
+                        <p class="alert alert-danger">
+                        	Para activar su cuenta favor imprimir y firmar el siguiente <a href="{% url 'ver_sol_intra' usuario_id %}">formulario </a>  y presentar en las Oficinas de TIC o enviando una copia escaneada al correo electrónico <b>informatica@inc.gov.py</b>
+                              <hr>
+                              <a href="{% url 'ver_sol_intra' usuario_id %}">Formulario de Alta para la Intranet</a> 
+                              Cualquier duda puede contactar a los internos <b>2234 ó 2291 </b>
+                              <hr>                             
+
+                        </p>
+                        <p class="alert alert-warning">
+                        	Una vez activado puede   
+                        	<a href="{% url 'login2' %}">Iniciar Sesion</a>
+                        </p>
+                    
+
+				</div>	
+			</div>
+		</div>
+{% endblock%}
+

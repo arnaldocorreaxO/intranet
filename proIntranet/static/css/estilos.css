@@ -1,0 +1,23 @@
+.btn-flotante {
+  position:fixed;
+
+  bottom:15px;
+  right:70px;
+  font-family: arial;
+  font-weight: bold;
+  color: #FFF !important;
+  font-size: 15px;
+  
+  box-shadow: 1px 1px 1px #BEE2F9;
+  padding: 15px 16px;
+  border-radius: 40px;
+  border: 2px solid #3866A3;
+  background: #1b262c;
+  background: linear-gradient(to top, #1b262c, #318fb5);
+  z-index:100;
+}
+.btn-flotante:hover {
+  color: #FFF !important;
+  background: #318fb5;
+  background: linear-gradient(to top, #318fb5, #1b262c);
+}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+	<title>Avisos Intranet</title>
+{% endblock%}
+
+{% load static %}
+{% block container %}
+
+    <div class="row">        
+			<div class="card">
+			        <div class="card-header">
+			            <i class="fas fa-table"></i>
+			            Avisos Internos</div>
+			          <div class="card-body">
+			            <div class="table-responsive">
+			              <table class="table" id="dataTable" width="100%" cellspacing="0">
+			                <thead>
+			                  <tr>
+			                    <th>Aviso</th>                    
+			                    <th>Aviso</th>                    
+			                  </tr>
+			                </thead>
+			                <tfoot>
+			                  <tr>
+			                    <th>Aviso</th>    
+			                    <th>Aviso</th>                                    
+			                  </tr>
+			                </tfoot>
+			                <tbody>
+			               {% for aviso in object_list %}
+			                  <tr>
+			                    <td>
+			                    	<!--
+									<div class="card flex-row flex-wrap">
+										<div class="card-header border-0">
+										<img src="//placehold.it/200" alt="">
+											</div>
+												<div class="card-block px-2">
+													<h4 class="card-title">{{aviso.titulo}}</h4>
+													<p class="card-text">{{aviso.mensaje}}</p>
+													<a href="#" class="btn btn-primary">Ver mas...</a>
+												</div>
+													<div class="w-100"></div>
+												<div class="card-footer w-100 text-muted">
+													<i class="fa fa-clock"></i>{{aviso.fecha}}
+												</div>
+									</div>-->
+										{% if aviso.imagen %}
+											<div>
+												<img src={{aviso.imagen}} alt="">
+											</div>
+										{%else%}
+											<div>
+												<img src="" alt="">
+											</div>
+										{% endif%}
+									</td>
+									<td>
+			                    	<div class="col-lg-8">
+								        <div class="card" style="width: 50rem;">								        	
+								            <div class="card-body">
+								                <!--<h5 class="card-title">{{aviso.fecha}}</h5>-->
+								                <h6 class="card-subtitle mb-2 text-muted">{{aviso.titulo}}</h6>
+								                <p class="card-text">{{aviso.mensaje}}</p>
+								                <a href="#" class="card-link">Ver mas...</a>
+								                <a href="#" class="card-link">Another link</a>
+								            </div>
+								            <div class="w-100"></div>
+												<div class="card-footer w-100 text-muted">
+													<i class="fa fa-clock px-2"></i>{{aviso.fecha}}
+												</div>
+								        </div>
+								    </div>
+    							</td>                    
+			                  </tr>
+			                  {% endfor %}
+			                </tbody>
+			              </table>
+			            </div>
+			          </div>
+			      <div class="card-footer small text-muted">Actualizado a las 09:52 AM</div>
+			</div>
+    </div>
+    
+{% endblock %}
+
+

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+
+{% block head_content %}
+	<title>Extensiones</title>
+		<style type="text/css">
+			.th-accion{
+		    width: 15%;
+		}
+		</style>
+
+{% endblock%}
+
+{% load static %}
+{% block container %}
+
+		
+		 	
+			<div class="row ml-2 mr-2">
+			
+				{% if perms.rh.add_interno %}
+					<div id="btnAgregar">	
+						<form action="{% url 'interno-new' %}">
+							<button type="submit" class="btn btn-outline-primary btn-sm">
+								<i class="fas fa-plus"></i> Agregar
+							</button>
+						</form>
+					</div>
+				{% endif %}	
+			
+			
+				<div class="table table-responsive">
+			 		<!-- <div style="padding-left: 50px; padding-bottom: 5px;"> -->
+						<table id="dataTable1" class="table table-bordered table-striped table-hover table-sm" cellspacing="0" cellpadding="0" style="font-size:14px">
+							<div class="card card-primary">
+								<div class="card-header">
+									<h6 class="card-title">Numero de Internos</h6>
+
+								</div>
+							</div>
+							<thead>
+			                	
+			                    <tr>
+									<th class="th-sm">ID</th>
+			                        <th class="th-sm">Dependencia</th>
+									<th class="th-sm">Responsable</th>
+									<th class="th-sm">Extension</th>
+									<th class="th-sm">Sede</th>
+									<th class="th-accion">Acciones</th>									
+			                    </tr>
+			                </thead>
+	                		<tbody>
+	                			{% for obj in object_list %}
+	                    		<tr>
+									<td>
+										<a href="{% url 'interno-detail' obj.id %}	">{{obj.id}}</a>
+									</td>
+									<td>
+										{{obj.dependencia}}
+									</td>
+									<td>
+										{{obj.responsable}}
+									</td>
+									<td>
+										{{obj.extension|stringformat:"i"}}
+									</td>
+									<td>
+										{{obj.get_sede_display}}
+									</td>
+									<td>
+										<a id="btnVer" class="btn btn-outline-info btn-sm" href="{% url 'interno-detail' obj.id %}">
+										<i class="fa fa-eye"></i></a>
+								        {% if perms.rh.change_interno %}
+								    		<a id="btnEditar" class="btn btn-outline-secondary btn-sm" href="{% url 'interno-edit' obj.id %}">
+								    		<i class="fa fa-edit"></i></a>
+										{% endif %}
+										{% if perms.rh.delete_interno %}
+											<a id="btnEliminar" class="btn btn-outline-danger btn-sm" href="{% url 'interno-delete' obj.id %}">
+											<i class="fa fa-trash"></i></a>
+										{% endif %}												
+									</td>
+
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+		
+		
+	
+{% endblock %}
+
+{% block js %}
+
+{% endblock js%}

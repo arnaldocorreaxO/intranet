@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+	<title>Avisos Intranet</title>
+{% endblock%}
+
+{% load static %}
+{% block container %}
+
+<div class="container">
+	<div class="row">    
+		<div class="col text-right"><b>Recibo de Pago</b></div>     
+	</div>
+
+	<div class="row">    
+		<div class="col text-right"><b>Original</b></div>     
+	</div>
+
+	<div class="row">    
+		<div class="col text-right"><b>{{recibos.0.ddma_emis}}</b></div>     
+	</div>
+
+	<div class="row">    		
+		<div class="col text-right">Sueldo Basico: {{recibos.0.suel_basi|floatformat:"0"}}</div>      
+	</div>
+
+
+	<div class="row">    
+		<div class="col text-left"><b>Legajo:</b> {{recibos.0.lega}} - {{recibos.0.nomb}} , {{recibos.0.apel}}</div>     
+	</div>
+
+</div>
+
+<div class="container">
+    	<div class="row">        
+			            <div class="table-responsive">
+			              <table id="dataTable1" class="table table-sm table-bordered" width="100%" cellspacing="0" >
+			                <thead>
+			                	<tr class="th-lg">
+			                		<th colspan="2"></th>
+			                		<th colspan="2" class="text-center">Haberes</th>
+			                		<th colspan="1"></th>
+				                  <tr>
+				                    <th class="th-lg">Concepto</th>
+				                    <th class="th-sm">Unidades</th>
+				                    <th class="th-sm">Deducibles</th>
+				                    <th class="th-sm">No deducibles</th>			                    
+				                    <th class="th-sm">Deducciones</th>
+				                    <th class="th-sm" hidden="true">Todo</th>
+				                  </tr>
+			                  </tr>
+			                </thead>
+			                
+			                <tbody>
+			                	
+			                	{% for recibo in recibos %}
+				                	
+				                	<tr>
+					                	<td>{{recibo.conl}} -- {{recibo.nomb_conl}}</td>
+					                	<td>{% if recibo.unid > '0.00' %}
+					                		{{recibo.unid}}{% endif %}</td>					                	
+					                	<td>{% if recibo.dedu == 'S' %}	
+					                		{{recibo.impo_oper|floatformat:"0"}} {% endif %}</td> 
+										<td>{% if recibo.dedu == 'N' and recibo.impo_oper > '0' %} 
+											{{recibo.impo_oper|floatformat:"0"}} {% endif %}</td> 
+					                	<td>{% if recibo.dbcr == 'D' %}
+					                		{{recibo.impo_oper|floatformat:"0"|cut:"-"}} {% endif %}</td>
+
+					                	<td hidden="true">{{recibo.impo_oper|floatformat:"0"}}</td> 
+					                	<!--
+					                	<td hidden="true">{% if recibo.dedu == 'S' %}	
+					                		{{recibo.impo_oper}} {% endif %}</td> 
+										<td hidden="true">{% if recibo.dedu == 'N' %} 
+											{{recibo.impo_oper}} {% endif %}</td> 
+					                	<td hidden="true">{% if recibo.dbcr == 'D' %}
+					                		{{recibo.impo_oper}} {% endif %}</td> 
+					                	-->
+
+				                	</tr>
+				                	
+			                	{% endfor %}
+			                	
+			               
+			                </tbody>
+								<tfoot>
+									<tr>
+											
+										<th colspan="1" style="text-align:right"></th>
+										<th colspan="1" style="text-align:right"></th>	
+										<th colspan="1" style="text-align:right"></th>
+										<th colspan="1" style="text-align:left"></th>	
+										
+									<th></th>
+									</tr>
+								</tfoot>
+			              </table>
+			            </div>
+		</div>
+	</div>		      
+    
+{% endblock %}
+
+ {% block js %}  
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#dataTable1').DataTable( {
+    	 "paging": false,
+		"ordering": false,
+		"searching": false,
+		"language": {
+		"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+		"decimal": ".",
+		"thousands": ",",
+
+      },
+
+		  columnDefs: [
+		    { className: 'text-right', targets: [1,2,3,4,5] },
+		    { className: 'text-left', targets: [0] },
+		  ],
+
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,.]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            tot_dedu = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            tot_nodedu = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 			tot_debi = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            total = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 5, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            /*$( api.column( 4 ).footer() ).html(
+                'Gs.'+ pageTotal +' ( Gs.'+ total +' total)'
+            );*/
+            $( api.column( 2 ).footer() ).html(
+                tot_dedu.format(0, 3, '.', ',')
+            );
+            $( api.column( 3 ).footer() ).html(
+                tot_nodedu.format(0, 3, '.', ',')
+            );
+            $( api.column( 4 ).footer() ).html(
+                 tot_debi.format(0, 3, '.', ',') 
+                	  + '<br><br> Neto a Cobrar Gs.<br> '+ total.format(0, 3, '.', ',')
+            );
+            $( api.column( 5 ).footer() ).html(
+                'Gs.'+ total.format(2, 3, '.', ',')
+            );
+
+        }
+    } );
+
+
+} );
+
+
+
+/**
+ * Number.prototype.format(n, x, s, c)
+ * 
+ * @param integer n: length of decimal
+ * @param integer x: length of whole part
+ * @param mixed   s: sections delimiter
+ * @param mixed   c: decimal delimiter
+ */
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+
+</script>
+ {% endblock js %}

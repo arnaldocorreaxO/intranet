@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>Ver Recibo</title>
+{% endblock %}
+  
+{% if error %}
+    <p class="alert alert-danger">{{ error }}</p>
+{% endif %}
+
+{% block container %}
+
+<div class="row">
+<div class="col-md-12 text-center"><p></p></div>
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <h3 align="center"><b>Consultar Recibo</b></h3>
+    <form  class ="form-horizontal" action="{% url 'intranet:ver_recibo' %}" method="POST">
+        {% csrf_token %}  
+
+        {% if form.errors %}
+            <p class="alert alert-danger">{{ form.errors}}</p>
+        {% endif %}
+                
+        {{ form.as_p }}
+
+        <div class="form-group row">
+          <div class="col-sm-12 text-center">
+            <button type="submit" class="btn btn-primary">Ver Recibo</button>
+          </div>
+        </div>
+    </form>
+
+     <!-- *********************************************************** -->
+    <!-- ESTE FORM ES AUXILIAR  -->
+    <!-- *********************************************************** -->
+    <form style="display: none">
+      <!-- style="display: none" -->
+      {# SEDE AUXILIAR #}
+        <div class="form-group" style="display: none">
+          <input id="id_pSedeAux" class="form-control" type="text" placeholder="Sede Auxiliar" name="id_pSedeAux"/>
+        </div>
+      {# LEGAJO AUXILIAR #}
+        <div class="form-group" style="display: none">
+          <input id="id_pLegajoAux" class="form-control" type="text" placeholder="Legajo Auxiliar" name="id_pLegajoAux"/>
+        </div>
+    </form>
+    <form>
+      {# RECORDAR EMPLEADO #}
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="id_mantenerEmpleado">
+          <label class="form-check-label" for="id_mantenerEmpleado">Recordar Empleado</label>
+        </div>
+      {# EMPLEADO FUENTE INFORMIX #}
+      {% if perms.auth.can_select_empleado %}
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="id_ifxEmpleado">
+          <label class="form-check-label" for="id_ifxEmpleado">Todos los Empleados</label>
+        </div>
+        {% endif %}
+    </form>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+
+{% endblock %}
+
+<!-- JAVASCRIPT -->
+{% block js%}
+<script type="text/javascript">
+  //HABILITAR PARA EVITAR ERROR 
+  $('form').submit(function () {
+      $('#id_pLegajo').prop( "disabled", false );
+      $('#id_pSede').prop( "disabled", false );
+    });
+
+  $(document).ready(function() {
+    var vSede  =  "{{usuario.sede}}";
+    var vCedula = {{usuario.cedula}};
+    var vLegajo = {{usuario.legajo}};
+    var vSedeAnt;
+
+    // MANTENER SEDE ANTERIOR EN LA SELECCION
+    
+    // console.log(vSede,vSedeAnt)
+    if (!vSedeAnt){
+      document.getElementById('id_pSede').value   = vSede;      
+      // console.log('72',vSede,vSedeAnt);
+    };
+     
+     
+     
+    // $("#id_pSede").on("change", getEmpleados); --Version corta del codigo de abajo
+    $('#id_pSede').change(function () {        
+      vSedeAnt = $("#id_pSede").val();
+      getEmpleados();        
+    });
+    // Dispara el evento change una vez en el document ready
+    $("#id_pSede").change();
+
+      //GUARDAMOS EL LEGAJO SELECCIONADO EN EL AUXILIAR
+      $('#id_pLegajo').change(function () {
+        document.getElementById('id_pLegajoAux').value = $('.selectpicker').val();        
+      });
+
+      $('#id_ifxEmpleado').change(function () {
+        getEmpleados();        
+      });
+
+      $('#id_mantenerEmpleado').change(function () {
+        document.getElementById('id_pSedeAux').value = $('#id_pSede').val();
+        document.getElementById('id_pLegajoAux').value = $('#id_pLegajo').val();        
+      });
+      
+    
+  //PERMISOS ESPECIALES PARA SELECCIONAR SEDE Y/O EMPLEADO
+
+       {#{% if not request.user.is_staff %}  #}
+       {% if not perms.auth.can_select_sede %}           
+           $('#id_pSede').prop( "disabled", true );
+       {% endif %}
+       {% if not perms.auth.can_select_empleado %}           
+           $('#id_pLegajo').prop( "disabled", true );
+       {% endif %}
+//////////////////////////////////////////////////
+//            FILTRO PARA EMPLEADOS
+//////////////////////////////////////////////////
+        // $(document).ready(function() {
+        //     $("#id_pSede").on("change", getEmpleados);
+        //     // $("#id_estado").on("change", getLocalidades);
+        // });
+
+        function getEmpleados() {
+            var sedeId;
+            // = $("#id_pSede").val();
+            vChk = $("#id_mantenerEmpleado").is(":checked");
+            // console.log(vChk);
+            if (vChk){
+              sedeId = $("#id_pSedeAux").val();
+            }
+            else {
+              sedeId = $("#id_pSede").val();
+              // console.log(sedeId);
+            };
+
+            // SI ESTA SELECCIONADO CONSULTAR LA BASE DE DATOS DE INFORMIX
+            vChk1 = $("#id_ifxEmpleado").is(":checked");
+            //console.log(vChk1);
+            var vUrl = "{% url 'getEmpleados' %}"; //POR DEFAULT LOS USUARIOS DE INTRANET
+            if (vChk1){
+               vUrl = "{% url 'getifxEmpleados' %}";
+            };
+            
+            if (sedeId) {
+                // Eliminamos las opciones anteriores del select
+                $("#id_pLegajo").html("");
+                // $("#id_pLegajo option").remove();
+                var request = $.ajax({
+                    type: "GET",
+                    url: vUrl,
+                    data: {
+                        "sede_id": sedeId,
+                    },
+                });
+                request.done(function(response) {
+                  // console.log(response.empleados)
+
+                    // Agregamos los resultados al select
+                    $("#id_pLegajo").html(response.empleados);
+                    var vLegajoAnt = $("#id_pLegajoAux").val(); 
+                    if (!vLegajoAnt){
+                      $("#id_pLegajo option[value='"+ {{usuario.legajo}} +"']").attr("selected",true);
+                    }
+                    else{
+                      $("#id_pLegajo option[value='"+ vLegajoAnt +"']").attr("selected",true);
+                    }
+                    ;
+                    $("#id_pLegajo").selectpicker('refresh');
+                });
+            } else {
+                $("#id_pLegajo").html("<option value='' selected='selected'>---------</option>");
+                // $("#id_pLegajo").trigger("change");
+                $("#id_pLegajo").selectpicker('refresh');
+            }
+        }    
+} );
+</script>
+
+{% endblock js%}

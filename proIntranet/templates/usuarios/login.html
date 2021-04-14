@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+	<title>Login Intranet INC</title>
+{% endblock %}
+
+{% block container%}	
+
+<!-- FORMAS DE ACTION DE UN FORMULARIO -->
+<!-- <form method="POST" action="."></form> 	EL PUNTO INDICA QUE VA A EJECUTAR LA MISMA URL ACTUAL EN ESTE CASO /usuario/login-->
+<!-- <form method="POST" action="usuarios/login"></form> EXPLICITAMENTE LE DECIMOS QUE URL EJECUTAR-->
+<!-- <form method="POST" action="{% url 'login' %}"> UTILIDAD DE DJANGO TAG URL -->
+
+{% load static %}
+		<div class="container h-100">
+        	<div class="row h-100 justify-content-center align-items-center">
+            	<div class="col-sm-12 col-md-8 col-lg-5 pt-2 pl-5 pr-5 pb-5" id="auth-container">
+            		  <img src="{% static 'img/logo_hd.png' %}" class="img-fluid rounded mx-auto d-block pb-4" style="max-width: 50%;">
+					<form method="POST" action="{% url 'login2' %}">
+						{% csrf_token %}
+						
+					 {% if err %}
+                        <p class="alert alert-danger">{{ err }}</p>
+                    {% endif %}
+
+						<!-- ERROR GENERAL __all__ -->
+						<div class="invalid-feedback d-block">
+							{% for error in form.non_field_errors %}
+								<!-- <p>{{ error }}</p> -->
+								<p class="alert alert-danger">{{ error }}</p>
+								<p>{{err}}</p>
+							{% endfor %}
+						</div>
+
+						<p class="alert alert-dark text-center"><b>Inicio de Sesión</b></p>
+
+						<!-- CEDULA -->
+						<div class="form-group">
+							<input class="form-control" type="text" placeholder="Cédula" name="username"/>
+								<div class="invalid-feedback d-block">
+									{% for error in form.username.errors %}
+										<!-- {{ error }} -->
+										<p class="alert alert-danger">{{ error }}</p>
+									{% endfor %}
+								</div>
+						</div>
+
+						<!-- CONTRASEÑA -->
+						<div class="form-group">
+							<input class="form-control" type="password" placeholder="Contraseña" name="password"/>
+								<div class="invalid-feedback d-block">
+									{% for error in form.password.errors %}
+										<!-- {{ error }} -->
+										<p class="alert alert-danger">{{ error }}</p>
+									{% endfor%}
+								</div>
+						</div>
+							
+						<button class="btn btn-success btn-block mt-5" type="submit" ><span class="glyphicon glyphicon-log-in"></span>
+							Ingresar
+						</button>
+					</form>
+					<br>
+					<div class="etc-login-form">
+							<!-- <p>Olvidaste tu contraseña? <a href="{% url 'password_change' %}">Click</a></p> -->
+						<p>Nuevo Usuario? <a href="{% url 'signup' %}">Registrarse!</a></p>
+					</div>
+			</div>
+		</div>
+{% endblock%}
+
+l
