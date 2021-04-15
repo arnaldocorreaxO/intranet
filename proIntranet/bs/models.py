@@ -1,6 +1,7 @@
 #Django 
 from django.db import models
-from proIntranet.utils import *
+from proIntranet.config.utils import *
+
 
 #NACIONALIDAD
 class Nacionalidad(models.Model):
