@@ -6,7 +6,7 @@ import json as simplejson
 from .models import *
 
 #Utils
-from proIntranet.config.identificaciones import getIdentificaciones
+from config.identificaciones import getIdentificaciones
 ###########################################
 # FUNCION QUE RETORNA LAS CIUDADES
 # EN FORMATO JSON

@@ -1,11 +1,12 @@
-#Django 
-from django.db import models
+#DJANGO
 from django.contrib.auth.models import User
+from django.db import models
 
-#
-from proIntranet.bs.models import *
-from proIntranet.rh.models import *
-from proIntranet.config.utils import *
+#LOCALS
+from rh.models import *
+from bs.models import *
+from config.utils import *
+
 
 #PERFIL DE USUARIO
 class Perfil(models.Model):

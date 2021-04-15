@@ -23,14 +23,14 @@ from django.contrib.auth.models import User
 
 #from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
-from proIntranet.config import settings
+from config import settings
 """
 https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 bajar GTK descomprimir en C:\\msys2\\mingw64
 https://weasyprint.readthedocs.io/en/latest/install.html#step-5-run-weasyprint
 """
 
-from proIntranet.config.utils import * #created in step 4
+from config.utils import * #created in step 4
 from .models import *
 
 from .forms import *

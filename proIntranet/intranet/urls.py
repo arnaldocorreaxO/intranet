@@ -14,10 +14,10 @@ urlpatterns = [
     path('ver_recibo/', views.ver_recibo, name='ver_recibo'),
     path('ver_recibo2/', views.ver_recibo2, name='ver_recibo2'),
     #path('recibo_pdf2/', views.pdf_generation, name='recibo_pdf2'),
-    path('recibo_pdf2/', views.html_to_pdf_view, name='recibo_pdf2'),
+    # path('recibo_pdf2/', views.html_to_pdf_view, name='recibo_pdf2'),
     #path('',views.index,name='index'),
     path('ver_asistencia/', views.ver_asistencia, name='ver_asistencia'),
-    path('ver_asistencia_pdf/', views.ver_asistencia_pdf, name='ver_asistencia_pdf'),
+    # path('ver_asistencia_pdf/', views.ver_asistencia_pdf, name='ver_asistencia_pdf'),
 
     path('', PublicacionList.as_view(), name='list'),
     path('publicacion/<int:pk>', PublicacionDetail.as_view(), name='detail'),

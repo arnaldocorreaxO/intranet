@@ -1,6 +1,6 @@
 #Django 
 from django.db import models
-from proIntranet.config.utils import *
+from config.utils import *
 
 
 #NACIONALIDAD
