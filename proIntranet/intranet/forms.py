@@ -8,7 +8,7 @@ from datetime import datetime,timedelta
 #Models
 from .models import Publicacion
 #Utils
-from proIntranet.utils import *
+from config.utils import *
 
 
 """Parametros Formulario Recibo"""

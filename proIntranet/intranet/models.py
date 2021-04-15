@@ -4,7 +4,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
-content_type = ContentType.objects.get_for_model(User)
+# content_type = ContentType.objects.get_for_model(User)
 
 class Aviso(models.Model):
 	fecha = models.DateField()

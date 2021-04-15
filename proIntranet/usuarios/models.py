@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 #
 from bs.models import *
 from rh.models import *
-from proIntranet.utils import *
+from config.utils import *
 
 #PERFIL DE USUARIO
 class Perfil(models.Model):
