@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 #
-from bs.models import *
-from rh.models import *
-from config.utils import *
+from proIntranet.bs.models import *
+from proIntranet.rh.models import *
+from proIntranet.config.utils import *
 
 #PERFIL DE USUARIO
 class Perfil(models.Model):

@@ -23,14 +23,14 @@ from django.contrib.auth.models import User
 
 #from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
-from config import settings
+from proIntranet.config import settings
 """
 https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 bajar GTK descomprimir en C:\\msys2\\mingw64
 https://weasyprint.readthedocs.io/en/latest/install.html#step-5-run-weasyprint
 """
 
-from config.utils import * #created in step 4
+from proIntranet.config.utils import * #created in step 4
 from .models import *
 
 from .forms import *
@@ -203,115 +203,116 @@ def ver_asistencia(request):
 
 
 
-def html_to_pdf_view(url):
+# def html_to_pdf_view(url):
+#     pass
 
-    from selenium import webdriver
-    import time
-    import os
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    driver = webdriver.Chrome('c://chromedriver//chromedriver.exe')  # Optional argument, if not specified will search path.
-    #driver.get('http://www.google.com/xhtml');
+#     from selenium import webdriver
+#     import time
+#     import os
+#     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#     driver = webdriver.Chrome('c://chromedriver//chromedriver.exe')  # Optional argument, if not specified will search path.
+#     #driver.get('http://www.google.com/xhtml');
 
-    #driver = webdriver.PhantomJS("C://phantomjs-2.1.1-windows//bin//phantomjs.exe")
-   # data = recibo(pCedula='3248983',pMes='7',pAnho='2019',pLegajo='3074')
-    #driver.get('http://130.10.10.97:8000/ver_recibo2/')
-    driver.get(url)
-    #html_source = driver.page_source 
-    #html_source = driver.page_source 
-    #html_source = driver.execute_script("return document.documentElement.outerHTML")
-    env = Environment(loader=FileSystemLoader('.'))
-    template = env.get_template("pdf/asistencia_pdf.html")
-    template_vars = {'asistencias':result, 'data':data}
-    html_out = template.render(template_vars)
+#     #driver = webdriver.PhantomJS("C://phantomjs-2.1.1-windows//bin//phantomjs.exe")
+#    # data = recibo(pCedula='3248983',pMes='7',pAnho='2019',pLegajo='3074')
+#     #driver.get('http://130.10.10.97:8000/ver_recibo2/')
+#     driver.get(url)
+#     #html_source = driver.page_source 
+#     #html_source = driver.page_source 
+#     #html_source = driver.execute_script("return document.documentElement.outerHTML")
+#     env = Environment(loader=FileSystemLoader('.'))
+#     template = env.get_template("pdf/asistencia_pdf.html")
+#     template_vars = {'asistencias':result, 'data':data}
+#     html_out = template.render(template_vars)
         
-    #print(html)
-   # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
-   # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
-    html = HTML(string = html_source)
-    css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
-    css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
-    css3 = BASE_DIR+"/static/css/sb-admin.css"
+#     #print(html)
+#    # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
+#    # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
+#     html = HTML(string = html_source)
+#     css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
+#     css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
+#     css3 = BASE_DIR+"/static/css/sb-admin.css"
 
-    css  = CSS(filename=css)
-    css2 = CSS(filename=css2)
-    css3 = CSS(filename=css3)
-    filename = '/tmp/mypdf.pdf'
+#     css  = CSS(filename=css)
+#     css2 = CSS(filename=css2)
+#     css3 = CSS(filename=css3)
+#     filename = '/tmp/mypdf.pdf'
 
-    #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
-    html.write_pdf(filename, stylesheets=[css,css2,css3])
+#     #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
+#     html.write_pdf(filename, stylesheets=[css,css2,css3])
 
-    fs = FileSystemStorage('/tmp')
-    with fs.open('mypdf.pdf') as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
-        return response
+#     fs = FileSystemStorage('/tmp')
+#     with fs.open('mypdf.pdf') as pdf:
+#         response = HttpResponse(pdf, content_type='application/pdf')
+#         response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+#         return response
 
-    return response
+#     return response
 
-def myview(request):
-    #Retrieve data or whatever you need
-    return render_to_pdf(
-            'pdf/asistencia_pdf.html',
-            {
-                'pagesize':'A4',
-                'mylist': results,
-            }
-        )
+# def myview(request):
+#     #Retrieve data or whatever you need
+#     return render_to_pdf(
+#             'pdf/asistencia_pdf.html',
+#             {
+#                 'pagesize':'A4',
+#                 'mylist': results,
+#             }
+#         )
 
 
 
-def ver_asistencia_pdf(request):
-    """Sign up view."""
-    usuario = None
-    if request.method == 'POST':
-        form = pAsistenciaForm(request.POST) 
-        if form.is_valid():
-            data = form.cleaned_data
-            print(data)
-            results = asistencia(**data)
-            #print(result)
-            #return 
+# def ver_asistencia_pdf(request):
+#     """Sign up view."""
+#     usuario = None
+#     if request.method == 'POST':
+#         form = pAsistenciaForm(request.POST) 
+#         if form.is_valid():
+#             data = form.cleaned_data
+#             print(data)
+#             results = asistencia(**data)
+#             #print(result)
+#             #return 
 
             
-            env = Environment(loader=FileSystemLoader(settings.TEMPLATES[0].get('DIRS')))
-            print(settings.TEMPLATES[0].get('DIRS'))
+#             env = Environment(loader=FileSystemLoader(settings.TEMPLATES[0].get('DIRS')))
+#             print(settings.TEMPLATES[0].get('DIRS'))
             
-            template = env.get_template("pdf/asistencia_pdf.html")
-            template_vars = {'asistencias':result, 'data':data}
-            html_out = template.render(template_vars)
+#             template = env.get_template("pdf/asistencia_pdf.html")
+#             template_vars = {'asistencias':result, 'data':data}
+#             html_out = template.render(template_vars)
     
-            #print(html)
-            # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
-            # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
-            html = HTML(string = html_out)
-            css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
-            css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
-            css3 = BASE_DIR+"/static/css/sb-admin.css"
-            css  = CSS(filename=css)
-            css2 = CSS(filename=css2)
-            css3 = CSS(filename=css3)
-            filename = '/tmp/mypdf.pdf'
+#             #print(html)
+#             # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
+#             # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
+#             html = HTML(string = html_out)
+#             css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
+#             css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
+#             css3 = BASE_DIR+"/static/css/sb-admin.css"
+#             css  = CSS(filename=css)
+#             css2 = CSS(filename=css2)
+#             css3 = CSS(filename=css3)
+#             filename = '/tmp/mypdf.pdf'
             
     
-            #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
-            html.write_pdf(filename, stylesheets=[css,css2,css3])
+#             #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
+#             html.write_pdf(filename, stylesheets=[css,css2,css3])
 
-            fs = FileSystemStorage('/tmp')
-            with fs.open('mypdf.pdf') as pdf:
-                response = HttpResponse(pdf, content_type='application/pdf')
-                response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
-            return response
+#             fs = FileSystemStorage('/tmp')
+#             with fs.open('mypdf.pdf') as pdf:
+#                 response = HttpResponse(pdf, content_type='application/pdf')
+#                 response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+#             return response
 
-        return response
+#         return response
   
-    else:
-        form = pAsistenciaForm()
-        usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
-    return render(
-        request=request,
-        template_name='ver_asistencia.html',
-        context={'form': form,'usuario':usuario}
-    )
+#     else:
+#         form = pAsistenciaForm()
+#         usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
+#     return render(
+#         request=request,
+#         template_name='ver_asistencia.html',
+#         context={'form': form,'usuario':usuario}
+#     )
 
 ###########################################
 #      CARGAR ASISTENCIA DE VALLEMI 

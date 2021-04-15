@@ -1,5 +1,5 @@
 from django.db import models
-from config.utils import *
+from proIntranet.config.utils import *
 
 #DEPENDENCIAS
 class Dependencia(models.Model):
