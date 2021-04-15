@@ -601,7 +601,7 @@ def cargarRecibo(**Kwargs):
             """.format(**Kwargs)
               #.format(Kwargs['pCedula'],Kwargs['pLegajo'],Kwargs['pMes'],Kwargs['pAnho'])
     
-    print(sql)
+    # print(sql)
     stmt = IfxPy.exec_immediate(conn, sql)
     dic = IfxPy.fetch_assoc(stmt)
     #print(dictionary)
