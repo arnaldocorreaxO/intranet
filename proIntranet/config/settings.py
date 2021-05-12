@@ -34,21 +34,32 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'bootstrap4',
-    'bootstrap_datepicker_plus',
-    'usuarios',
-    'bs',
-    'rh',    
-    'intranet',
-    'crispy_forms',
 ]
+
+THIRD_PARTY_APPS = [
+    'bootstrap_datepicker_plus',
+    'crispy_forms',
+    
+]
+
+LOCAL_APPS = [
+    'usuarios',
+    'bs.apps.BsConfig',
+    'rh.apps.RhConfig',    
+    'cm.apps.CmConfig',    
+    'intranet',
+]
+
+INSTALLED_APPS =  DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crum.CurrentRequestUserMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -124,6 +136,9 @@ USE_TZ = True
 
 USE_THOUSAND_SEPARATOR=True
 
+
+"""Modelo de Autorizacion de Usuario"""
+AUTH_USER_MODEL = 'auth.User'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

@@ -108,37 +108,37 @@ def choiceTipoRecibo():
         ]
     return CHOICE
     
-def render_to_pdf2(template_src, context_dict={}):
-    template = get_template(template_src)
-    html  = template.render(context_dict)
-    result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return None
+# def render_to_pdf2(template_src, context_dict={}):
+#     template = get_template(template_src)
+#     html  = template.render(context_dict)
+#     result = BytesIO()
+#     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+#     if not pdf.err:
+#         return HttpResponse(result.getvalue(), content_type='application/pdf')
+#     return None
 
 
 #Este es del ejemplo de ReportLab
-def render_to_pdf(template_src, context_dict):
-    template = get_template(template_src)
-    #context = Context(context_dict)
-    #Context esta en desuso
-    context = context_dict
-    html  = template.render(context)
-    result = StringIO()
+# def render_to_pdf(template_src, context_dict):
+#     template = get_template(template_src)
+#     #context = Context(context_dict)
+#     #Context esta en desuso
+#     context = context_dict
+#     html  = template.render(context)
+#     result = StringIO()
 
-    pdf = pisa.pisaDocument(StringIO(html.encode("ISO-8859-1")), result, encoding='UTF-8')
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('Ocurrio algun error <pre>%s</pre>' % escape(html))
+#     pdf = pisa.pisaDocument(StringIO(html.encode("ISO-8859-1")), result, encoding='UTF-8')
+#     if not pdf.err:
+#         return HttpResponse(result.getvalue(), content_type='application/pdf')
+#     return HttpResponse('Ocurrio algun error <pre>%s</pre>' % escape(html))
 
 
-def pdf_generation2(template_src,context_dict):
-	html_template = get_template(template_src)
-	pdf_file - HTML(string-html_template).write_pdf()
-	response = HttpResponse(pdf_file, content_type='application/pdf')
-	response['Content-Disposition'] = "filename='prueba.pdf'"
-	return response
+# def pdf_generation2(template_src,context_dict):
+# 	html_template = get_template(template_src)
+# 	pdf_file - HTML(string-html_template).write_pdf()
+# 	response = HttpResponse(pdf_file, content_type='application/pdf')
+# 	response['Content-Disposition'] = "filename='prueba.pdf'"
+    # return response
 
 def pdf_generation(template_src,context_dict):
     #html_template = get_template('pdf/recibo_pdf.html')
@@ -154,14 +154,14 @@ def pdf_generation(template_src,context_dict):
 
 
 
-def render_to_pdf3(template_src, context_dict):
-    template = get_template(template_src)
-    #context = Context(context_dict)
-    html  = template.render(context_dict)
-    #result = StringIO.StringIO()
-    result = BytesIO()
+# def render_to_pdf3(template_src, context_dict):
+#     template = get_template(template_src)
+#     #context = Context(context_dict)
+#     html  = template.render(context_dict)
+#     #result = StringIO.StringIO()
+#     result = BytesIO()
 
-    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+#     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+#     if not pdf.err:
+#         return HttpResponse(result.getvalue(), content_type='application/pdf')
+#     return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
