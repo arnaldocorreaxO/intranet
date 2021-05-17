@@ -22,6 +22,11 @@ class Paciente(ModeloBase):
     def get_edad(self):
         return calculate_age(self.fecha_nacimiento)
 
+    def save(self, force_insert=False, force_update=False):
+        self.nombre = self.nombre.upper()
+        self.apellido = self.apellido.upper()
+        super(Paciente, self).save(force_insert, force_update)
+
 
 '''MOTIVO DE CONSULTA'''
 class MotivoConsulta(ModeloBase):   
