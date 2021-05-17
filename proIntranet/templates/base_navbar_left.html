@@ -171,4 +171,20 @@
             </ul>
           </li>
           {% endif %}
-        </ul>
+
+
+          {% if perms.cm.view_consulta %}
+          <!-- CLINICA MEDICA -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-hospital"></i><span> Clinica Médica</span>
+            </a>
+          
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="/admin/cm/">Registrar</a></li>
+            </ul>
+            {% endif %}
+    </ul>
+
+        
