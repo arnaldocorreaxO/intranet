@@ -16,6 +16,14 @@ from django.conf import settings
 
 from datetime import datetime,timedelta
 
+
+def calculate_age(born):
+    from datetime import date
+    today = date.today()
+    #((today.month, today.day) < (born.month, born.day)) That can be done much simpler 
+    # considering that int(True) is 1 and int(False) is 0:
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 #datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 #vAnhoActual = datetime.now().year
 vFechaActual = datetime.today().strftime('%d/%m/%Y')
@@ -165,3 +173,4 @@ def pdf_generation(template_src,context_dict):
 #     if not pdf.err:
 #         return HttpResponse(result.getvalue(), content_type='application/pdf')
 #     return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+

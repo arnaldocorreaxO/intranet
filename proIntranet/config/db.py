@@ -20,3 +20,13 @@ POSTGRESQL = {
         'PORT': '5432',
     }
 }
+POSTGRESQLOCAL = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db',
+        'USER': 'postgres',
+        'PASSWORD': 'ox82',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
