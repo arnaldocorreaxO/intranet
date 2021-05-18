@@ -73,8 +73,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
 $(function () {
 
-    fecha_nacimiento = $('input[name="fecha_nacimiento"]');
-
+    fecha_nacimiento = $('input[name="fecha_nacimiento"]');    
 
     fecha_nacimiento.datetimepicker({
         useCurrent: false,
@@ -82,6 +81,8 @@ $(function () {
         locale: 'es',
         keepOpen: false,
     });
+
+    fecha_nacimiento.datetimepicker('date', fecha_nacimiento.val());
 
     $('.select2').select2({
         theme: 'bootstrap4',
