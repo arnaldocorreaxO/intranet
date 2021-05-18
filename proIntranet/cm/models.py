@@ -11,7 +11,7 @@ class Paciente(ModeloBase):
     ci = models.IntegerField(unique=True)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
-    fecha_nacimiento = models.DateField(null=True,blank=True)
+    fecha_nacimiento = models.DateField()
     sexo = models.CharField(choices=choiceGenero(),max_length=2)
     estado_civil = models.CharField(choices=choiceEstadoCivil(),max_length=2)
     nacionalidad = models.ForeignKey(Nacionalidad,on_delete=PROTECT)
