@@ -21,7 +21,7 @@ class PacienteListView(PermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['create_url'] = reverse_lazy('paciente_create')
-        context['title'] = 'Listado de Motivo Consulta'
+        context['title'] = 'Listado de Pacientes'
         return context
 
 
@@ -112,7 +112,7 @@ class PacienteUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
-        context['title'] = 'Edición de un Motivo Consulta'
+        context['title'] = 'Edición de un Paciente'
         context['action'] = 'edit'
         return context
 
