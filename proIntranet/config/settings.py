@@ -47,6 +47,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'bootstrap_datepicker_plus',
     'crispy_forms',
+    'widget_tweaks',
     
 ]
 

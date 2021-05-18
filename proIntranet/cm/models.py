@@ -4,7 +4,7 @@ from enum import unique
 from bs.models import ModeloBase, Nacionalidad
 from config.utils import calculate_age, choiceEstadoCivil, choiceGenero
 from django.db import models
-from django.db.models.deletion import CASCADE, PROTECT
+from django.db.models.deletion import PROTECT
 
 '''PACIENTES'''
 class Paciente(ModeloBase):

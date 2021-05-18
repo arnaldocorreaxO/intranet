@@ -3,12 +3,8 @@ from django.contrib import admin
 from bs.admin import ModeloAdminBase
 
 
-class ConsultaAdmin(ModeloAdminBase):
-    
-    # form = ElectorForm2 
-    # readonly_fields = ('ci','nombre','apellido','edad')   
+class ConsultaAdmin(ModeloAdminBase):  
     list_display =['fecha','hora','paciente','edad']
-    # list_editable =['tipo_voto'] #Consume muchos recursos (tarda mucho la consulta)
     list_filter =['fecha','motivo_consulta','paciente']
     search_fields =['paciente']
     list_display_links = ['fecha','hora','paciente']

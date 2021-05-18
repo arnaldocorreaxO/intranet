@@ -11,4 +11,5 @@ class PerfilAdmin(admin.ModelAdmin):
 	list_filter = ('sede','tip_empleado','usuario__is_active','creacion')
 
 	def usuario_full_name(self,obj):
-		return obj.usuario.first_name +' '+obj.usuario.last_name
+		return f"{obj.usuario.first_name} {obj.usuario.last_name}"
+		

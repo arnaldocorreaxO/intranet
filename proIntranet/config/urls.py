@@ -28,19 +28,13 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('rh/', include('rh.urls')),
     path('bs/', include('bs.urls')),
-    # path('publicacion/',include('intranet.urls',namespace='publicacion')),
+    path('cm/', include('cm.urls')),
     path('admin/', admin.site.urls),
-    #  path(
-    #     'change-password/',
-    #     auth_views.PasswordChangeView.as_view(template_name='usuarios/change-password.html'),
-    #     name ='change-password',
-    # ),
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('intranet/', AvisoListView.as_view(), name='aviso-list'),
 
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #TITULO ADMINISTRACION DJANGO
-admin.site.site_header = 'Administración Intranet INC'
+admin.site.site_header = 'Intranet INC'

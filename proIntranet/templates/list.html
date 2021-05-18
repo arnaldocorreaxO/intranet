@@ -1,4 +1,4 @@
-{% extends 'skin.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block head_body %}
     <!-- DATATABLES -->
@@ -20,7 +20,7 @@
     {% block head_list %}{% endblock %}
 {% endblock %}
 
-{% block content %}
+{% block container %}
     <div class="card {{ dshboard.card }}">
         <div class="card-header">
             <h3 class="card-title">
@@ -102,6 +102,11 @@
             var table;
             $(function () {
                 table = $('#data').DataTable({
+                    "language": {
+                        "url": "{% static 'lib/datatables-1.10.20/plugins/1.10.20/i18n/Spanish.json' %}",
+                        "decimal": ".",
+                        "thousands": ",",
+                    },
                     responsive: true,
                     autoWidth: false,
                     destroy: true,

@@ -24,49 +24,51 @@
 
   <!--ESTATICOS-->
   {% load static %}
-
-  <!-- BOOTSTRAP -->
-  <link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}"> 
-  <link rel="stylesheet" href="{% static '/bootstrap-select-1.13.1/css/bootstrap-select.min.css' %}">
-
-  <!-- JQUERY CDN  EL ORDER IMPORTA -->  
-  <script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>  
-  <!-- <script src="{% static '/bootstrap/4.3.1/js/popper.min.js' %}"></script> -->
-  <!-- <script src="{% static '/bootstrap/4.3.1/js/bootstrap.min.js' %}"></script> -->
   
- 
+  <!-- BOOTSTRAP -->
+  <link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static '/bootstrap-select-1.13.1/css/bootstrap-select.min.css' %}">
+  
+  <!-- JQUERY CDN  EL ORDER IMPORTA -->
+  <script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
 
+  
+  
+  
   <!-- FONTS PARA ESTE TEMPLATE-->
-  <!-- <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css"> -->
   <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/all.min.css' %}" type="text/css">
-  <!-- <link rel="stylesheet" href="{% static 'font-awesome/css/all.css' %}"> -->
 
+  
   <!-- DATATABLES FORMATO BOOSTRAP 4 -->
-  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" >
-
+  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}">
+  
   <!-- ESTILO GENERAL DE ESTE TEMPLATE-->
-  <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" >
+  <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}">
+  
+  <!-- GIJGO DATEPICKER   -->
+  <script src="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script>
+  <link href="{% static '/gijgo-combined-1.9.13/css/gijgo.min.css' %}" rel="stylesheet" type="text/css" />
+  <script src="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script>
+  
+  <!--ESTILOS PROPIOS-->
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+  
+  <!-- LIBS -->
+  <script src="{% static 'lib/moment/moment.js' %}"></script>
+  <script src="{% static 'lib/moment/moment-with-locales.js' %}"></script>
+  <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" />
+  <script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'lib/sweetalert2-9.10.0/sweetalert2.min.css' %}" />
+  <script src="{% static 'lib/jquery-loading-overlay-1.5.3/loadingoverlay.min.js' %}"></script>
+  <!-- FUNCTION -->
+  <script src="{% static 'js/functions.js' %}"></script>
 
-
-  <!-- IMPLEMENTACION DATETIMEPICKER -->
-  <!-- <script src="{% static '/js/moment.js' %}" ></script> -->
-  <!-- <script src="{% static '/js/bootstrap-datetimepicker.min.js' %}" ></script> -->
-  <!-- <script src="{% static '/js/locale/es.js' %}" ></script> -->
-
-<!-- GIJGO DATEPICKER   -->
-<script src ="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script>
-<link   href="{% static '/gijgo-combined-1.9.13/css/gijgo.min.css' %}" rel="stylesheet" type="text/css" />
-<script src ="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script>
-
-<!--ESTILOS PROPIOS-->
-<link rel="stylesheet" href="{% static 'css/estilos.css' %}" >
-<link rel="stylesheet" href="{% static 'css/carousel.css' %}" >
-
-<!-- SELECT PICKER CON OPCIONES DE BUSQUEDA SEARCH-->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css"> -->
 
 {% block extrahead %}    {% endblock %} {# Embeds Extra Resources #}                
 {% block head_content %} {% endblock %}
+{% block head_body %} {% endblock %}
 
   <!--HEADER --> 
 </head>
@@ -509,6 +511,9 @@
   </script>
   <!--TOOLTIP MENU BAR LEFT-->
   <script type="text/javascript">
+
+  var pathname = window.location.pathname;
+  
     $(function () {
       $('[data-toggle="tooltip"]').tooltip({
      'delay': { show: 1000, hide: 500 }

@@ -17,22 +17,22 @@ def getIdentificaciones(**Kwargs):
 
 		# Ejecutar una consulta SELECT
 		sqlquery = """SELECT 
-								per_codcci, 
-								per_apynom, 
-								per_nombres, 
-								TO_DATE(per_fchnaci,'YYYY-MM-DD')::char(10) AS per_fchnaci,
-								nac_codpais,
-								CASE civ_codeciv
-									WHEN '-1' THEN 'DE'
-									WHEN '0' THEN 'DE'
-									WHEN 'ME' THEN 'DE'
-								ELSE
-									civ_codeciv
-								END, 
-								per_desdomi 
-						FROM 	personas 
-					   WHERE 
-							 	per_codcci = '{vCedula}';""".format(**Kwargs)
+							per_codcci, 
+							per_apynom, 
+							per_nombres, 
+							TO_DATE(per_fchnaci,'YYYY-MM-DD')::char(10) AS per_fchnaci,
+							nac_codpais,
+							CASE civ_codeciv
+							WHEN '-1' THEN 'DE'
+							WHEN '0' THEN 'DE'
+							WHEN 'ME' THEN 'DE'
+							ELSE
+							civ_codeciv
+							END, 
+							per_desdomi 
+						FROM personas 
+						WHERE 
+						per_codcci = '{vCedula}';""".format(**Kwargs)
 		#print(sqlquery)
 		cur.execute(sqlquery)
 

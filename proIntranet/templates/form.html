@@ -1,6 +1,6 @@
 {% extends 'list.html' %}
 {% load widget_tweaks %}
-{% load security_extras %}
+{% load base_extras %}
 {% load static %}
 {% block head_list %}
     <!--Formvalidation Libs-->
@@ -13,7 +13,7 @@
     {% block head_form %}{% endblock %}
 {% endblock %}
 
-{% block content %}
+{% block container %}
     <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm"
           data-url="{{ list_url }}">
         <div class="card {{ dshboard.card }}">
@@ -32,7 +32,7 @@
                     <input type="hidden" name="action" id="action" value="{{ action }}">
                     {% csrf_token %}
                     {# Forms Visible #}
-                    <!-- {{ form.as_p}} -->
+                    <!-- {#{ form.as_p}} -->
                     {% for field in form.visible_fields %}
                         <div class="form-group">
                             <label>{{ field.label }}:</label>
