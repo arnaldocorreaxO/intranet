@@ -65,7 +65,7 @@ class MotivoConsultaCreateView(PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
-        context['title'] = 'Nuevo registro de un MotivoConsulta'
+        context['title'] = 'Nuevo registro Motivo Consulta'
         context['action'] = 'add'
         return context
 
@@ -112,7 +112,7 @@ class MotivoConsultaUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
-        context['title'] = 'Edición de un Motivo Consulta'
+        context['title'] = 'Edición de Motivo Consulta'
         context['action'] = 'edit'
         return context
 
