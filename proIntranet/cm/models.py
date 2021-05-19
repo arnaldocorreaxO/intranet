@@ -5,6 +5,7 @@ from bs.models import ModeloBase, Nacionalidad
 from config.utils import calculate_age, choiceEstadoCivil, choiceGenero
 from django.db import models
 from django.db.models.deletion import PROTECT
+from django.forms import model_to_dict
 
 '''PACIENTES'''
 class Paciente(ModeloBase):
@@ -21,6 +22,12 @@ class Paciente(ModeloBase):
     
     def get_edad(self):
         return calculate_age(self.fecha_nacimiento)
+    
+    def toJSON(self):
+        item = model_to_dict(self,exclude=[''])
+        item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%d-%m-%Y')
+        item['edad'] = self.get_edad()
+        return item
 
     def save(self, force_insert=False, force_update=False):
         self.nombre = self.nombre.upper()
@@ -28,7 +35,7 @@ class Paciente(ModeloBase):
         super(Paciente, self).save(force_insert, force_update)
 
 
-'''MOTIVO DE CONSULTA'''
+'''MOTIVOS DE CONSULTAS'''
 class MotivoConsulta(ModeloBase):   
     descripcion = models.CharField(max_length=150,unique=True)
     
@@ -46,5 +53,13 @@ class Consulta(ModeloBase):
 
     def __str__(self):
         return f"{self.fecha} {self.hora} {self.paciente}"
+    
+    def toJSON(self):
+        item = model_to_dict(self,exclude=[''])
+        item['fecha'] = self.fecha.strftime('%d/%m/%Y')
+        item['hora'] = self.hora.strftime('%H:%M:%S')
+        item['paciente'] = str(self.paciente)
+        item['edad'] = self.paciente.get_edad()
+        return item
     
     

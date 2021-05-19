@@ -45,13 +45,13 @@
                             <!--Block box footer buttons-->
                             {% block box_header_buttons %}
                                 {% if create_url %}
-                                <a href="{{ create_url }}" class="btn btn-primary btn-flat">
+                                <a href="{{ create_url }}" class="btn btn-primary btn-xs btn-flat">
                                     <i class="fas fa-plus"></i> Nuevo Registro
                                 </a>
                                 {% endif %}
                             <!--Block box footer add buttons-->
                                 {% block box_header_add_button %}{% endblock %}
-                                <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                                <a href="{{ list_url }}" class="btn btn-success btn-xs btn-flat">
                                     <i class="fas fa-sync-alt"></i> Actualizar
                                 </a>
                             {% endblock %}
@@ -62,7 +62,7 @@
                                 <br>
                         {% endblock %}
                         <!--Table-->
-                        <table width="100%" class="table table-bordered table-striped" id="data">
+                        <table width="100%" class="table table-bordered table-striped table-sm" id="data">
                             <thead>
                             <tr>
                                 <!--Columns-->
