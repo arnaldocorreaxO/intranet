@@ -184,9 +184,12 @@
             </a>
           
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="/admin/cm/consulta">Consultas</a></li>
-              <li><a class="dropdown-item" href="{% url 'motivo_consulta_list' %}">Motivo Consulta</a></li>
+              <h6 class="dropdown-header">Clínica Médica</h6>
+              <li><a class="dropdown-item" href="{% url 'consulta_list' %}">Registrar Consultas</a></li>
+              <li><a class="dropdown-item" href="{% url 'motivo_consulta_list' %}">Motivos de Consultas</a></li>
               <li><a class="dropdown-item" href="{% url 'paciente_list' %}">Pacientes</a></li>
+              <div class="dropdown-divider"></div>
+              <li><a class="dropdown-item" href="/admin/cm/consulta">Listados de Consultas Admin</a></li>
             </ul>
             {% endif %}
     </ul>

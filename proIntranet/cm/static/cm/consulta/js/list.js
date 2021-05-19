@@ -34,7 +34,11 @@ function getData(all) {
     }
 
     tblData = $('#data').DataTable({
-        
+        "language": {
+            "url": "/static/lib/datatables-1.10.20/plugins/1.10.20/i18n/Spanish.json",
+            "decimal": ".",
+            "thousands": ",",
+        },        
         responsive: true,
         autoWidth: false,
         destroy: true,
