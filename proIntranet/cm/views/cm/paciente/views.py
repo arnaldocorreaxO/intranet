@@ -13,7 +13,7 @@ from cm.forms import PacienteForm
 class PacienteListView(PermissionRequiredMixin, ListView):
     model = Paciente
     template_name = 'cm/paciente/list.html'
-    permission_required = 'view_paciente'
+    permission_required = 'cm.view_paciente'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -30,7 +30,7 @@ class PacienteCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'cm/paciente/create.html'
     form_class = PacienteForm
     success_url = reverse_lazy('paciente_list')
-    permission_required = 'add_paciente'
+    permission_required = 'cm.add_paciente'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -75,7 +75,7 @@ class PacienteUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'cm/paciente/create.html'
     form_class = PacienteForm
     success_url = reverse_lazy('paciente_list')
-    permission_required = 'change_paciente'
+    permission_required = 'cm.change_paciente'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -121,7 +121,7 @@ class PacienteDeleteView(PermissionRequiredMixin, DeleteView):
     model = Paciente
     template_name = 'cm/paciente/delete.html'
     success_url = reverse_lazy('paciente_list')
-    permission_required = 'delete_paciente'
+    permission_required = 'cm.delete_paciente'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

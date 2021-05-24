@@ -13,7 +13,7 @@ from cm.forms import MotivoConsultaForm
 class MotivoConsultaListView(PermissionRequiredMixin, ListView):
     model = MotivoConsulta
     template_name = 'cm/motivo_consulta/list.html'
-    permission_required = 'view_motivoconsulta'
+    permission_required = 'cm.view_motivoconsulta'
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -30,7 +30,7 @@ class MotivoConsultaCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'cm/motivo_consulta/create.html'
     form_class = MotivoConsultaForm
     success_url = reverse_lazy('motivo_consulta_list')
-    permission_required = 'add_motivoconsulta'
+    permission_required = 'cm.add_motivoconsulta'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -75,7 +75,7 @@ class MotivoConsultaUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'cm/motivo_consulta/create.html'
     form_class = MotivoConsultaForm
     success_url = reverse_lazy('motivo_consulta_list')
-    permission_required = 'change_motivoconsulta'
+    permission_required = 'cm.change_motivoconsulta'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -121,7 +121,7 @@ class MotivoConsultaDeleteView(PermissionRequiredMixin, DeleteView):
     model = MotivoConsulta
     template_name = 'cm/motivo_consulta/delete.html'
     success_url = reverse_lazy('motivo_consulta_list')
-    permission_required = 'delete_motivoconsulta'
+    permission_required = 'cm.delete_motivoconsulta'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
