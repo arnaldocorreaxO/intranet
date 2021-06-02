@@ -4,41 +4,41 @@ var hora;
 document.addEventListener('DOMContentLoaded', function (e) {
     const form = document.getElementById('frmForm');
     const fv = FormValidation.formValidation(form, {
-            locale: 'es_ES',
-            localization: FormValidation.locales.es_ES,
-            plugins: {
-                trigger: new FormValidation.plugins.Trigger(),
-                submitButton: new FormValidation.plugins.SubmitButton(),
-                bootstrap: new FormValidation.plugins.Bootstrap(),
-                icon: new FormValidation.plugins.Icon({
-                    valid: 'fa fa-check',
-                    invalid: 'fa fa-times',
-                    validating: 'fa fa-refresh',
-                }),
-            },
-            fields: {
-                denominacion: {
-                    validators: {
-                        notEmpty: {},
-                        stringLength: {
-                            min: 2,
+        locale: 'es_ES',
+        localization: FormValidation.locales.es_ES,
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            bootstrap: new FormValidation.plugins.Bootstrap(),
+            icon: new FormValidation.plugins.Icon({
+                valid: 'fa fa-check',
+                invalid: 'fa fa-times',
+                validating: 'fa fa-refresh',
+            }),
+        },
+        fields: {
+            denominacion: {
+                validators: {
+                    notEmpty: {},
+                    stringLength: {
+                        min: 2,
+                    },
+                    remote: {
+                        url: pathname,
+                        data: function () {
+                            return {
+                                obj: form.querySelector('[name="denominacion"]').value,
+                                type: 'denominacion',
+                                action: 'validate_data'
+                            };
                         },
-                        remote: {
-                            url: pathname,
-                            data: function () {
-                                return {
-                                    obj: form.querySelector('[name="denominacion"]').value,
-                                    type: 'denominacion',
-                                    action: 'validate_data'
-                                };
-                            },
-                            message: 'El nombre ya se encuentra registrado',
-                            method: 'POST'
-                        }
+                        message: 'El nombre ya se encuentra registrado',
+                        method: 'POST'
                     }
                 }
-            },
-        }
+            }
+        },
+    }
     )
         .on('core.element.validated', function (e) {
             if (e.valid) {
@@ -98,6 +98,4 @@ $(function () {
         theme: 'bootstrap4',
         language: "es"
     });
-
-
 });

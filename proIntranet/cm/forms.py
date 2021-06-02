@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
 from django.forms import *
 from django import forms
 from bs.forms import *
@@ -84,21 +85,37 @@ class ConsultaForm(ModelForm):
         model = Consulta
         fields = '__all__'
         exclude = readonly_fields
+        # widgets = {
+        #     'fecha': forms.DateInput(format='%d-%m-%Y', attrs={
+        #         'class': 'datetimepicker-input',
+        #         'id': 'fecha',
+        #         'value': datetime.now().strftime('%d/%m/%Y'),
+        #         'data-toggle': 'datetimepicker',
+        #         'data-target': '#fecha'
+        #     }),            
+        #     'hora': forms.TimeInput(format='%H:%M:%S', attrs={
+        #         'class': 'datetimepicker-input',
+        #         'id': 'hora',
+        #         'value': datetime.now().strftime('%H:%M:%S'),
+        #         'data-toggle': 'datetimepicker',
+        #         'data-target': '#hora'
+        #     }),       
         widgets = {
-            'fecha': forms.DateInput(format='%d-%m-%Y', attrs={
-                'class': 'form-control datetimepicker-input',
-                'id': 'fecha',
-                'value': datetime.now().strftime('%d/%m/%Y'),
-                'data-toggle': 'datetimepicker',
-                'data-target': '#fecha'
-            }),            
-            'hora': forms.TimeInput(format='%H:%M:%S', attrs={
-                'class': 'form-control datetimepicker-input',
-                'id': 'hora',
-                'value': datetime.now().strftime('%H:%M:%S'),
-                'data-toggle': 'datetimepicker',
-                'data-target': '#hora'
-            }),            
+        'fecha': DatePickerInput(attrs={'class': 'col-md-6'},
+                                options={
+                                    "format": "DD/MM/YYYY",
+                                    "locale": "es", 
+
+                                }),
+        'hora': TimePickerInput(attrs={'class': 'col-md-6'},
+                                options={
+                                    # "format": "HH:MM:SS",
+                                    "locale": "es", 
+
+                                }),
+        #'titulo':forms.TextInput(attrs={'class': 'form-control',
+        #                                'placeholder' : 'Ingrese su número de Cédula'}),
+        
             'motivo_consulta':forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'paciente':forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
         }
