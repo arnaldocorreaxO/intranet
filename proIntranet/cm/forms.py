@@ -101,13 +101,13 @@ class ConsultaForm(ModelForm):
         #         'data-target': '#hora'
         #     }),       
         widgets = {
-        'fecha': DatePickerInput(attrs={'class': 'col-md-6'},
+        'fecha': DatePickerInput(attrs={'class': 'col-md-2'},
                                 options={
                                     "format": "DD/MM/YYYY",
                                     "locale": "es", 
 
                                 }),
-        'hora': TimePickerInput(attrs={'class': 'col-md-6'},
+        'hora': TimePickerInput(attrs={'class': 'col-md-2'},
                                 options={
                                     # "format": "HH:MM:SS",
                                     "locale": "es", 
