@@ -36,7 +36,7 @@ def getIdentificaciones(**Kwargs):
 		#print(sqlquery)
 		cur.execute(sqlquery)
 
-		# Obtener los resultados como objetos Python
+		# Obtener los resultados como dict objetos Python
 		allresults = cur.fetchall()
 		#print(dictionary)
 		results = []

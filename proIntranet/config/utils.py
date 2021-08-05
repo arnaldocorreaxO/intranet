@@ -66,6 +66,7 @@ def pMesActual():
   ahora = datetime.now()
   mes = ahora.month
   return mes
+
 def choiceTipoEmpleado():
     CHOICE = [
         ('PER','PERMANENTE'),
