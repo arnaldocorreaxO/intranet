@@ -319,7 +319,7 @@ def ver_asistencia(request):
 ###########################################
 def cargarAsistenciaVallemi(**Kwargs):
   #PARAMETROS DE CONEXION SQLSERVER VALLEMI
-  MSSQL_VMI_SERVER = '192.168.100.75'
+  MSSQL_VMI_SERVER = '192.168.100.48'
   MSSQL_VMI_DB ='db_inc'
 
   MSSQL_DRIVER = 'ODBC Driver 17 for SQL Server'
