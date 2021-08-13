@@ -314,6 +314,7 @@ def ver_asistencia(request):
 #         context={'form': form,'usuario':usuario}
 #     )
 
+
 ###########################################
 #      CARGAR ASISTENCIA DE VALLEMI 
 ###########################################
