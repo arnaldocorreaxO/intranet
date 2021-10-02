@@ -41,12 +41,14 @@
 				</div>
 
 				<div class="row">
-					<div class="col-6">
-						 <img src="{% static 'img/logo_inc.png' %}" width="65%" height="70%">
-						 <div style="padding: 3px 30px"><b>RUC: 80000089-7</b></div>
-					</div>						 
-					<div class="col-6 text-right">
-						<div><b>Recibo de Pago</b></div>
+					<div class="col-2">
+						 <img class="center" src="{% static 'img/logo_hd.png' %}" width="100%">				
+					</div>	
+					<div class="col-3">
+						<p class="text-center pt-3 m-0"><b>INDUSTRIA NACIONAL DEL CEMENTO</b><br><b>RUC: 80000089-7</b></p>						
+					</div>					 
+					<div class="col-7 text-right">
+						<div><b>RECIBO DE PAGO</b></div>
 						<div><b>Original</b></div> 
 						<div><b> Mes {{recibos.0.nombre_mes}} de {{recibos.0.aano}} - {{recibos.0.fecha}}</b></div>
 						<div>Sueldo Basico: {{recibos.0.suel_basi|floatformat:"0"}}</div> 
@@ -55,7 +57,7 @@
 				</div>
 
 				<div class="row">    
-					<div class="col text-left"><b>Legajo:</b> {{recibos.0.lega}} - {{recibos.0.nomb}}, {{recibos.0.apel}} <p style="color:#FF0000";>{{recibos.0.mensaje}}</p></div>     
+					<div class="col text-left"><b>LEGAJO:</b> {{recibos.0.lega}} - {{recibos.0.nomb}}, {{recibos.0.apel}} <p style="color:#FF0000";>{{recibos.0.mensaje}}</p></div>     
 				</div>
 			    	<div class="row">        
 						            <div class="table-responsive">

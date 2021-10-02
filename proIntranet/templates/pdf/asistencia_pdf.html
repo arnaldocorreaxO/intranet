@@ -30,31 +30,35 @@
 	<div class="row">	
 		
 			<div class="col-md-12">
-				<div class="row"> 
+				<div class="row">
 					<div class="col text-right">
 						<a class="button btn btn-outline-primary" href="javascript:history.back()">
-						<i class="fa fa-undo" aria-hidden="true"></i> Atrás</a>
+							<i class="fa fa-undo" aria-hidden="true"></i> Atrás</a>
 						<button type="button" class="btn btn-outline-danger" onclick="window.print();">
-						<i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
+							<i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
 						<button type="button" class="btn btn-outline-success" id="btnExportExcel">
-						<i class="fa fa-file-excel" aria-hidden="true"></i> Descargar</button>
-							<!-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> -->						
-					</div>  
-				</div>
-
-				<div class="row">
-					<div class="col-6">
-						 <img src="{% static 'img/logo_inc.png' %}" width="50%" height="70%">
-						 <div style="padding: 3px 30px"><b>RUC: 80000089-7</b></div>
-					</div>						 
-					<div class="col-12 text-center">
-						<div><b>Historial de Asistencia</b></div>
-						<div><b>Periodo: Entre {{data.pFechaDesde|date:"d/m/Y"}} y {{data.pFechaHasta|date:"d/m/Y"}} </b></div> 
-						<p style="color:#FF0000";>{{asistencias.0.mensaje}}</p></div>
+							<i class="fa fa-file-excel" aria-hidden="true"></i> Descargar</button>
+						<!-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> -->
 					</div>
-					
 				</div>
 				
+			
+				<div class="row">
+					<div class="col-2">
+						<img class="center" src="{% static 'img/logo_hd.png' %}" width="100%">
+					</div>
+					<div class="col-8">
+						<p class="text-center mt-5"><b>INDUSTRIA NACIONAL DEL CEMENTO</b><br><b>RUC: 80000089-7</b></p>
+					</div>
+					<div class="col-2"></div>
+					<div class="col-12 text-center">
+						<div><b>Historial de Asistencia</b></div>
+						<div><b>Periodo: Entre {{data.pFechaDesde|date:"d/m/Y"}} y {{data.pFechaHasta|date:"d/m/Y"}} </b></div>
+						<p style="color:#FF0000" ;>{{asistencias.0.mensaje}}</p>
+					</div>
+				</div>
+			
+			</div>
 
 				   	<div class="row">        
 						            <div class="table-responsive">
