@@ -1,28 +1,8 @@
 import pyodbc
 import IfxPy
-
-#from xhtml2pdf import pisa
-#from django.template.loader import get_template
-#from django.template import Context
-#from django.http import HttpResponse
-#from cgi import escape
-
-#from io import BytesIO
-#from django.core.files.storage import FileSystemStorage
-#from django.http import HttpResponse
-#from django.template.loader import render_to_string
-#from django.views.generic import View
-from django.shortcuts import render, render_to_response
-#from django.template import RequestContext
-#from django.utils import timezone
+from django.shortcuts import render
 from django.views.generic.list import ListView
-#from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
-#from django.contrib.auth.models import User
-
-#from jinja2 import Environment, FileSystemLoader
-#from weasyprint import HTML, CSS
-#from config import settings
 """
 https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 bajar GTK descomprimir en C:\\msys2\\mingw64
