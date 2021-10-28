@@ -1,29 +1,28 @@
 import pyodbc
 import IfxPy
-import time
-import io as StringIO
-from xhtml2pdf import pisa
-#from django.template.loader import get_template
-from django.template import Context
-#from django.http import HttpResponse
-from cgi import escape
 
-from io import BytesIO
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.views.generic import View
+#from xhtml2pdf import pisa
+#from django.template.loader import get_template
+#from django.template import Context
+#from django.http import HttpResponse
+#from cgi import escape
+
+#from io import BytesIO
+#from django.core.files.storage import FileSystemStorage
+#from django.http import HttpResponse
+#from django.template.loader import render_to_string
+#from django.views.generic import View
 from django.shortcuts import render, render_to_response
-from django.template import RequestContext
-from django.utils import timezone
+#from django.template import RequestContext
+#from django.utils import timezone
 from django.views.generic.list import ListView
-from django.template.loader import get_template
+#from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 
 #from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML, CSS
-from config import settings
+#from weasyprint import HTML, CSS
+#from config import settings
 """
 https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 bajar GTK descomprimir en C:\\msys2\\mingw64
@@ -424,10 +423,20 @@ def cargarAsistencia(**Kwargs):
                    ELSE NULL 
                END AS hora_sali,
               ashst.tipo_entr, 
-              ashst.ccos, sjdiv.nomb_divi, sjdpt.nomb_depa, 
+              ashst.ccos as ccos2, sjdiv.nomb_divi, sjdpt.nomb_depa, 
               sjsec.nomb_secc, ashot.nomb_hora_tipo, 
               astur.hora_ent1, astur.hora_sal1, pscco.nomb_ccos,
-              ashst.conl,ashst.moti_ause 
+              ashst.conl,ashst.moti_ause,
+              CASE WEEKDAY(ashst.ddma_emis) 
+                    WHEN 0 THEN 'Do' 
+                    WHEN 1 THEN 'Lu' 
+                    WHEN 2 THEN 'Ma' 
+                    WHEN 3 THEN 'Mi' 
+                    WHEN 4 THEN 'Ju'
+                    WHEN 5 THEN 'Vi'
+                    WHEN 6 THEN 'Sá'
+              ELSE '..'    
+              END as ccos
         FROM  sjsit, OUTER(sjdiv), OUTER(sjdpt), OUTER(sjsec), 
               ashst, ashot, OUTER(astur), OUTER pscco , OUTER(sjcol), 
               sjpag, sjdoc 
