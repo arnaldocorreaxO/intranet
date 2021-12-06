@@ -34,8 +34,6 @@ class Publicacion(models.Model):
 	url = models.URLField(blank=True,null=False)
 	imagen = models.ImageField(
 		upload_to='intranet/img/post',
-		blank=True,
-		null=True
 		)	
 	cumpleanho = models.BooleanField(verbose_name='Sección Cumpleaños',default=False)
 	class Meta:

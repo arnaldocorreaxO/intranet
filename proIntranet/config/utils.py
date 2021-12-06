@@ -7,6 +7,15 @@ from django.conf import settings
 
 from datetime import datetime, timedelta
 
+def print_info(*args):
+	txt = args[0] 	# Texto
+	rel = '-'*15	# Relleno
+	print(f'{rel} {txt.center(70)} {rel}')
+
+def print_err(*args):
+	txt = args[0]	#Texto
+	rel = '#'*15	#Relleno
+	print(f'{rel} {txt.center(70)} {rel}')
 
 def calculate_age(born):
 	from datetime import date
@@ -84,6 +93,13 @@ def choiceEstado():
 	CHOICE = [
 			('A', 'ACTIVO'),
 			('I', 'INACTIVO'),
+	]
+	return CHOICE
+
+def choiceTipoMarcacion():
+	CHOICE = [
+			('E', 'ENTRADA'),
+			('S', 'SALIDA'),
 	]
 	return CHOICE
 

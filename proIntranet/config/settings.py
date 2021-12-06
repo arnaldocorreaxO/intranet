@@ -137,6 +137,22 @@ USE_TZ = True
 
 USE_THOUSAND_SEPARATOR=True
 
+from django.conf.locale.es import formats as es_formats
+
+es_formats.DATETIME_FORMAT = "d M Y H:i:s"
+# es_formats.NUMBER_GROUPING
+# es_formats.DATETIME_INPUT_FORMATS  
+# es_formats.SHORT_DATETIME_FORMAT
+es_formats.DATE_FORMAT  = "d/m/Y"            
+# es_formats.SHORT_DATE_FORMAT
+# es_formats.DATE_INPUT_FORMATS      
+# es_formats.THOUSAND_SEPARATOR
+# es_formats.DECIMAL_SEPARATOR       
+# es_formats.TIME_FORMAT
+# es_formats.FIRST_DAY_OF_WEEK       
+# es_formats.YEAR_MONTH_FORMAT
+# es_formats.MONTH_DAY_FORMAT
+
 
 """Modelo de Autorizacion de Usuario"""
 AUTH_USER_MODEL = 'auth.User'

@@ -40,35 +40,34 @@ def my_Sample(**Kwargs):
           """.format(Kwargs['pCedula'],Kwargs['pMes'],Kwargs['pAnho'])
     #print(sql)
     stmt = IfxPy.exec_immediate(conn, sql)
-    dictionary = IfxPy.fetch_assoc(stmt)
+    row = IfxPy.fetch_assoc(stmt) #Dictionary {}
 
-    rc = 0
-    lista = []
-    while dictionary != False:
-        rc += 1
-        print ("--  Record {0} --".format(rc))
-        row=""
-        lista.append(dictionary)
-        #for k, v in dictionary.items():
-        #    print("Code : {0}, Value : {1}".format(k, v))
-        """
-        print ("c2 is : ", dictionary[1])
-        print ("c3 is : ", dictionary[2])
-        print ("c4 is : ", dictionary[3])
-        print (" ")
-        print (dictionary)
-        """
-        dictionary = IfxPy.fetch_assoc(stmt)
-    for i in lista: 
-      for k,v in i.items():
-          if k == 'lega':
-            print(v)
-          if k == 'conl':
-            print(v)
-          if k == 'nomb':
-            print(v)    
-    print( "Total Record Selected {}".format(rc) )
-
+    rows={} #Dictionary key:[valores como lista]
+    nrows=0 #Nro de Filas  
+    while row != False:
+      nrows+=1
+      # print('###########   DICTIONARY      #############')
+      for key,value in row.items(): 
+        # print('###########   ITEMS      #############')
+        try:
+          # print(key,'->',value)
+          rows[key].append(value)          
+        except KeyError:
+          rows[key] = [value]
+      row = IfxPy.fetch_assoc(stmt)
+    
+    if nrows:
+      legajos = rows['lega']
+      # keys = [*rows.keys()] #Desempaquetar dict 
+      keys =['lega','nomb','apel','docu','nomb_carg']
+      # keys =['lega','nomb','apel',]
+      # print(" ".join(keys))
+      print(keys)
+      for i in range(0,len(legajos)):
+        data=''
+        for k in range(0,len(keys)):
+          data += str(rows[keys[k]][i]).strip() + "\t"
+        print(data + "\n")  
     # Free up memory used by result and then stmt too
     IfxPy.free_result(stmt)
     IfxPy.free_stmt (stmt)
@@ -77,4 +76,4 @@ def my_Sample(**Kwargs):
 
     print ("Done")
 
-my_Sample(pCedula='3588321',pMes='7',pAnho='2019')    
+#my_Sample(pCedula='3588321',pMes='7',pAnho='2019')    

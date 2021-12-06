@@ -81,6 +81,49 @@ function message_error(message) {
     }
 }
 
+function message_warning(message) {
+    var type = typeof (message) === "object";
+    if (typeof (message) === "object") {
+        var errors = '<ul style="list-style: square; text-align: left;">';
+        $.each(message, function (index, item) {
+            errors += '<li><b style="text-transform:capitalize;">' + index + "</b>.- " + item + '</li>';
+        });
+        errors += '</ul>';
+        message = errors;
+    }
+    if (type) {
+        alert_sweetalert('warning', 'Atención!', "X", function () {
+
+        }, null, message);
+    } else {
+        alert_sweetalert('warning', 'Atención!', "X", function () {
+
+        }, null, message);
+    }
+}
+
+function message_success(message) {
+    var type = typeof (message) === "object";
+    if (typeof (message) === "object") {
+        var errors = '<ul style="list-style: square; text-align: left;">';
+        $.each(message, function (index, item) {
+            errors += '<li><b style="text-transform:capitalize;">' + index + "</b>.- " + item + '</li>';
+        });
+        errors += '</ul>';
+        message = errors;
+       
+    }
+    if (type) {
+        alert_sweetalert('success', 'OK', "", function () {
+
+        }, null, message);
+    } else {
+        alert_sweetalert('success', 'OK!', "X", function () {
+
+        }, null, message);
+    }
+}
+
 function submit_formdata_with_ajax_form(fv) {
     var form = fv.form;
     var submitButton = fv.form.querySelector('[type="submit"]');
@@ -179,7 +222,7 @@ function submit_with_ajax(title, content, url, parameters, callback) {
     });
 }
 
-function submit_formdata_with_ajax(title, content, url, parameters, callback) {
+function submit_formdata_with_ajax(title, content, url, parameters,callback) {
     $.confirm({
         theme: 'modern',
         title: title,
@@ -195,7 +238,7 @@ function submit_formdata_with_ajax(title, content, url, parameters, callback) {
                 text: "Si",
                 btnClass: 'btn-primary',
                 action: function () {
-                    $.ajax({
+                    $.ajax({   
                         url: url, //window.location.pathname
                         type: 'POST',
                         data: parameters,

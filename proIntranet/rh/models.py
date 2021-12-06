@@ -1,5 +1,7 @@
 from django.db import models
+from django.forms.models import model_to_dict
 from config.utils import *
+
 
 #DEPENDENCIAS
 class Dependencia(models.Model):

@@ -29,7 +29,7 @@ class ModeloBase(models.Model):
 	'''SAVE'''
 	def save(self, *args, **kwargs):
 		user = get_current_user()
-		print(user)
+		# print(user)
 		if user and not user.pk:
 			user = None
 		# print(dir(self))
