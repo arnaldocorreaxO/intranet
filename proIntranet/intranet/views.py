@@ -155,7 +155,7 @@ def ver_asistencia(request):
         if form.is_valid():
             data = form.cleaned_data
             result=[]
-            can_select_empleado = request.user.has_perm('can_select_empleado')
+            can_select_empleado = request.user.has_perm('auth.can_select_empleado')
             #CONTROLAR QUE SOLO LOS USUARIOS CON PERMISO PUEDAN CONSULTAR OTRAS ASISTENCIAS
             if not can_select_empleado and data['pLegajo']!= str(request.user.perfil.legajo):
                 result = [{'mensaje':'Permisos Insuficientes para consultar otras asistencias'}]

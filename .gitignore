@@ -238,3 +238,6 @@ Thumbs.db
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,vscode
+proIntranet/requerimientos.txt
+proIntranet/requirements.txt
+proIntranet/requerimientos.txt
