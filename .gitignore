@@ -241,3 +241,5 @@ Thumbs.db
 proIntranet/requerimientos.txt
 proIntranet/requirements.txt
 proIntranet/requerimientos.txt
+proIntranet/config/db.py
+proIntranet/config/settings.py
