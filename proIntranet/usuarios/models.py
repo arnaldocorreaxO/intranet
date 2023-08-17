@@ -5,7 +5,7 @@ from django.db import models
 #LOCALS
 from rh.models import *
 from bs.models import *
-from config.utils import *
+from bs.utils import *
 
 
 #PERFIL DE USUARIO

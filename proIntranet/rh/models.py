@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms.models import model_to_dict
-from config.utils import *
+from bs.utils import *
 
 
 #DEPENDENCIAS

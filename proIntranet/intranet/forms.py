@@ -8,7 +8,7 @@ from datetime import datetime,timedelta
 #Models
 from .models import Publicacion
 #Utils
-from config.utils import *
+from bs.utils import *
 
 
 """Parametros Formulario Recibo"""

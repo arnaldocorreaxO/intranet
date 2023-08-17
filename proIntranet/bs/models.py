@@ -1,6 +1,6 @@
 #Django 
 from django.db import models
-from config.utils import *
+from bs.utils import *
 
 from django.db import models
 from crum import get_current_user

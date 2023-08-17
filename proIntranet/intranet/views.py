@@ -9,7 +9,7 @@ bajar GTK descomprimir en C:\\msys2\\mingw64
 https://weasyprint.readthedocs.io/en/latest/install.html#step-5-run-weasyprint
 """
 
-from config.utils import * #created in step 4
+from bs.utils import * #created in step 4
 from .models import *
 
 from .forms import *

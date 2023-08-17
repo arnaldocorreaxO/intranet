@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import unique
 
 from bs.models import ModeloBase, Nacionalidad
-from config.utils import calculate_age, choiceEstadoCivil, choiceGenero
+from bs.utils import calculate_age, choiceEstadoCivil, choiceGenero
 from django.db import models
 from django.db.models.deletion import PROTECT
 from django.forms import model_to_dict
