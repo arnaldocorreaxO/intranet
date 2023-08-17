@@ -35,7 +35,7 @@ class pReciboForm(forms.Form):
                                                            'data-toggle': 'select'}),
                                 choices=choiceMes(), 
                                 required=True,
-                                initial=str(pMesActual()))
+                                initial=mesActual)
     pAnho   = forms.ChoiceField(label='Año',
                                 #min_length=4,
                                 #max_length=4,
