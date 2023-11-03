@@ -10,7 +10,11 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+/* COLORES DE TOP NAVBAR Y MENU IZQUIERDO SIDEBAR BUSCAR CON EL TEXTO /*MODIFICA */
 :root {
+  --intranet_navbar:#0078D4;
+  --intranet_sidebar:#0289D5;
   --blue: #007bff;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -6984,12 +6988,14 @@ button.bg-light:hover,
 button.bg-light:focus {
   background-color: #dae0e5 !important;
 }
-/*COLOR MENU TOPBAR NAVBAR*/
+/*MODIFICA COLOR MENU TOPBAR NAVBAR*/
 .bg-dark {
   /*background-color: #343a40 !important;*/
   /*background-color: #637884 !important;*/
   /*background-color: #5e5e5e !important;*/
-  background-color: #092532 !important;
+  /* background-color: #092532 !important; */
+  background-color: var(--intranet_navbar) !important;
+  
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
@@ -10673,12 +10679,14 @@ body {
     width: auto;
   }
 }
-/*COLOR MENU IZQUIERDO*/
+/*MODIFICA COLOR MENU IZQUIERDO*/
+
 .sidebar {
   width: 90px !important;
   /*background-color: #212529;*/
-  /*background-color: #637884;*/
-  background-color: #204051;
+  /* background-color: #637884; */
+  /* background-color: #204051; */
+  background-color: var(--intranet_sidebar);
   min-height: calc(100vh - 56px);
 }
 
