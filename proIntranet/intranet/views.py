@@ -1,5 +1,7 @@
 import pyodbc
 import IfxPy
+from config import dbinformix as dbifx
+from config import dbmssql as dbmssql
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
@@ -20,25 +22,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import (CreateView,UpdateView,DeleteView)
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-
-####################################################################  
-#IFXPY NECESITA QUE ESTEN DEFINIDOS LOS CLIENTES INFORMIX CLIENT SDK
-####################################################################
-#CENTRAL
-IFX_CEN_HOST = '10.130.10.250'
-IFX_CEN_SERVER = 'ol_informix1170'
-IFX_CEN_SERVICE = '22767'
-IFX_CEN_DB = 'pl4sjasu'
-#VILLETA
-IFX_VTA_HOST = '192.100.100.8'
-IFX_VTA_SERVER = 'ol_platino'
-IFX_VTA_SERVICE = '1530'
-IFX_VTA_DB = 'pl4sjpvi'
-#VALLEMI
-IFX_VMI_HOST = '192.168.100.7'
-IFX_VMI_SERVER = 'ol_informix1171'
-IFX_VMI_SERVICE = '22767'
-IFX_VMI_DB = 'pl4sjvalle'
 
 #############################################
 #             PUBLICACIONES
@@ -85,12 +68,11 @@ def recibo(**Kwargs):
   vMes = Kwargs['pMes']
   vAnho = Kwargs['pAnho']
  
-  if not (vMes== '02' and vAnho == '2021'):
-    return cargarRecibo(**Kwargs)
-  else:
-
-    lista=[{"mensaje":"CONSULTA DE RECIBO NO DISPONIBLE POR EL MOMENTO"}]
-    return lista
+  
+  return cargarRecibo(**Kwargs)
+ 
+  #lista=[{"mensaje":"CONSULTA DE RECIBO NO DISPONIBLE POR EL MOMENTO"}]
+  #return lista
   
 #############################################
 #     CARGAR ASISTENCIAS 
@@ -182,140 +164,15 @@ def ver_asistencia(request):
 
 
 
-# def html_to_pdf_view(url):
-#     pass
-
-#     from selenium import webdriver
-#     import time
-#     import os
-#     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#     driver = webdriver.Chrome('c://chromedriver//chromedriver.exe')  # Optional argument, if not specified will search path.
-#     #driver.get('http://www.google.com/xhtml');
-
-#     #driver = webdriver.PhantomJS("C://phantomjs-2.1.1-windows//bin//phantomjs.exe")
-#    # data = recibo(pCedula='3248983',pMes='7',pAnho='2019',pLegajo='3074')
-#     #driver.get('http://130.10.10.97:8000/ver_recibo2/')
-#     driver.get(url)
-#     #html_source = driver.page_source 
-#     #html_source = driver.page_source 
-#     #html_source = driver.execute_script("return document.documentElement.outerHTML")
-#     env = Environment(loader=FileSystemLoader('.'))
-#     template = env.get_template("pdf/asistencia_pdf.html")
-#     template_vars = {'asistencias':result, 'data':data}
-#     html_out = template.render(template_vars)
-        
-#     #print(html)
-#    # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
-#    # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
-#     html = HTML(string = html_source)
-#     css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
-#     css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
-#     css3 = BASE_DIR+"/static/css/sb-admin.css"
-
-#     css  = CSS(filename=css)
-#     css2 = CSS(filename=css2)
-#     css3 = CSS(filename=css3)
-#     filename = '/tmp/mypdf.pdf'
-
-#     #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
-#     html.write_pdf(filename, stylesheets=[css,css2,css3])
-
-#     fs = FileSystemStorage('/tmp')
-#     with fs.open('mypdf.pdf') as pdf:
-#         response = HttpResponse(pdf, content_type='application/pdf')
-#         response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
-#         return response
-
-#     return response
-
-# def myview(request):
-#     #Retrieve data or whatever you need
-#     return render_to_pdf(
-#             'pdf/asistencia_pdf.html',
-#             {
-#                 'pagesize':'A4',
-#                 'mylist': results,
-#             }
-#         )
-
-
-
-# def ver_asistencia_pdf(request):
-#     """Sign up view."""
-#     usuario = None
-#     if request.method == 'POST':
-#         form = pAsistenciaForm(request.POST) 
-#         if form.is_valid():
-#             data = form.cleaned_data
-#             print(data)
-#             results = asistencia(**data)
-#             #print(result)
-#             #return 
-
-            
-#             env = Environment(loader=FileSystemLoader(settings.TEMPLATES[0].get('DIRS')))
-#             print(settings.TEMPLATES[0].get('DIRS'))
-            
-#             template = env.get_template("pdf/asistencia_pdf.html")
-#             template_vars = {'asistencias':result, 'data':data}
-#             html_out = template.render(template_vars)
-    
-#             #print(html)
-#             # data = recibo(pCedula='4647857',pMes='7',pAnho='2019')
-#             # html_string = render_to_string('pdf/recibo_pdf.html', {"recibos":data,})
-#             html = HTML(string = html_out)
-#             css = BASE_DIR+"/static/vendor/fontawesome-free/css/all.min.css"
-#             css2 = BASE_DIR+"/static/vendor/datatables/dataTables.bootstrap4.css"
-#             css3 = BASE_DIR+"/static/css/sb-admin.css"
-#             css  = CSS(filename=css)
-#             css2 = CSS(filename=css2)
-#             css3 = CSS(filename=css3)
-#             filename = '/tmp/mypdf.pdf'
-            
-    
-#             #html.write_pdf(filename, stylesheets=[css, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"])
-#             html.write_pdf(filename, stylesheets=[css,css2,css3])
-
-#             fs = FileSystemStorage('/tmp')
-#             with fs.open('mypdf.pdf') as pdf:
-#                 response = HttpResponse(pdf, content_type='application/pdf')
-#                 response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
-#             return response
-
-#         return response
-  
-#     else:
-#         form = pAsistenciaForm()
-#         usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
-#     return render(
-#         request=request,
-#         template_name='ver_asistencia.html',
-#         context={'form': form,'usuario':usuario}
-#     )
-
-
 ###########################################
 #      CARGAR ASISTENCIA DE VALLEMI 
 ###########################################
-def cargarAsistenciaVallemi(**Kwargs):
-  #PARAMETROS DE CONEXION SQLSERVER VALLEMI
-  MSSQL_VMI_SERVER = '192.168.100.48'
-  MSSQL_VMI_DB ='db_inc'
-
-  MSSQL_DRIVER = 'ODBC Driver 17 for SQL Server'
-  MSSQL_SERVER = MSSQL_VMI_SERVER 
-  MSSQL_DB = MSSQL_VMI_DB
-  MSSQL_USER='intranet'
-  MSSQL_PASS='tic2019*'
-
-  #CADENA DE CONEXION
-  ConStr = "DRIVER={%s};SERVER=%s;DATABASE=%s;UID=%s;PWD=%s;" % (MSSQL_DRIVER,MSSQL_SERVER,MSSQL_DB,MSSQL_USER,MSSQL_PASS)
-  #print(ConStr)
+def cargarAsistenciaVallemi(**Kwargs): 
   try:
-    conn = pyodbc.connect(ConStr)
+    conn =dbmssql.conectar()
 
     cursor = conn.cursor()
-    vSql = """SELECT 'VMI' AS sede,
+    sql = """SELECT 'VMI' AS sede,
     e.legajo AS lega,
     e.nombre AS nomb,
     e.apellido AS apel,
@@ -340,7 +197,7 @@ def cargarAsistenciaVallemi(**Kwargs):
     ORDER BY t.fecha
     """.format(**Kwargs)
     #print(vSql)
-    cursor.execute(vSql)
+    cursor.execute(sql)
   except Exception as e:
     print ('ERROR: Connect failed MSSQL SERVER')
     print ( e )
@@ -354,32 +211,6 @@ def cargarAsistenciaVallemi(**Kwargs):
 #########################################
 def cargarAsistencia(**Kwargs):
   vSede = Kwargs['pSede']
-  #CONEXION DEFAULT
-  IFX_HOST = IFX_CEN_HOST
-  IFX_SERVER = IFX_CEN_SERVER
-  IFX_SERVICE = IFX_CEN_SERVICE
-  IFX_DB = IFX_CEN_DB
-  #COMUN
-  IFX_USER = 'informix'
-  IFX_PASS ='cnumtc'
-
-  if vSede == 'VTA':
-    #CONEXION VILLETA
-    IFX_HOST = IFX_VTA_HOST
-    IFX_SERVER = IFX_VTA_SERVER
-    IFX_SERVICE = IFX_VTA_SERVICE
-    IFX_DB = IFX_VTA_DB        
-      
-  #CADENA DE CONEXION
-  ConStr = "SERVER=%s;DATABASE=%s;HOST=%s;SERVICE=%s;UID=%s;PWD=%s;" % (IFX_SERVER,IFX_DB,IFX_HOST,IFX_SERVICE,IFX_USER,IFX_PASS)
-  #print(ConStr)
-  try:
-      # netstat -a | findstr  9088
-      conn = IfxPy.connect( ConStr, "", "")
-  except Exception as e:
-      print ('ERROR: Falla de conexion INFORMIX')
-      print ( e )
-      quit()
 
   # Select records
   sql = """
@@ -441,56 +272,24 @@ def cargarAsistencia(**Kwargs):
   """.format(**Kwargs)
           #.format(Kwargs['pCedula'],Kwargs['pLegajo'],Kwargs['pMes'],Kwargs['pAnho'])
   #print(sql)
-
+  conn = dbifx.conectar(vSede)
   stmt = IfxPy.exec_immediate(conn, sql)
-  dic = IfxPy.fetch_assoc(stmt)
+  dict = IfxPy.fetch_assoc(stmt)
   #print(dic)
   lista = []
-  while dic != False:
-      lista.append(dic)        
-      dic = IfxPy.fetch_assoc(stmt)
+  while dict != False:
+      lista.append(dict)        
+      dict = IfxPy.fetch_assoc(stmt)
   # print(lista)
+  dbifx.cerrar(stmt,conn)
   return lista
 
 ###########################################
 # CARGAR RECIBO CENTRAL, VILLETA, VALLEMI
 ###########################################
 def cargarRecibo(**Kwargs):
-    #CONEXION DEFAULT
-    IFX_HOST = IFX_CEN_HOST
-    IFX_SERVER = IFX_CEN_SERVER
-    IFX_SERVICE = IFX_CEN_SERVICE
-    IFX_DB = IFX_CEN_DB
-    #COMUN
-    IFX_USER = 'informix'
-    IFX_PASS ='cnumtc'
 
     vSede = Kwargs['pSede']
-        
-    if vSede == 'VTA':
-      #CONEXION VILLETA
-      IFX_HOST = IFX_VTA_HOST
-      IFX_SERVER = IFX_VTA_SERVER
-      IFX_SERVICE = IFX_VTA_SERVICE
-      IFX_DB = IFX_VTA_DB        
-    elif vSede == 'VMI':
-      #CONEXION VALLEMI
-      IFX_HOST = IFX_VMI_HOST
-      IFX_SERVER = IFX_VMI_SERVER
-      IFX_SERVICE = IFX_VMI_SERVICE
-      IFX_DB = IFX_VMI_DB        
-        
-    #CADENA DE CONEXION
-    ConStr = "SERVER=%s;DATABASE=%s;HOST=%s;SERVICE=%s;UID=%s;PWD=%s;" % (IFX_SERVER,IFX_DB,IFX_HOST,IFX_SERVICE,IFX_USER,IFX_PASS)
-    #print(ConStr)
-    try:
-        # netstat -a | findstr  9088
-        conn = IfxPy.connect( ConStr, "", "")
-    except Exception as e:
-        print ('ERROR: Falla de conexion INFORMIX')
-        print ( e )
-        quit()
-    
     #TIPO DE RECIBO
     vTipo = Kwargs['pTipo']
     sql=''
@@ -592,12 +391,13 @@ def cargarRecibo(**Kwargs):
               #.format(Kwargs['pCedula'],Kwargs['pLegajo'],Kwargs['pMes'],Kwargs['pAnho'])
     
     # print(sql)
-    stmt = IfxPy.exec_immediate(conn, sql)
-    dic = IfxPy.fetch_assoc(stmt)
+    conn = dbifx.conectar(vSede)
+    stmt = dbifx.ejecutar(conn, sql)
+    dic  = IfxPy.fetch_assoc(stmt)
     #print(dictionary)
     lista = []
-    while dic != False:
+    while dic:
         lista.append(dic)        
         dic = IfxPy.fetch_assoc(stmt)
-    #print(lista)
+    dbifx.cerrar(stmt,conn)
     return lista
