@@ -6,151 +6,147 @@
 {% endblock%}
 
 {% load static %}
+
 {% block container %}
 
 <!--BOTON SOLICITUD DE SOPORTE-->
 <!-- SOPORTE -->
-	<a  class="btn-flotante" 	href="http://soporte.inc.gov.py/plugins/formcreator/front/formdisplay.php?id=1" target="_blank">
+<a  class="btn-flotante" 	
+	href="http://soporte.inc.gov.py/plugins/formcreator/front/formdisplay.php?id=1" target="_blank">
 	<i class="fa fa-headphones" aria-hidden="true"></i> Solicitar Soporte</a>
 
-	<div class="row mb-3">
-		<div class="col-md-8">			
-				<div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
-				  <div class="carousel-inner w-100" role="listbox">
-					{% for pub in publicacion_list|slice:":30" %}
-													
-							<div class="carousel-item {% if forloop.first %} active {% endif %}">
-								<div class="col-lg-4 col-md-6">
-									<a href="{% url 'publicacion:detail' pub.id %}">
-									<img class="img-fluid" src="{{pub.imagen.url}}"></a>
-								</div>
-							</div>									  
+<div class="container">
+<!-- <div class="row mb-3"> -->
+	<div class="col-md-12">			
+		<div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+			<div class="carousel-inner w-100" role="listbox">
+				{% for pub in publicacion_list|slice:":30" %}
 						
-					{% endfor %}
-					
-				  </div>
-				  <a class="carousel-control-prev bg-dark w-auto" href="#myCarousel" role="button" data-slide="prev">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="sr-only">Previous</span>
-				  </a>
-				  <a class="carousel-control-next bg-dark w-auto" href="#myCarousel" role="button" data-slide="next">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="sr-only">Next</span>
-				  </a>
-				</div>
-			
-		</div>		
-		<!-- <div class="col-md-4 mt-5">
-			<iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FINCParaguay&tabs=timeline&width=260&height=400&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="300" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
-		</div> -->
-		
-
-		<div class="container">
-
-
-
-			 <div class="row">
-			 	
-				<div class="col-md-12 mt-3" >
-					<div class="row">
-						<div class="col-md-6 text-left">
-							<form action="{% url 'publicacion:list' %}">
-								<button type="submit" class="btn btn-outline-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="Actualizando...">
-								<i class="fas fa-sync"></i> Noticias
-								</button>
-							</form>
-						</div>
-
-						{% if perms.intranet.add_publicacion %}
-						<div id="btnPublicar" class="col-md-6 text-right">	
-							<form action="{% url 'publicacion:new' %}">
-								<button type="submit" class="btn btn-outline-primary btn-sm text-left">
-									<i class="fas fa-plus"></i> Nueva Publicación
-								</button>
-							</form>
-						</div>
-						{% endif %}
-
+				<div class="carousel-item {% if forloop.first %} active {% endif %}">
+					<div class="col-lg-4 col-md-6">
+						<a href="{% url 'publicacion:detail' pub.id %}">
+						<img class="img-fluid" src="{{pub.imagen.url}}"></a>
 					</div>
-					
-					<div class="card">				
-						<div class="card-header" >						
-						   {% for publicacion in publicacion_list %}							  
-								<div class="card mb-3" style="max-width: 1100px; ">
-								  <div class="row no-gutters">
-									<div class="col-md-4 text-center" style="width: 100px; height: 240px;">
-										<div class="col m-3">
-											{% if publicacion.imagen %}
-												{% if publicacion.url %}
-													<a href="{{publicacion.url}}">
-												{% else %}
-													<a href="{{publicacion.imagen.url}}">
-												{% endif %}
+				</div>									  
 
-												<img src="{{publicacion.imagen.url}}" alt="No Image" class="img-responsive" width="200" height="200" >
-											</a>	
-											{% else %}
-												<img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="img-responsive" width="200" height="200">
-											{% endif %}	
-										</div>
-									</div>
-									<div class="col-md-8">
-									  <div class="card-body">
-										<h5 class="card-title">{{publicacion.titulo}}</h5>
-										<p class="card-text"><small class="text-muted"><i class="fas fa-calendar-alt"></i>
-										 {{publicacion.fecha}}</small></p>
-										<!-- <p class="card-text">{{publicacion.mensaje|slice:":100"}}</p> -->
-										<p class="card-text">{{publicacion.descripcion}}</p>
-										<!-- <button type="button" class="btn btn-outline-info btn-sm">Ver más</button> -->
-										<a id="btnVer" class="btn btn-outline-info btn-sm" href="{% url 'publicacion:detail' publicacion.id %}">Ver más</a>
-										{% if perms.intranet.change_publicacion %}
-											<a id="btnEditar" class="btn btn-outline-secondary btn-sm" href="{% url 'publicacion:edit' publicacion.id %}">Editar</a>
-										{% endif %}
-										{% if perms.intranet.delete_publicacion %}
-										   <a id="btnEliminar" class="btn btn-outline-danger btn-sm" href="{% url 'publicacion:delete' publicacion.id %}">Eliminar</a>
-										{% endif %}									        
-										 
-										
-									  </div>
-									</div>
-								  </div>
-								</div>
-							 {% endfor %}					
-							<div class="card-footer small text-muted">Actualizado a las 09:52 AM</div>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
+
 		</div>
-	
+		<a class="carousel-control-prev bg-dark w-auto" href="#myCarousel" role="button" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next bg-dark w-auto" href="#myCarousel" role="button" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
+
+{% comment %} </div>		 {% endcomment %}
+
+
+{% comment %} <div class="container"> {% endcomment %}
+<div class="row">
+
+<div class="col-md-12 mt-3" >
+<div class="row">
+<div class="col-md-6 text-left">
+<form action="{% url 'publicacion:list' %}">
+<button type="submit" class="btn btn-outline-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="Actualizando...">
+<i class="fas fa-sync"></i> Noticias
+</button>
+</form>
+</div>
+
+{% if perms.intranet.add_publicacion %}
+<div id="btnPublicar" class="col-md-6 text-right">	
+<form action="{% url 'publicacion:new' %}">
+<button type="submit" class="btn btn-outline-primary btn-sm text-left">
+<i class="fas fa-plus"></i> Nueva Publicación
+</button>
+</form>
+</div>
+{% endif %}
+
+</div>
+
+			<div class="card">				
+				<div class="card-header" >						
+					{% for publicacion in publicacion_list %}							  
+						<div class="card mb-3" style="max-width: 1100px; ">
+							<div class="row no-gutters">
+								<div class="col-md-4 text-center" style="width: 100px; height: 240px;">
+									<div class="col m-3">
+										{% if publicacion.imagen %}
+											{% if publicacion.url %}
+												<a href="{{publicacion.url}}">
+											{% else %}
+												<a href="{{publicacion.imagen.url}}">
+											{% endif %}
+												<img src="{{publicacion.imagen.url}}" alt="No Image" class="img-responsive" width="200" height="200" >
+												</a>	
+										{% else %}
+											<img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="img-responsive" width="200" height="200">
+										{% endif %}	
+									</div>
+								</div>
+							<div class="col-md-8">
+			<div class="card-body">
+			<h5 class="card-title">{{publicacion.titulo}}</h5>
+			<p class="card-text"><small class="text-muted"><i class="fas fa-calendar-alt"></i>
+				{{publicacion.fecha}}</small></p>
+			<!-- <p class="card-text">{{publicacion.mensaje|slice:":100"}}</p> -->
+			<p class="card-text">{{publicacion.descripcion}}</p>
+			<!-- <button type="button" class="btn btn-outline-info btn-sm">Ver más</button> -->
+			<a id="btnVer" class="btn btn-outline-info btn-sm" href="{% url 'publicacion:detail' publicacion.id %}">Ver más</a>
+			{% if perms.intranet.change_publicacion %}
+				<a id="btnEditar" class="btn btn-outline-secondary btn-sm" href="{% url 'publicacion:edit' publicacion.id %}">Editar</a>
+			{% endif %}
+			{% if perms.intranet.delete_publicacion %}
+				<a id="btnEliminar" class="btn btn-outline-danger btn-sm" href="{% url 'publicacion:delete' publicacion.id %}">Eliminar</a>
+			{% endif %}									        
+				
+
+			</div>
+			</div>
+			</div>
+			</div>
+{% endfor %}					
+<div class="card-footer small text-muted">Ultimas publicaciones</div>
+</div>
+</div>
+</div>
+</div>
+
 {% endblock %}
 
 {% block js%}
 <!-- <script type="text/javascript">
-	$(document).ready(function() {
-		$('#dataTable').DataTable( {
-			"retrieve":true,
-			
-		} );		
-	} );
+$(document).ready(function() {
+$('#dataTable').DataTable( {
+"retrieve":true,
+
+} );		
+} );
 </script> -->
 <script type="text/javascript">
-		// POPOVER
-		$(function() {
-				$('[data-toggle="popover"]').popover({
-					sanitize:false
-				})
-		})
+// POPOVER
+$(function() {
+$('[data-toggle="popover"]').popover({
+sanitize:false
+})
+})
 
-		// NO APLICA EN TODOS LOS OBJECTOS 
-		function ocultar(){      
-		  document.getElementById("btnPublicar").style.display = "none";
-		  //document.getElementById("btnEditar").style.display = "none";
-		  //document.getElementById("btnEliminar").style.display = "none";
-		}    
+// NO APLICA EN TODOS LOS OBJECTOS
+function ocultar(){      
+document.getElementById("btnPublicar").style.display = "none";
+//document.getElementById("btnEditar").style.display = "none";
+//document.getElementById("btnEliminar").style.display = "none";
+}    s
 
-		{% if not request.user.is_staff %}    
-			ocultar();
-		{% endif %}
+{% if not request.user.is_staff %}    
+ocultar();
+{% endif %}
 
 
 
