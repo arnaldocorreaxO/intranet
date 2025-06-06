@@ -49,7 +49,7 @@
             </div>
       </li>
       <!--SGDI-->
-      {% comment %} <li class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-address-book" aria-hidden="true"></i>
             <span data-toggle="tooltip" data-placement="top" title="Sistema de Gestión de Expedientes">Expedientes</span>
@@ -58,12 +58,12 @@
             <h6 class="dropdown-header">SGEE - DIGITALIA</h6>
             <span class="badge badge-success blinking" title="Nuevo!">Nuevo!</span>
             <a class="dropdown-item" href="https://expedientes.inc.gov.py/#/login" target="_blank">Ingresar:</a>
-            <div class="dropdown-divider"></div>
+            {% comment %} <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">SGDi</h6>
             <a class="dropdown-item" href="http://sgdi.inc.gov.py:8080/xre/login/auth" target="_blank">Ingresar:</a>
-            <a class="dropdown-item" href="http://sgdi.inc.gov.py:8080/xre/consultas" target="_blank">Consultar:</a>
+            <a class="dropdown-item" href="http://sgdi.inc.gov.py:8080/xre/consultas" target="_blank">Consultar:</a> {% endcomment %}
         </div>
-    </li> {% endcomment %}
+    </li>
       <!--NUBE-->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
