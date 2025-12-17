@@ -27,6 +27,11 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 #             PUBLICACIONES
 #############################################
 
+def navbar_context(request):
+    menus = NavbarMenu.objects.prefetch_related("secciones__items").order_by("orden")
+    return {"navbar_menus": menus}
+
+
 class PublicacionList(ListView):
   model = Publicacion
   def get_context_data(self, **kwargs):
@@ -34,6 +39,7 @@ class PublicacionList(ListView):
       context = super().get_context_data(**kwargs)
       # Add in a QuerySet of all the books
       context['pub_cumple_list'] = Publicacion.objects.filter(cumpleanho=True).order_by('-fecha')[:9]
+      context['navbar_menus'] = navbar_context(self.request)['navbar_menus']
       return context
   def get_queryset(self):
         # return Publicacion.objects.exclude(imagen='').order_by('-fecha')[:20]

@@ -1,578 +1,484 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-<head>
+    <!-- ESTILOS PARA EL MENU NAVBAR -->
+    <style type="text/css">
+      .dropdown-submenu {
+        position: relative;
+      }
+      
+      .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+      }
 
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	/* estilos.css */
 
-	<!-- ESTILOS PARA EL MENU NAVBAR -->
-	<style type="text/css">
-		.dropdown-submenu {
-		position: relative;
-		}
-		
-		.dropdown-submenu>.dropdown-menu {
-		top: 0;
-		left: 100%;
-		}  
-	{% comment %} <!-- ESTILOS NUEVO BLINKING--> {% endcomment %}
-	.blinking {
-		animation: blinker 1s linear infinite;
-	}
+	/* Navbar futurista suave */
+.navbar-futurista {
+  background: linear-gradient(135deg, #2c3e50, #34495e); /* degradado gris-azulado */
+  border-bottom: 2px solid #5dade2; /* azul suave */
+  box-shadow: 0 4px 10px rgba(93, 173, 226, 0.2); /* sombra ligera */
+}
+
+/* Texto y enlaces */
+.navbar-futurista .nav-link,
+.navbar-futurista .navbar-brand {
+  color: #ecf0f1 !important; /* gris claro */
+  transition: color 0.3s ease;
+}
+
+.navbar-futurista .nav-link:hover,
+.navbar-futurista .navbar-brand:hover {
+  color: #5dade2 !important; /* azul suave al pasar el mouse */
+}
+
+/* Dropdown */
+.navbar-futurista .dropdown-menu {
+  background-color: #2c3e50;
+  border: 1px solid #5dade2;
+}
+
+.navbar-futurista .dropdown-item {
+  color: #ecf0f1;
+}
+
+.navbar-futurista .dropdown-item:hover {
+  background-color: #5dade2;
+  color: #fff;
+}
+
+
+    </style>
+
+    <!-- ESTATICOS -->
+    {% load static %}
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/bootstrap-select-1.13.1/css/bootstrap-select.min.css' %}" />
+
+    <!-- JQUERY CDN EL ORDER IMPORTA -->
+    <script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
+
+    <!-- FONTS PARA ESTE TEMPLATE -->
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/all.min.css' %}" type="text/css" />
+
+    <!-- DATATABLES FORMATO BOOSTRAP 4 -->
+    <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" />
+
+    <!-- ESTILO GENERAL DE ESTE TEMPLATE -->
+    <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" />
+
+    <!-- GIJGO DATEPICKER -->
+    <script src="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script>
+    <link href="{% static '/gijgo-combined-1.9.13/css/gijgo.min.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script>
+
+    <!-- ESTILOS PROPIOS -->
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/carousel.css' %}" />
+
+    <!-- LIBS -->
+    <script src="{% static 'lib/moment/moment.js' %}"></script>
+    <script src="{% static 'lib/moment/moment-with-locales.js' %}"></script>
+    <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" />
+    <script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/sweetalert2-9.10.0/sweetalert2.min.css' %}" />
+    <script src="{% static 'lib/jquery-loading-overlay-1.5.3/loadingoverlay.min.js' %}"></script>
+    <!-- FUNCTION -->
+    <script src="{% static 'js/functions.js' %}"></script>
+
+    {% block extrahead %}
+
+    {% endblock %} {# Embeds Extra Resources #} {% block head_content %}
+
+    {% endblock %} {% block head_body %}
+
+    {% endblock %}
+
+    <!-- HEADER -->
+  </head>
+
+  <body id="page-top">
+    <nav class="navbar navbar-expand navbar-futurista  static-top">
+      <a class="navbar-brand mr-1" href="{% url 'publicacion:list' %}"><img src="{% static 'img/logo_hd.png' %}" class="rounded-circle" height="50" /> <span class="off">Intranet</span></a>
+
+      <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+
+      <h3><a href="https://nube.inc.gov.py/s/xAe5LcWYercP9T8" target="_blank" class="badge badge-pill badge-primary blinking" title="Manuales de Uso y Buenas Prácticas del Sistema de Gestión Expedientes">Manuales SGEE!</a></h3>
 	
-	@keyframes blinker {
-		50% {
-			opacity: 0; /* Hace que el texto sea invisible a la mitad del ciclo */
-		}
-	}
-	</style>
+		{% comment %} {% for menu in navbar_menus %}
+		<ul class="navbar-nav ml-auto ml-md-4">
+		<li class="nav-item dropdown no-arrow mx-1">
+			<a class="nav-link dropdown-toggle" href="#" id="menu{{ menu.id }}" role="button"
+			data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			{% if menu.icono %}<i class="{{ menu.icono }}" aria-hidden="true"></i>{% endif %}
+			<span class="off">{{ menu.nombre }}</span>
+			</a>
 
-	<!--ESTATICOS-->
-	{% load static %}
-
-	<!-- BOOTSTRAP -->
-	<link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static '/bootstrap-select-1.13.1/css/bootstrap-select.min.css' %}">
-
-	<!-- JQUERY CDN  EL ORDER IMPORTA -->
-	<script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
-
-
-
-
-	<!-- FONTS PARA ESTE TEMPLATE-->
-	<link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/all.min.css' %}" type="text/css">
-
-
-	<!-- DATATABLES FORMATO BOOSTRAP 4 -->
-	<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}">
-
-	<!-- ESTILO GENERAL DE ESTE TEMPLATE-->
-	<link rel="stylesheet" href="{% static 'css/sb-admin.css' %}">
-
-	<!-- GIJGO DATEPICKER   -->
-	<script src="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script>
-	<link href="{% static '/gijgo-combined-1.9.13/css/gijgo.min.css' %}" rel="stylesheet" type="text/css" />
-	<script src="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script>
-
-	<!--ESTILOS PROPIOS-->
-	<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-	<link rel="stylesheet" href="{% static 'css/carousel.css' %}">
-
-	<!-- LIBS -->
-	<script src="{% static 'lib/moment/moment.js' %}"></script>
-	<script src="{% static 'lib/moment/moment-with-locales.js' %}"></script>
-	<script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
-	<link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" />
-	<script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
-	<link rel="stylesheet" href="{% static 'lib/sweetalert2-9.10.0/sweetalert2.min.css' %}" />
-	<script src="{% static 'lib/jquery-loading-overlay-1.5.3/loadingoverlay.min.js' %}"></script>
-	<!-- FUNCTION -->
-	<script src="{% static 'js/functions.js' %}"></script>
-
-
-	{% block extrahead %} {% endblock %} {# Embeds Extra Resources #} {% block head_content %} {% endblock %} {% block head_body %} {% endblock %}
-
-	<!--HEADER -->
-</head>
-
-<body id="page-top">
-
-	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
-
-		<a class="navbar-brand mr-1" href="{% url 'publicacion:list' %}">
-			<img src="{% static 'img/logo_hd.png' %}" class="rounded-circle" height="50"> <span class="off">Intranet</span>
-		</a>
-
-		<button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-<i class="fas fa-bars"></i>
-</button>
-
-		<h3><a href="https://nube.inc.gov.py/s/xAe5LcWYercP9T8" target="_blank" class="badge badge-pill badge-primary blinking" 
-			title="Manuales de Uso y Buenas Prácticas del Sistema de Gestión Expedientes">Manuales SGEE!</a>
-		</h3>
-
-		{% comment %} ZONA DE DESCARGAS {% endcomment %}
-		<ul class="navbar-nav ml-auto ml-md-4 ">
-			<li class="nav-item dropdown no-arrow mx-1">
-				<a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fa fa-download" aria-hidden="true"></i>
-					<span class="off">Zona de Descargas</span>
+			<div class="dropdown-menu dropdown-menu-left" aria-labelledby="menu{{ menu.id }}">
+			{% for section in menu.secciones.all %}
+				<h6 class="dropdown-header">{{ section.titulo }}</h6>
+				<div class="dropdown-divider"></div>
+				{% for item in section.items.all %}
+				<a class="dropdown-item"
+					href="{% if item.archivo %}{{ item.archivo.url }}{% else %}{{ item.url }}{% endif %}"
+					{% if item.target_blank %}target="_blank"{% endif %}
+					download>
+					<i class="{{ item.icono }} px-2" aria-hidden="true"></i>{{ item.titulo }}
 				</a>
-
-
-				<div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
-					<h6 class="dropdown-header">Descargar Formatos Oficiales</h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true" ></i>Formato hoja documentos oficiales INC</a>
-					{% comment %} <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC_A_COLOR.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true" ></i>Formato hoja documentos oficiales INC a color</a> {% endcomment %}
-					<a class="dropdown-item" href="{% static 'download/Logos/Formato_Hoja_Membretada_INC_Guarania.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true" ></i>Formato hoja documentos oficiales INC Guarania</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Reglamento Interno </h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/cS4JNiXRqyzoCFi" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Reglamento Interno</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Descargar Formularios</h6>
-					<div class="dropdown-divider"></div>
-					{% comment %} <a class="dropdown-item" href="https://nube.inc.gov.py/s/y7GpNqgePcmjGxL" target="_blank"><i class="fa fa-download px-2" aria-hidden="true" ></i>Solicitud de Viáticos</a> {% endcomment %}
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/9N6T4pXapK6GXGy" target="_blank"><i class="fa fa-download px-2" aria-hidden="true" ></i>Solicitud de Usuarios</a>
-					<!-- <a class="dropdown-item" href="{% static 'download/Formularios/formulario_abm_de_usuarios_inc.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true" ></i>Solicitud de Usuarios INC</a>
-    <a class="dropdown-item" href="{% static 'download/Formularios/formulario_abm_sap_2019.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Usuarios SAP</a>
-    <a class="dropdown-item" href="{% static 'download/Formularios/formulario_usuario_remoto.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Usuarios Acceso Remoto</a>-->
-					<!-- <div class="dropdown-divider"></div>  -->
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/RSaWAZ5ZTsDPgFt" target="_blank"><i class="fa fa-download px-2" aria-hidden="true" ></i>Solicitud de Permisos y Vacaciones</a>
-					<!-- <a class="dropdown-item" href="{% static 'download/Formularios/permiso_de_salida.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Permiso</a>            
-    <a class="dropdown-item" href="#"><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Vacaciones</a>
-    <a class="dropdown-item" href="{% static 'download/Formularios/justificativo_version_1.0.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Justificativo</a> -->
-					<!-- <div class="dropdown-divider"></div>  -->
-					<a class="dropdown-item" href="{% static 'download/Formularios/pedido_de_utiles.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Pedido de Utiles</a>
-					<!-- <div class="dropdown-divider"></div> -->
-					<!-- <a class="dropdown-item" href="{% static 'download/Formularios/formulario_transporte_v3.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Usufructo de Vehiculo</a> -->
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/ismDN3t9EnGeTCm" target="_blank"><i class="fa fa-download px-2" aria-hidden="true" ></i>Solicitud de Transporte</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Evaluación de Desempeño</h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/Jc2xoRQZaTejKKL" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formulario Evaluación de Desempeño</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Capacitación</h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="{% static 'download/Formularios/formulario_inscripcion_capacitacion.doc' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formulario de Inscripción</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Prensa</h6>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/RsrSJm25QPg8fNN" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formularios</a>
-					<!-- <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header">COOPFINC</h6>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="{% static 'download/Formularios/solicitud_seguro_panal_coopfinc.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formulario Seguro Panal</a> -->
-				</div>
-			</li>
-			<!-- <li class="nav-item dropdown no-arrow mx-1">
-  <a class="nav-link dropdown-toggle" href="{% url 'interno-list' %}" aria-expanded="false">
-    <i class="fa fa-phone" aria-hidden="true"></i>
-    <span class="off">Lista de Numeros Internos</span>
-  </a>
-</li> -->
-		</ul>
-
-		<!--REGLAMENTOS-->
-		<ul class="navbar-nav ml-auto ml-md-4 ">
-			<li class="nav-item dropdown no-arrow mx-1">
-				<a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fa fa-university" aria-hidden="true"></i>
-					<span class="off">Reglamentos de TI</span>
-				</a>
-				<div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
-					<h6 class="dropdown-header">Normativas</h6>
-					<div class="dropdown-divider"></div>
-
-					<a class="dropdown-item" href="{% static 'download/Normativas/1_Politica_de_Seguridad_de_la_Información.pdf' %}" target="_blank">
-						<i class="fa fa-gavel px-2" aria-hidden="true"></i> 1-Politica de Seguridad de la Información
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/Normativas/2_Reglamento_de_Recursos_de_TI_Correo_Internet.pdf' %}" target="_blank">
-						<i class="fa fa-gavel px-2" aria-hidden="true"></i> 2-Reglamento de Recursos de TI - Correo - Internet
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/Normativas/3_Consolidacion_Adquisiciones_de_TI.pdf' %}" target="_blank">
-						<i class="fa fa-gavel px-2" aria-hidden="true"></i> 3-Consolidación Adquisiciones de TI
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/Normativas/4_Manual_de_Gestion_de_Usuarios.pdf' %}" target="_blank">
-						<i class="fa fa-gavel px-2" aria-hidden="true"></i> 4-Manual de Gestión de Usuarios
-					</a>
-				</div>
-			</li>
-
-		</ul>
-		<!-- LISTA DE INTERNOS -->
-		<ul class="navbar-nav ml-auto ml-md-4 ">
-			<li class="nav-item dropdown no-arrow mx-1">
-				<a class="nav-link dropdown-toggle" href="{% url 'interno-list' %}" aria-expanded="false">
-					<i class="fa fa-phone" aria-hidden="true"></i>
-					<span class="off">Teléfonos Internos</span>
-				</a>
-			</li>
-		</ul>
-
-		<!-- GESTION DE USUARIOS SGDU-->
-		{% comment %} <ul class="navbar-nav ml-auto ml-md-4 ">
-			<li class="nav-item dropdown no-arrow mx-1">
-				<a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fa fa-user" aria-hidden="true"></i>
-					<span class="off">SGDU - Gestión de Usuarios</span>
-				</a>
-				<div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
-					<h6 class="dropdown-header">SGDU</h6>
-					<div class="dropdown-divider"></div>
-
-					<a class="dropdown-item" href="https://sgdu.inc.gov.py:9082/itim/ui/Login.jsp#homepage" target="_blank">
-						<i class="fa fa-arrow-circle-right px-2" aria-hidden="true"></i> Acceder
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/InformacionSGDU.pdf' %}" target="_blank">
-						<i class="fa fa-info-circle px-2" aria-hidden="true"></i> Información
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/RecuperarPassword.pdf' %}" target="_blank">
-						<i class="fa fa-unlock px-2" aria-hidden="true"></i> Recuperar contraseña
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/F-CREA-SGDU-01.pdf' %}" target="_blank">
-						<i class="fa fa-user-plus px-2" aria-hidden="true"></i> Obtener usuario
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/F-BAJA-SGDU-01.pdf' %}" target="_blank">
-						<i class="fa fa-user-times px-2" aria-hidden="true"></i> Dar de Baja Usuario
-					</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Ayuda</h6>
-					<a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Solicitud-Acceso.mp4' %}" target="_blank">
-						<i class="fa fa-plus-square px-2" aria-hidden="true"></i> Solicitar Accesos
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Aprobar-Solicitud-Acceso.mp4' %}" target="_blank">
-						<i class="fa fa-check-square px-2" aria-hidden="true"></i> Aprobar Solicitudes de Acceso
-					</a>
-
-					<a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Cambiar-Password.mp4' %}" target="_blank">
-						<i class="fa fa-key px-2" aria-hidden="true"></i> Cambiar contraseña
-					</a>
-				</div>
-			</li>
-
-		</ul> {% endcomment %}
-
-		<!-- SISTEMA DE GESTION - PROCEDIMIENTOS-->
-		<ul class="navbar-nav ml-auto ml-md-4 ">
-			<li class="nav-item dropdown no-arrow mx-1">
-				<a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fa fa-book" aria-hidden="true"></i>
-					<span class="off">Sistema de Gestión</span>
-				</a>
-				<div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
-					<h6 class="dropdown-header">Sistema de Gestión</h6>
-					<div class="dropdown-divider"></div>
-
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/x3C6mA4ZpnG8LoC" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Industrial
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/4S6HM5WsNwCx9eH" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Financiera
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/Gto2drA2nAkW5Nj" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Transparencia
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/2D8KfXBjq9RrpBd" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Personas y DO
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/mN9Pasj4ZaRcaZs" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Planificación Estratégica
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/w8C2nY9JQxdWs7x" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Documentos
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/EnYyNZnsbJiHmcn" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Comunicación Estratégica
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/BQeyPmw62KrPf2g" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Compras Públicas y Contrataciones
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/DsGScMtKSfPbJDD" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Comercial
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/RdAWY5DtgDr2WWa" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Ambiental y SSO
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/FLTnoDPqLdqoFQo" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Asesoría Legal
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/PFSjDoWeNtSiLHE" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de TIC
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/TKz5JTxKd3Mec4w" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Evaluación y Control
-					</a>
-					<a class="dropdown-item" href="https://nube.inc.gov.py/s/z4LzCWr48nycLgA" target="_blank">
-						<i class="fa fa-book px-2" aria-hidden="true"></i> Documentos Externos del SGC
-					</a>
-					
-				</div>
-			</li>
-		</ul>
-
-
-
-
-		<!-- Navbar Search -->
-		<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-			<!-- <div class="input-group">
-<input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="basic-addon2">
-<div class="input-group-append">
-  <button class="btn btn-dark" type="button">
-    <i class="fas fa-search"></i>
-  </button>
-</div>
-</div> -->
-			{% if not request.user.is_authenticated %}
-			<div class="text-center">
-				<a href="{% url 'signup' %}?next={{request.path}}" style="color: rgb(255,255,255)">
-					<font color="#F5F6F7">Registrarse!</font>
-				</a>
+				{% endfor %}
+			{% endfor %}
 			</div>
-			{% endif %}
-
-		</form>
-
-
-		<!-- Navbar -->
-		<ul class="navbar-nav ml-auto ml-md-0">
-			<!-- <li class="nav-item dropdown no-arrow mx-1">
-<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  <i class="fas fa-bell fa-fw" ></i>
-  <span class="badge badge-danger">9+</span>
-</a>
-<div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-  <a class="dropdown-item" href="#">Action</a>
-  <a class="dropdown-item" href="#">Another action</a>
-  <div class="dropdown-divider"></div>
-  <a class="dropdown-item" href="#">Something else here</a>
-</div>
-</li>
-<li class="nav-item dropdown no-arrow mx-1">
-<a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  <i class="fas fa-envelope fa-fw"></i>
-  <span class="badge badge-danger"></span>
-</a>
-<div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-  <a class="dropdown-item" href="#">Action</a>
-  <a class="dropdown-item" href="#">Another action</a>
-  <div class="dropdown-divider"></div>
-  <a class="dropdown-item" href="#">Something else here</a>
-</div>
-</li> -->
-			<li class="nav-item dropdown no-arrow text-center">
-				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<!-- <i class="fas fa-user-circle fa-fw"></i> -->
-					{% if request.user.perfil.foto %}
-					<img src="{{ request.user.perfil.foto.url }}" class="d-inline-block align-top rounded-circle" height="35" width="35" /> {% else%}
-					<img src="{% static 'img/default-profile.png' %}" class="d-inline-block align-top rounded-circle" height="35" width="35" /> {% endif %} {% if not request.user.is_authenticated %}
-					<a href="{% url 'login2' %}?next={{request.path}}" style="color: rgb(255,255,255)">
-						<font color="#F5F6F7">Ingresar</font>
-					</a>
-					{% endif %}
-
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-						<p class="text-center link-text-span">
-							{% if request.user.username %}
-							<a href="{% url 'perfil-detail' request.user.id %}"><b>{{request.user.first_name}}</b></a>
-
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="{% url 'perfil-detail' request.user.id %}">Perfil</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="{% url 'password_change' %}">Cambiar mi contraseña</a> {% else %}
-							<a href="#">Usuario</a> {% endif %}
-						</p>
-
-						<div class="dropdown-divider"></div>
-						<!-- Primero llama a un DIV MODAL para cerrar sesion -->
-
-						{% if not request.user.is_authenticated %}
-						<a class="dropdown-item" href="{% url 'login2' %}?next={{request.path}}">Iniciar Sesión</a> {% else %}
-						<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><i class="hidden-xs hidden-sm hidden-md fa fa-sign-out-alt"></i> Cerrar Sesión</a> {% endif %}
-
-					</div>
-			</li>
+		</li>
 		</ul>
-
-	</nav>
-
-	<div id="wrapper">
-
-		<!-- ///////////////////////////////////////////////////////////// -->
-		<!-- BARRA LATERAL DE NAVEGACION -->
-		{% include 'base_navbar_left.html' %}
-		<!-- ///////////////////////////////////////////////////////////// -->
-
-		<!--CONTENIDO EMBEBIDO DE OTROS FORMS-->
-		<div id="content-wrapper">
-			<div class="container-fluid">
-				<!-- PRINCIPAL         -->
-				{% block container %}{% endblock%}
-			</div>
-			<!-- Sticky Footer -->
-			<footer class="sticky-footer">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto">
-						<span>Copyright © Industria Nacional del Cemento - Gerencia de Tecnologías de la Información y Comunicación 2019</span>
-					</div>
-				</div>
-			</footer>
-		</div>
-		<!-- /.content-wrapper -->
-
-	</div>
-	<!-- /#wrapper -->
-
-	<!-- Scroll to Top Button-->
-	<a class="scroll-to-top rounded" href="#page-top">
-		<i class="fas fa-angle-up"></i>
-	</a>
-
-	<!-- Logout Modal-->
-	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">¿Seguro desea cerrar sesión?</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">×</span>
-  </button>
-				</div>
-				<div class="modal-body">Seleccione "Cerrar sesión" para finalizar su sesión actual.</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-					<a class="btn btn-primary" href="{% url 'logout' %}">Cerrar sesión</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<!-- JAVASCRIPT -->
-
-	{% block js %}{% endblock js %} {# Extras Javascript #}
-
-	<!-- JQUERY CDN  EL ORDER IMPORTA -->
-
-	<script src="{% static '/bootstrap-4.3.1/js/popper.min.js' %}"></script>
-	<script src="{% static '/bootstrap-4.3.1/js/bootstrap.min.js' %}"></script>
-
-
-	<!-- IMPLEMENTACION DATETIMEPICKER -->
-	<script src="{% static '/js/moment.js' %}"></script>
-	<!-- <script src="{% static '/js/bootstrap-datetimepicker.min.js' %}" ></script> -->
-	<!-- <script src="{% static '/js/locale/es.js' %}" ></script> -->
-
-	<!-- GIJGO DATEPICKER   -->
-	<!-- <script src ="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script> -->
-	<!-- <script src ="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script> -->
-
-
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="{% static '/bootstrap-select-1.13.1/js/bootstrap-select.min.js' %}"></script>
-
-	<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script> -->
+		{% endfor %} {% endcomment %}
 
 
 
-	<!-- Bootstrap core JavaScript-->
-	<!-- <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script> -->
-	<!-- <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> -->
+      {% comment %}ZONA DE DESCARGAS{% endcomment %}
+      <ul class="navbar-nav ml-auto ml-md-4">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-download" aria-hidden="true"></i>
+            <span class="off">Zona de Descargas</span>
+          </a>
 
-	<!-- Core plugin JavaScript-->
-	<!-- <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script> -->
-	<!-- <script src="{% static 'js/popper.min.js' %}"></script> -->
+          <div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
+            <h6 class="dropdown-header">Descargar Formatos Oficiales</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC</a>
+            {% comment %} <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC_A_COLOR.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC a color</a> {% endcomment %}
+            <a class="dropdown-item" href="{% static 'download/Logos/Formato_Hoja_Membretada_INC_Guarania.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC Guarania</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Reglamento Interno</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/cS4JNiXRqyzoCFi" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Reglamento Interno</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Descargar Formularios</h6>
+            <div class="dropdown-divider"></div>
 
-	<!-- Page level plugin JavaScript-->
-	<!-- <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script> -->
-	<script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
-	<script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/9N6T4pXapK6GXGy" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Usuarios</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/RSaWAZ5ZTsDPgFt" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Permiso Laboral</a>
+            <a class="dropdown-item" href="{% static 'download/Formularios/pedido_de_utiles.pdf' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Pedido de Utiles</a>
 
-	<!-- Custom scripts for all pages-->
-	<script src="{% static 'js/sb-admin.min.js' %}"></script>
-	<script src="{% static 'js/xo-numeric.js' %}"></script>
-	<script src="{% static 'js/utils.js' %}"></script>
-	<script src="{% static 'js/scripts.js' %}"></script>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/ismDN3t9EnGeTCm" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Solicitud de Transporte</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Evaluación de Desempeño</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/Jc2xoRQZaTejKKL" target="_blank"><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formulario Evaluación de Desempeño</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Capacitación</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% static 'download/Formularios/formulario_inscripcion_capacitacion.doc' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formulario de Inscripción</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Prensa</h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/RsrSJm25QPg8fNN" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formularios</a>
+          </div>
+        </li>
+      </ul>
 
-	<!-- Demo scripts for this page-->
-	<!-- <script src="{% static 'js/demo/datatables-demo.js' %}"></script> -->
-	<!-- <script src="{% static 'js/demo/chart-area-demo.js' %}"></script> -->
+      <!-- REGLAMENTOS -->
+      <ul class="navbar-nav ml-auto ml-md-4">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-university" aria-hidden="true"></i>
+            <span class="off">Reglamentos de TI</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
+            <h6 class="dropdown-header">Normativas</h6>
+            <div class="dropdown-divider"></div>
 
+            <a class="dropdown-item" href="{% static 'download/Normativas/1_Politica_de_Seguridad_de_la_Información.pdf' %}" target="_blank"><i class="fa fa-gavel px-2" aria-hidden="true"></i> 1-Politica de Seguridad de la Información</a>
 
+            <a class="dropdown-item" href="{% static 'download/Normativas/2_Reglamento_de_Recursos_de_TI_Correo_Internet.pdf' %}" target="_blank"><i class="fa fa-gavel px-2" aria-hidden="true"></i> 2-Reglamento de Recursos de TI - Correo - Internet</a>
 
+            <a class="dropdown-item" href="{% static 'download/Normativas/3_Consolidacion_Adquisiciones_de_TI.pdf' %}" target="_blank"><i class="fa fa-gavel px-2" aria-hidden="true"></i> 3-Consolidación Adquisiciones de TI</a>
 
+            <a class="dropdown-item" href="{% static 'download/Normativas/4_Manual_de_Gestion_de_Usuarios.pdf' %}" target="_blank"><i class="fa fa-gavel px-2" aria-hidden="true"></i> 4-Manual de Gestión de Usuarios</a>
+          </div>
+        </li>
+      </ul>
+      <!-- LISTA DE INTERNOS -->
+      <ul class="navbar-nav ml-auto ml-md-4">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="{% url 'interno-list' %}" aria-expanded="false">
+            <i class="fa fa-phone" aria-hidden="true"></i>
+            <span class="off">Teléfonos Internos</span>
+          </a>
+        </li>
+      </ul>
 
-	<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
-	<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+      <!-- GESTION DE USUARIOS SGDU -->
+      {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span class="off">SGDU - Gestión de Usuarios</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
+            <h6 class="dropdown-header">SGDU</h6>
+            <div class="dropdown-divider"></div>
 
-	<script type="text/javascript">
-		//DEFAULT CLICK MENU BAR
-		$(function() {
-		var menubutton = document.getElementById("sidebarToggle");
-		menubutton.click();
-		});
-		
-		
-		// $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-		
-		/////////////////////////////////////
-		// EVENTOS MENU DE VARIOS NIVELES 
-		/////////////////////////////////////
-		$(function() {
-		$("ul.dropdown-menu [data-toggle='dropdown']").on("click", function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		
-		//method 1: remove show from sibilings and their children under your first parent
-		
-		// if (!$(this).next().hasClass('show')) {
-		      
-		//         $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
-		//      }       
-		  
-		  
-		//method 2: remove show from all siblings of all your parents
-		$(this).parents('.dropdown-submenu').siblings().find('.show').removeClass("show");
-		
-		$(this).siblings().toggleClass("show");
-		
-		
-		//collapse all after nav is closed
-		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-		  $('.dropdown-submenu .show').removeClass("show");
-		});
-		
-		});
-		});
-		
-		///////////////////////////////////
-		//          DATATABLES
-		///////////////////////////////////
-		$(document).ready(function() {
-		$('#dataTable1').DataTable({
-		"paging": true,
-		"ordering": true,
-		"searching": true,
-		"language": {
-		"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
-		"decimal": ".",
-		"thousands": ",",},
-		  dom: 'Bfrtip',
-		buttons: [
-		    'copy', 'csv', 'excel', 'pdf', 'print'
-		],
-		});
-		});
-		
-		
-	</script>
-	<!--TOOLTIP MENU BAR LEFT-->
-	<script type="text/javascript">
-		var pathname = window.location.pathname;
-		
-		$(function () {
-		$('[data-toggle="tooltip"]').tooltip({
-		'delay': { show: 1000, hide: 500 }
-		})
-		})
-		
-	</script>
+            <a class="dropdown-item" href="https://sgdu.inc.gov.py:9082/itim/ui/Login.jsp#homepage" target="_blank"><i class="fa fa-arrow-circle-right px-2" aria-hidden="true"></i> Acceder</a>
 
-</body>
+            <a class="dropdown-item" href="{% static 'download/SGDU/InformacionSGDU.pdf' %}" target="_blank"><i class="fa fa-info-circle px-2" aria-hidden="true"></i> Información</a>
+
+            <a class="dropdown-item" href="{% static 'download/SGDU/RecuperarPassword.pdf' %}" target="_blank"><i class="fa fa-unlock px-2" aria-hidden="true"></i> Recuperar contraseña</a>
+
+            <a class="dropdown-item" href="{% static 'download/SGDU/F-CREA-SGDU-01.pdf' %}" target="_blank"><i class="fa fa-user-plus px-2" aria-hidden="true"></i> Obtener usuario</a>
+
+            <a class="dropdown-item" href="{% static 'download/SGDU/F-BAJA-SGDU-01.pdf' %}" target="_blank"><i class="fa fa-user-times px-2" aria-hidden="true"></i> Dar de Baja Usuario</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Ayuda</h6>
+            <a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Solicitud-Acceso.mp4' %}" target="_blank"><i class="fa fa-plus-square px-2" aria-hidden="true"></i> Solicitar Accesos</a>
+
+            <a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Aprobar-Solicitud-Acceso.mp4' %}" target="_blank"><i class="fa fa-check-square px-2" aria-hidden="true"></i> Aprobar Solicitudes de Acceso</a>
+
+            <a class="dropdown-item" href="{% static 'download/SGDU/SGDU-Cambiar-Password.mp4' %}" target="_blank"><i class="fa fa-key px-2" aria-hidden="true"></i> Cambiar contraseña</a>
+          </div>
+        </li>
+      </ul> {% endcomment %}
+
+      <!-- SISTEMA DE GESTION - PROCEDIMIENTOS -->
+      <ul class="navbar-nav ml-auto ml-md-4">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            <span class="off">Sistema de Gestión</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
+            <h6 class="dropdown-header">Sistema de Gestión</h6>
+            <div class="dropdown-divider"></div>
+
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/x3C6mA4ZpnG8LoC" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Industrial</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/4S6HM5WsNwCx9eH" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Financiera</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/Gto2drA2nAkW5Nj" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Transparencia</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/2D8KfXBjq9RrpBd" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Personas y DO</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/mN9Pasj4ZaRcaZs" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Planificación Estratégica</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/w8C2nY9JQxdWs7x" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Documentos</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/EnYyNZnsbJiHmcn" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Comunicación Estratégica</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/BQeyPmw62KrPf2g" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de Compras Públicas y Contrataciones</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/DsGScMtKSfPbJDD" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Comercial</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/RdAWY5DtgDr2WWa" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión Ambiental y SSO</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/FLTnoDPqLdqoFQo" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Asesoría Legal</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/PFSjDoWeNtSiLHE" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Gestión de TIC</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/TKz5JTxKd3Mec4w" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Evaluación y Control</a>
+            <a class="dropdown-item" href="https://nube.inc.gov.py/s/z4LzCWr48nycLgA" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Documentos Externos del SGC</a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Navbar Search -->
+      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        {% if not request.user.is_authenticated %}
+          <div class="text-center">
+            <a href="{% url 'signup' %}?next={{ request.path }}" style="color: rgb(255,255,255)"><font color="#F5F6F7">Registrarse!</font></a>
+          </div>
+        {% endif %}
+      </form>
+
+      <!-- Navbar -->
+      <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown no-arrow text-center">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% if request.user.perfil.foto %}
+              <img src="{{ request.user.perfil.foto.url }}" alt="Foto de perfil" class="d-inline-block align-top rounded-circle" height="35" width="35" />
+            {% else %}
+              <img src="{% static 'img/default-profile.png' %}" alt="Foto por defecto" class="d-inline-block align-top rounded-circle" height="35" width="35" />
+            {% endif %}
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            {% if request.user.is_authenticated %}
+              <p class="text-center link-text-span">
+                <a href="{% url 'perfil-detail' request.user.id %}"><b>{{ request.user.first_name }}</b></a>
+              </p>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'perfil-detail' request.user.id %}">Perfil</a>
+              <a class="dropdown-item" href="{% url 'password_change' %}">Cambiar mi contraseña</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-sign-out-alt"></i> Cerrar Sesión</a>
+            {% else %}
+              <a class="dropdown-item" href="{% url 'login2' %}?next={{ request.path }}">Ingresar</a>
+            {% endif %}
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="wrapper">
+      <!-- Barra lateral -->
+      {% include 'base_navbar_left.html' %}
+
+      <!-- Contenido -->
+      <div id="content-wrapper">
+        <main class="container-fluid">
+          {% block container %}
+
+          {% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-light">
+          <div class="container my-auto">
+            <div class="text-center my-auto">
+              <span>&copy; Industria Nacional del Cemento - Gerencia TIC 2019</span>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Scroll to Top -->
+    <a class="scroll-to-top rounded" href="#page-top" aria-label="Volver arriba"><i class="fas fa-angle-up"></i></a>
+
+    <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">¿Seguro desea cerrar sesión?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">Seleccione "Cerrar sesión" para finalizar su sesión actual.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <a class="btn btn-primary" href="{% url 'logout' %}">Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    {% block js %}
+
+    {% endblock %} {# Extras Javascript #}
+
+    <!-- JQUERY CDN EL ORDER IMPORTA -->
+
+    <script src="{% static '/bootstrap-4.3.1/js/popper.min.js' %}"></script>
+    <script src="{% static '/bootstrap-4.3.1/js/bootstrap.min.js' %}"></script>
+
+    <!-- IMPLEMENTACION DATETIMEPICKER -->
+    <script src="{% static '/js/moment.js' %}"></script>
+    <!-- <script src="{% static '/js/bootstrap-datetimepicker.min.js' %}" ></script> -->
+    <!-- <script src="{% static '/js/locale/es.js' %}" ></script> -->
+
+    <!-- GIJGO DATEPICKER -->
+    <!-- <script src ="{% static '/gijgo-combined-1.9.13/js/gijgo.min.js' %}" type="text/javascript"></script> -->
+    <!-- <script src ="{% static '/gijgo-combined-1.9.13/js/messages/messages.es-es.js' %}" type="text/javascript"></script> -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{% static '/bootstrap-select-1.13.1/js/bootstrap-select.min.js' %}"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script> -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script> -->
+    <!-- <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> -->
+
+    <!-- Core plugin JavaScript -->
+    <!-- <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/popper.min.js' %}"></script> -->
+
+    <!-- Page level plugin JavaScript -->
+    <!-- <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script> -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+
+    <!-- Custom scripts for all pages -->
+    <script src="{% static 'js/sb-admin.min.js' %}"></script>
+    <script src="{% static 'js/xo-numeric.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    <!-- Demo scripts for this page -->
+    <!-- <script src="{% static 'js/demo/datatables-demo.js' %}"></script> -->
+    <!-- <script src="{% static 'js/demo/chart-area-demo.js' %}"></script> -->
+
+    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <script type="text/javascript">
+      //DEFAULT CLICK MENU BAR
+      $(function () {
+        var menubutton = document.getElementById('sidebarToggle')
+        menubutton.click()
+      })
+      
+      // $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+      
+      /////////////////////////////////////
+      // EVENTOS MENU DE VARIOS NIVELES
+      /////////////////////////////////////
+      $(function () {
+        $("ul.dropdown-menu [data-toggle='dropdown']").on('click', function (event) {
+          event.preventDefault()
+          event.stopPropagation()
+      
+          //method 1: remove show from sibilings and their children under your first parent
+      
+          // if (!$(this).next().hasClass('show')) {
+      
+          //         $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+          //      }
+      
+          //method 2: remove show from all siblings of all your parents
+          $(this).parents('.dropdown-submenu').siblings().find('.show').removeClass('show')
+      
+          $(this).siblings().toggleClass('show')
+      
+          //collapse all after nav is closed
+          $(this)
+            .parents('li.nav-item.dropdown.show')
+            .on('hidden.bs.dropdown', function (e) {
+              $('.dropdown-submenu .show').removeClass('show')
+            })
+        })
+      })
+      
+      ///////////////////////////////////
+      //          DATATABLES
+      ///////////////////////////////////
+      $(document).ready(function () {
+        $('#dataTable1').DataTable({
+          paging: true,
+          ordering: true,
+          searching: true,
+          language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+            decimal: '.',
+            thousands: ','
+          },
+          dom: 'Bfrtip',
+          buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        })
+      })
+    </script>
+    <!-- TOOLTIP MENU BAR LEFT -->
+    <script type="text/javascript">
+      var pathname = window.location.pathname
+      
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+          delay: { show: 1000, hide: 500 }
+        })
+      })
+    </script>
+  </body>
 </html>
