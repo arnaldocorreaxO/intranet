@@ -435,19 +435,22 @@
 
   // Popup Felices Fiestas
   {% if parametro_mostrar_felices_fiestas %}
-  $(document).ready(function () {
-    if (!localStorage.getItem('popupShown')) {
+    $(document).ready(function () {
+      if (!localStorage.getItem('popupShown')) {
       Swal.fire({
-        title: '🎄 Felices Fiestas 🎉',
-        text: 'Que la alegría y la unión acompañen cada momento.',
-        icon: 'success',
-        confirmButtonText: 'Cerrar',
-        confirmButtonColor: '#5dade2',
-        background: '#2c3e50',
-        color: '#ecf0f1'
-      });
-      localStorage.setItem('popupShown', 'true');
-    }
-  });
+            title: '🎄 Felices Fiestas 🎅',
+            html: '<p style="font-size:18px;">Que la alegría y la unión acompañen cada momento.<br>¡Gracias por ser parte de este año!</p>',
+            icon: 'success',
+            confirmButtonText: 'Cerrar',
+            confirmButtonColor: '#d32f2f',   // rojo navideño
+            background: '#fff8e1',           // dorado suave
+            color: '#2e7d32',                // verde navideño
+            customClass: {
+              popup: 'popup-fiestas'
+            }
+          });
+          sessionStorage.setItem('popupShown', 'true');
+      }
+    });
   {% endif %}
 </script>
