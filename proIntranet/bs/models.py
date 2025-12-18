@@ -45,7 +45,7 @@ class ModeloBase(models.Model):
 class Parametro(ModeloBase):
     parametro = models.CharField(max_length=25, unique=True)
     descripcion = models.CharField(max_length=100, unique=True)
-    valor = models.CharField(max_length=100)
+    valor = models.CharField(max_length=500)
 
     def __str__(self):
         return "%s - %s " % (self.parametro, self.valor)
