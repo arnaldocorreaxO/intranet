@@ -1,5 +1,6 @@
 import pyodbc
 import IfxPy
+from bs.models import Parametro
 from config import dbinformix as dbifx
 from config import dbmssql as dbmssql
 from django.shortcuts import render
@@ -40,6 +41,7 @@ class PublicacionList(ListView):
       # Add in a QuerySet of all the books
       context['pub_cumple_list'] = Publicacion.objects.filter(cumpleanho=True).order_by('-fecha')[:9]
       context['navbar_menus'] = navbar_context(self.request)['navbar_menus']
+      context['parametro_mostrar_felices_fiestas'] = Parametro.objects.get(clave='MOSTRAR_FELICES_FIESTAS').valor_bool()  
       return context
   def get_queryset(self):
         # return Publicacion.objects.exclude(imagen='').order_by('-fecha')[:20]
