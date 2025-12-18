@@ -439,7 +439,7 @@
       if (!localStorage.getItem('popupShown')) {
       Swal.fire({
             title: '🎄 Felices Fiestas 🎅',
-            html: '<p style="font-size:18px;">Que la alegría y la unión acompañen cada momento.<br>¡Gracias por ser parte de este año!</p>',
+            html: '<p style="font-size:18px;">{{ mensaje_felices_fiestas|safe }}</p>',
             icon: 'success',
             confirmButtonText: 'Cerrar',
             confirmButtonColor: '#d32f2f',   // rojo navideño

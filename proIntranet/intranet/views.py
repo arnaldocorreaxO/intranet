@@ -41,8 +41,11 @@ class PublicacionList(ListView):
       # Add in a QuerySet of all the books
       context['pub_cumple_list'] = Publicacion.objects.filter(cumpleanho=True).order_by('-fecha')[:9]
       context['navbar_menus'] = navbar_context(self.request)['navbar_menus']
-      parametro = Parametro.objects.filter(parametro='MOSTRAR_FELICES_FIESTAS').first()
-      context['parametro_mostrar_felices_fiestas'] = (parametro and parametro.valor.upper() == 'SI')
+      parametro_mostrar = Parametro.objects.filter(parametro='MOSTRAR_FELICES_FIESTAS').first()
+      parametro_mensaje = Parametro.objects.filter(parametro='MENSAJE_FELICES_FIESTAS').first()
+      context['parametro_mostrar_felices_fiestas'] = (parametro_mostrar and parametro_mostrar.valor.upper() == 'SI')
+      context['parametro_mensaje_felices_fiestas'] = (parametro_mensaje.valor if parametro_mensaje else '')
+
       return context
   def get_queryset(self):
         # return Publicacion.objects.exclude(imagen='').order_by('-fecha')[:20]
