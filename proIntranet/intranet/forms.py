@@ -10,7 +10,6 @@ from .models import Publicacion
 #Utils
 from bs.utils import *
 
-
 """Parametros Formulario Recibo"""
 class pReciboForm(forms.Form):
     pSede   = forms.ChoiceField(label='Sede',
@@ -48,29 +47,83 @@ class pReciboForm(forms.Form):
    
 """Parametros Formulario Asistencia"""
 class pAsistenciaForm(forms.Form):
-    pSede   = forms.ChoiceField(label='Sede',
-                                widget=forms.Select(attrs={'class': 'form-control',
-                                                           'data-toggle': 'select'}),
-                                choices=choiceSede(), 
-                                required=True)
+    pSede = forms.ChoiceField(
+        label='Sede',
+        widget=forms.Select(attrs={'class': 'form-control', 'data-toggle': 'select'}),
+        choices=[], # Lo dejamos vacío inicialmente
+        required=True
+    )
+    pLegajo = forms.CharField(
+        label='Empleado',
+        widget=forms.Select(attrs={
+            'class': 'selectpicker form-control',
+            'data-toggle': 'select',
+            'data-live-search': 'true'
+        }),
+        required=True
+    )
+    
+    pMes = forms.ChoiceField(
+        label='Mes',
+        choices=choiceMes(), # Esta lista es estática, no hay problema
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    pAnho = forms.ChoiceField(
+        label='Año',
+        choices=[], # Lo dejamos vacío inicialmente
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(pAsistenciaForm, self).__init__(*args, **kwargs)
+        # Cargamos los años dinámicamente cada vez que se crea el form
+        self.fields['pAnho'].choices = choiceAnho()
+        # Aprovechamos para cargar las sedes también si vienen de DB
+        self.fields['pSede'].choices = choiceSede()
+        
+        # Opcional: Establecer el año actual como inicial dinámicamente
+        self.fields['pAnho'].initial = str(datetime.now().year)
+        self.fields['pMes'].initial = str(datetime.now().month)
+
+# class pAsistenciaForm(forms.Form):
+#     pSede   = forms.ChoiceField(label='Sede',
+#                                 widget=forms.Select(attrs={'class': 'form-control',
+#                                                            'data-toggle': 'select'}),
+#                                 choices=choiceSede(), 
+#                                 required=True)
       
-    pLegajo   = forms.CharField(label='Empleado',
-                                widget=forms.Select(attrs={'class': 'selectpicker form-control',
-                                                           'data-toggle': 'select',
-                                                           'data-live-search':'true'}),
-                                required=True)
-    pFechaDesde = forms.DateField(label = 'Desde:', initial= fechaInicial(),widget=DatePickerInput(
-                                                                          options={
-                                                                              "format": "DD/MM/YYYY",
-                                                                              "locale": "es", 
+#     pLegajo   = forms.CharField(label='Empleado',
+#                                 widget=forms.Select(attrs={'class': 'selectpicker form-control',
+#                                                            'data-toggle': 'select',
+#                                                            'data-live-search':'true'}),
+#                                 required=True)
+#     # NUEVOS CAMPOS
+#     pMes = forms.ChoiceField(
+#         label='Mes',
+#         choices=MONTH_CHOICES,
+#         initial=datetime.datetime.now().month,
+#         widget=forms.Select(attrs={'class': 'form-control'})
+#     )
+    
+#     pAnio = forms.ChoiceField(
+#         label='Año',
+#         choices=get_year_choices(),
+#         initial=datetime.datetime.now().year,
+#         widget=forms.Select(attrs={'class': 'form-control'})
+#     )
+    # pFechaDesde = forms.DateField(label = 'Desde:', initial= fechaInicial(),widget=DatePickerInput(
+    #                                                                       options={
+    #                                                                           "format": "DD/MM/YYYY",
+    #                                                                           "locale": "es", 
 
-                                                                          }))
-    pFechaHasta = forms.DateField(label = 'Hasta:',initial= fechaActual(),widget=DatePickerInput(
-                                                                          options={
-                                                                              "format": "DD/MM/YYYY",
-                                                                              "locale": "es", 
+    #                                                                       }))
+    # pFechaHasta = forms.DateField(label = 'Hasta:',initial= fechaActual(),widget=DatePickerInput(
+    #                                                                       options={
+    #                                                                           "format": "DD/MM/YYYY",
+    #                                                                           "locale": "es", 
 
-                                                                          }))
+    #                                                                       }))
 
 class PublicacionForm(forms.ModelForm):
   class Meta:

@@ -1,27 +1,30 @@
-import pyodbc
+# 1. Librerías estándar
+import calendar
+from datetime import date
+
+# 2. Librerías de terceros (Django y conectores)
 import IfxPy
-from bs.models import Parametro
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+# 3. Imports locales (Configuración y Apps)
 from config import dbinformix as dbifx
 from config import dbmssql as dbmssql
-from django.shortcuts import render
-from django.views.generic.list import ListView
-from django.contrib.auth.decorators import login_required
-"""
-https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
-bajar GTK descomprimir en C:\\msys2\\mingw64
-https://weasyprint.readthedocs.io/en/latest/install.html#step-5-run-weasyprint
-"""
-
-from bs.utils import * #created in step 4
+from bs.models import Parametro
+from bs.utils import * # Utilidades creadas en paso 4
 from .models import *
-
 from .forms import *
 
-from django.urls import reverse_lazy
-from django.views.generic import ListView
-from django.views.generic.detail import DetailView 
-from django.views.generic.edit import (CreateView,UpdateView,DeleteView)
-from django.contrib.auth.mixins import PermissionRequiredMixin
+"""
+RECURSOS PARA EXPORTAR A PDF:
+- Tutorial: https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
+- Requisito GTK: Descomprimir en C:\\msys2\\mingw64
+- Documentación WeasyPrint: https://weasyprint.readthedocs.io/en/latest/install.html#step-5-run-weasyprint
+"""
 
 
 #############################################
@@ -147,32 +150,86 @@ def ver_asistencia(request):
     if request.method == 'POST':
         form = pAsistenciaForm(request.POST) 
         if form.is_valid():
+            # Extraemos los datos limpios
             data = form.cleaned_data
-            result=[]
+            
+            # --- LÓGICA DE FECHAS DINÁMICAS ---
+            mes = int(data['pMes'])
+            anio = int(data['pAnho'])
+            
+            # Calculamos el último día de ese mes específico
+            ultimo_dia = calendar.monthrange(anio, mes)[1]
+            
+            # Sobrescribimos o añadimos las fechas al diccionario 'data'
+            # Esto es lo que recibirá tu función asistencia(**data)
+            data['pFechaDesde'] = date(anio, mes, 1).strftime('%Y-%m-%d')
+            data['pFechaHasta'] = date(anio, mes, ultimo_dia).strftime('%Y-%m-%d')
+            # ----------------------------------
+
+            result = []
             can_select_empleado = request.user.has_perm('auth.can_select_empleado')
-            #CONTROLAR QUE SOLO LOS USUARIOS CON PERMISO PUEDAN CONSULTAR OTRAS ASISTENCIAS
-            if not can_select_empleado and data['pLegajo']!= str(request.user.perfil.legajo):
-                result = [{'mensaje':'Permisos Insuficientes para consultar otras asistencias'}]
+            
+            # CONTROLAR QUE SOLO LOS USUARIOS CON PERMISO PUEDAN CONSULTAR OTRAS ASISTENCIAS
+            if not can_select_empleado and data['pLegajo'] != str(request.user.perfil.legajo):
+                result = [{'mensaje': 'Permisos Insuficientes para consultar otras asistencias'}]
             else:    
+                # Ahora data lleva pFechaDesde y pFechaHasta calculados
                 result = asistencia(**data)
-            #print(result)
-            # return render_to_response('pdf/asistencia_pdf.html',{'asistencias':result, 'data':data})
+
             vTemplateName = 'pdf/asistencia_pdf.html'
-            if (data['pSede']=='VMI'):
-              vTemplateName = 'pdf/asistencia_pdf_vmi.html'
+            if (data['pSede'] == 'VMI'):
+                vTemplateName = 'pdf/asistencia_pdf_vmi.html'
 
             return render(
-              request=request,
-              template_name=vTemplateName,
-              context={'asistencias':result, 'data':data})
+                request=request,
+                template_name=vTemplateName,
+                context={'asistencias': result, 'data': data}
+            )
     else:
         form = pAsistenciaForm()
-        usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
+        usuario = {
+            'sede': str(request.user.perfil.sede),
+            'cedula': request.user.username, 
+            'legajo': str(request.user.perfil.legajo)
+        }
+        
     return render(
         request=request,
         template_name='ver_asistencia.html',
-        context={'form': form,'usuario':usuario}
-    )    
+        context={'form': form, 'usuario': usuario}
+    )
+# def ver_asistencia(request):
+#     """Sign up view."""
+#     usuario = None
+#     if request.method == 'POST':
+#         form = pAsistenciaForm(request.POST) 
+#         if form.is_valid():
+#             data = form.cleaned_data
+#             result=[]
+#             can_select_empleado = request.user.has_perm('auth.can_select_empleado')
+#             #CONTROLAR QUE SOLO LOS USUARIOS CON PERMISO PUEDAN CONSULTAR OTRAS ASISTENCIAS
+#             if not can_select_empleado and data['pLegajo']!= str(request.user.perfil.legajo):
+#                 result = [{'mensaje':'Permisos Insuficientes para consultar otras asistencias'}]
+#             else:    
+#                 result = asistencia(**data)
+#             #print(result)
+#             # return render_to_response('pdf/asistencia_pdf.html',{'asistencias':result, 'data':data})
+#             vTemplateName = 'pdf/asistencia_pdf.html'
+#             if (data['pSede']=='VMI'):
+#               vTemplateName = 'pdf/asistencia_pdf_vmi.html'
+
+#             return render(
+#               request=request,
+#               template_name=vTemplateName,
+#               context={'asistencias':result, 'data':data})
+#     else:
+#         form = pAsistenciaForm()
+#         usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
+#     return render(
+#         request=request,
+#         template_name='ver_asistencia.html',
+#         context={'form': form,'usuario':usuario}
+#     )    
 
 
 
@@ -282,7 +339,7 @@ def cargarAsistencia(**Kwargs):
          and ashst.conl = sjcol.conl
          ORDER BY 1 
   """.format(**Kwargs)
-          #.format(Kwargs['pCedula'],Kwargs['pLegajo'],Kwargs['pMes'],Kwargs['pAnho'])
+          #.format(Kwargs['pCedula'],Kwargs['pLegajo'],Kwargs['pFechaDesde'],Kwargs['pFechaHasta'])
   #print(sql)
   conn = dbifx.conectar(vSede)
   stmt = IfxPy.exec_immediate(conn, sql)
