@@ -232,6 +232,7 @@
     <div class="report-container">
       <div class="no-print">
         <a href="javascript:history.back()" class="btn btn-back">Atrás</a>
+        <button onclick="exportTableToExcel('DTAsistencia', 'Asistencia_INC')" class="btn" style="background: #217346; color: white; border: none;">Descargar Excel</button>
         <button onclick="window.print()" class="btn btn-print">Imprimir Reporte</button>
       </div>
 
@@ -253,7 +254,7 @@
           </tr>
         </table>
 
-        <table class="asistencia-table">
+        <table id="DTAsistencia" class="asistencia-table">
           <thead>
             <tr>
               <th>Legajo</th>
@@ -321,4 +322,30 @@
       {% endblock %}
     </div>
   </body>
+  <script>
+    function exportTableToExcel(tableID, filename = '') {
+      var downloadLink
+      var dataType = 'application/vnd.ms-excel'
+      var tableSelect = document.getElementById(tableID)
+    
+      // Reemplazamos caracteres especiales para que Excel los lea bien (UTF-8)
+      var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20')
+    
+      filename = filename ? filename + '.xls' : 'reporte_asistencia.xls'
+    
+      downloadLink = document.createElement('a')
+      document.body.appendChild(downloadLink)
+    
+      if (navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(['\ufeff', tableHTML], {
+          type: dataType
+        })
+        navigator.msSaveOrOpenBlob(blob, filename)
+      } else {
+        downloadLink.href = 'data:' + dataType + ', ' + '\ufeff' + tableHTML
+        downloadLink.download = filename
+        downloadLink.click()
+      }
+    }
+  </script>
 </html>
