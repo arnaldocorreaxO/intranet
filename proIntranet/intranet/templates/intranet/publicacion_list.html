@@ -1,190 +1,153 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
+
 
 {% block head_content %}
-  <title>Publicaciones Intranet | INC</title>
-  <style>
-    /* Estilos para las tarjetas de noticias */
-    .news-card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      overflow: hidden;
-    }
-    
-    .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    }
-    
-    .news-image-container {
-      height: 200px;
-      overflow: hidden;
-      background-color: #f8f9fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .news-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    
-    .news-card:hover .news-image {
-      transform: scale(1.05);
-    }
-    
-    /* Ajustes del Carrusel */
-    .carousel-item img {
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    
-    .carousel-control-prev,
-    .carousel-control-next {
-      width: 5%;
-      border-radius: 50%;
-      height: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  </style>
-{% endblock %}
+	<title>Publicaciones Intranet</title>
+{% endblock%}
+
+{% load static %}
 
 {% block container %}
-  <div class="container py-4">
-    <div class="row mb-5">
-      <div class="col-12">
-        <div id="myCarousel" class="carousel slide shadow-lg rounded overflow-hidden" data-ride="carousel">
-          <ol class="carousel-indicators">
-            {% for pub in publicacion_list|slice:':5' %}
-              <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
-            {% endfor %}
-          </ol>
 
-          <div class="carousel-inner">
-            {% for pub in publicacion_list|slice:':5' %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <a href="{% url 'publicacion:detail' pub.id %}">
-                  <div class="carousel-img-container">
-                    <img src="{{ pub.imagen.url }}" class="d-block w-100" alt="{{ pub.titulo }}" />
-                  </div>
-                  <div class="carousel-caption d-none d-md-block">
-                    <h4 class="font-weight-bold">{{ pub.titulo }}</h4>
-                    <p>{{ pub.descripcion|truncatechars:100 }}</p>
-                  </div>
-                </a>
-              </div>
-            {% endfor %}
-          </div>
+<!--BOTON SOLICITUD DE SOPORTE-->
+<!-- SOPORTE -->
+{% comment %} <a  class="btn-flotante" 	
+	href="http://soporte.inc.gov.py/plugins/formcreator/front/formdisplay.php?id=1" target="_blank">
+	<i class="fa fa-headphones" aria-hidden="true"></i> Solicitar Soporte</a> {% endcomment %}
 
-          <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Anterior</span>
-          </a>
-          <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Siguiente</span>
-          </a>
-        </div>
-      </div>
-    </div>
+<div class="container">	
+	<div class="col-md-12">			
+		<div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+			<div class="carousel-inner w-100" role="listbox">
+				{% for pub in publicacion_list|slice:":30" %}
+						
+				<div class="carousel-item {% if forloop.first %} active {% endif %}">
+					<div class="col-lg-4 col-md-6">
+						<a href="{% url 'publicacion:detail' pub.id %}">
+						<img class="img-fluid" src="{{pub.imagen.url}}"></a>
+					</div>
+				</div>									  
 
-    <div class="row mb-4 align-items-center">
-      <div class="col-6">
-        <h4 class="mb-0 text-secondary"><i class="fas fa-newspaper mr-2"></i>Últimas Noticias</h4>
-      </div>
-      <div class="col-6 text-right">
-        <div class="btn-group shadow-sm">
-          <a href="{% url 'publicacion:list' %}" class="btn btn-white btn-sm border" title="Actualizar"><i class="fas fa-sync-alt"></i></a>
-          {% if perms.intranet.add_publicacion %}
-            <a href="{% url 'publicacion:new' %}" class="btn btn-primary btn-sm ml-2"><i class="fas fa-plus mr-1"></i> Nueva Publicación</a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
+				{% endfor %}
 
-    <div class="row">
-      <div class="col-12">
-        {% for publicacion in publicacion_list %}
-          <div class="card news-card mb-4">
-            <div class="row no-gutters">
-              <div class="col-md-3">
-                <div class="news-image-container">
-                  {% if publicacion.imagen %}
-                    <a href="{% if publicacion.url %}
-                        {{ publicacion.url }}
-                      {% else %}
-                        {% url 'publicacion:detail' publicacion.id %}
-                      {% endif %}">
-                      <img src="{{ publicacion.imagen.url }}" class="news-image" alt="Imagen" />
-                    </a>
-                  {% else %}
-                    <img src="{% static 'img/logo_inc.png' %}" class="p-4 opacity-5" style="width:150px" alt="INC" />
-                  {% endif %}
-                </div>
-              </div>
+		</div>
+		<a class="carousel-control-prev bg-dark w-auto" href="#myCarousel" role="button" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next bg-dark w-auto" href="#myCarousel" role="button" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
 
-              <div class="col-md-9">
-                <div class="card-body h-100 d-flex flex-column">
-                  <div class="mb-2">
-                    <h5 class="card-title text-primary mb-1">{{ publicacion.titulo }}</h5>
-                    <small class="text-muted"><i class="fas fa-calendar-day mr-1"></i> {{ publicacion.fecha|date:'d M, Y' }}</small>
-                  </div>
+{% comment %} </div>		 {% endcomment %}
 
-                  <p class="card-text text-secondary flex-grow-1">{{ publicacion.descripcion|truncatechars:200 }}</p>
 
-                  <div class="mt-3 d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <a href="{% url 'publicacion:detail' publicacion.id %}" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Leer más</a>
-                      {% if perms.intranet.change_publicacion %}
-                        <a href="{% url 'publicacion:edit' publicacion.id %}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
-                      {% endif %}
-                      {% if perms.intranet.delete_publicacion %}
-                        <a href="{% url 'publicacion:delete' publicacion.id %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% empty %}
-          <div class="alert alert-light text-center border py-5">
-            <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
-            <p class="mb-0 text-muted">No hay publicaciones disponibles en este momento.</p>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
+{% comment %} <div class="container"> {% endcomment %}
+<div class="row">
 
-    <div class="row">
-      <div class="col-12 text-center text-muted py-3 border-top mt-4">
-        <small>Mostrando las últimas actualizaciones de la Intranet INC</small>
-      </div>
-    </div>
-  </div>
+<div class="col-md-12 mt-3" >
+<div class="row">
+<div class="col-md-6 text-left">
+<form action="{% url 'publicacion:list' %}">
+<button type="submit" class="btn btn-outline-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="right" data-content="Actualizando...">
+<i class="fas fa-sync"></i> Noticias
+</button>
+</form>
+</div>
+
+{% if perms.intranet.add_publicacion %}
+<div id="btnPublicar" class="col-md-6 text-right">	
+<form action="{% url 'publicacion:new' %}">
+<button type="submit" class="btn btn-outline-primary btn-sm text-left">
+<i class="fas fa-plus"></i> Nueva Publicación
+</button>
+</form>
+</div>
+{% endif %}
+
+</div>
+
+			<div class="card">				
+				<div class="card-header" >						
+					{% for publicacion in publicacion_list %}							  
+						<div class="card mb-3" style="max-width: 1100px; ">
+							<div class="row no-gutters">
+								<div class="col-md-4 text-center" style="width: 100px; height: 240px;">
+									<div class="col m-3">
+										{% if publicacion.imagen %}
+											{% if publicacion.url %}
+												<a href="{{publicacion.url}}">
+											{% else %}
+												<a href="{{publicacion.imagen.url}}">
+											{% endif %}
+												<img src="{{publicacion.imagen.url}}" alt="No Image" class="img-responsive" width="200" height="200" >
+												</a>	
+										{% else %}
+											<img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="img-responsive" width="200" height="200">
+										{% endif %}	
+									</div>
+								</div>
+							<div class="col-md-8">
+			<div class="card-body">
+			<h5 class="card-title">{{publicacion.titulo}}</h5>
+			<p class="card-text"><small class="text-muted"><i class="fas fa-calendar-alt"></i>
+				{{publicacion.fecha}}</small></p>
+			<!-- <p class="card-text">{{publicacion.mensaje|slice:":100"}}</p> -->
+			<p class="card-text">{{publicacion.descripcion}}</p>
+			<!-- <button type="button" class="btn btn-outline-info btn-sm">Ver más</button> -->
+			<a id="btnVer" class="btn btn-outline-info btn-sm" href="{% url 'publicacion:detail' publicacion.id %}">Ver más</a>
+			{% if perms.intranet.change_publicacion %}
+				<a id="btnEditar" class="btn btn-outline-secondary btn-sm" href="{% url 'publicacion:edit' publicacion.id %}">Editar</a>
+			{% endif %}
+			{% if perms.intranet.delete_publicacion %}
+				<a id="btnEliminar" class="btn btn-outline-danger btn-sm" href="{% url 'publicacion:delete' publicacion.id %}">Eliminar</a>
+			{% endif %}									        
+				
+
+			</div>
+			</div>
+			</div>
+			</div>
+{% endfor %}					
+<div class="card-footer small text-muted">Ultimas publicaciones</div>
+</div>
+</div>
+</div>
+</div>
+
 {% endblock %}
 
-{% block js %}
-  <script type="text/javascript">
-    $(function () {
-      // Inicializar Popovers si existen
-      $('[data-toggle="popover"]').popover({
-        sanitize: false,
-        trigger: 'hover'
-      })
-    
-      // El carrusel se inicia automáticamente con Bootstrap 4
-      $('.carousel').carousel({
-        interval: 5000
-      })
-    })
-  </script>
-{% endblock %}
+{% block js%}
+<!-- <script type="text/javascript">
+$(document).ready(function() {
+$('#dataTable').DataTable( {
+"retrieve":true,
+
+} );		
+} );
+</script> -->
+<script type="text/javascript">
+// POPOVER
+$(function() {
+$('[data-toggle="popover"]').popover({
+sanitize:false
+})
+})
+
+// NO APLICA EN TODOS LOS OBJECTOS
+function ocultar(){      
+document.getElementById("btnPublicar").style.display = "none";
+//document.getElementById("btnEditar").style.display = "none";
+//document.getElementById("btnEliminar").style.display = "none";
+}    s
+
+{% if not request.user.is_staff %}    
+ocultar();
+{% endif %}
+
+
+
+</script>
+{% endblock js%}
