@@ -40,7 +40,7 @@ class PublicacionList(ListView):
       context = super().get_context_data(**kwargs)
       # Add in a QuerySet of all the books
       context['pub_cumple_list'] = Publicacion.objects.filter(cumpleanho=True).order_by('-fecha')[:9]
-      context['navbar_menus'] = navbar_context(self.request)['navbar_menus']
+      # context['navbar_menus'] = navbar_context(self.request)['navbar_menus'] --Se pasa en el context processor para que esté disponible en todas las vistas
       parametro_mostrar = Parametro.objects.filter(parametro='MOSTRAR_FELICES_FIESTAS').first()
       parametro_mensaje = Parametro.objects.filter(parametro='MENSAJE_FELICES_FIESTAS').first()
       context['parametro_mostrar_felices_fiestas'] = (parametro_mostrar and parametro_mostrar.valor.upper() == 'SI')

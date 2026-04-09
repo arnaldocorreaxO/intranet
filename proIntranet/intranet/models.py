@@ -9,34 +9,51 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 class NavbarMenu(models.Model):
-    nombre = models.CharField(max_length=100)       # Ej: "Zona de Descargas"
-    icono = models.CharField(max_length=50, blank=True, null=True)  # Ej: "fa fa-download"
-    orden = models.PositiveIntegerField(default=0)  # Para ordenar en la barra
+	nombre = models.CharField(max_length=100)       # Ej: "Zona de Descargas"
+	icono = models.CharField(max_length=50, blank=True, null=True)  # Ej: "fa fa-download"
+	# --- Nuevos campos para enlaces directos ---
+	url = models.CharField(max_length=255, blank=True, null=True, help_text="Si se llena, el menú será un link directo y no un desplegable.")
+	target_blank = models.BooleanField(default=False, verbose_name="Abrir en nueva pestaña")
+	# -------------------------------------------
+	orden = models.PositiveIntegerField(default=0)  # Para ordenar en la barra
 
-    def __str__(self):
-        return self.nombre
+	def __str__(self):
+		return self.nombre
+	
+	class Meta:
+		verbose_name = '01 - Navbar Menu'
+		verbose_name_plural = '01 - Navbar Menus'
+			
 
 
 class NavbarSection(models.Model):
-    menu = models.ForeignKey(NavbarMenu, related_name="secciones", on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=100)       # Ej: "Descargar Formatos Oficiales"
-    orden = models.PositiveIntegerField(default=0)
+	menu = models.ForeignKey(NavbarMenu, related_name="secciones", on_delete=models.CASCADE)
+	titulo = models.CharField(max_length=100)       # Ej: "Descargar Formatos Oficiales"
+	orden = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return f"{self.menu.nombre} - {self.titulo}"
+	def __str__(self):
+		return f"{self.menu.nombre} - {self.titulo}"
+	
+	class Meta:
+		verbose_name = '02 - Navbar Section'
+		verbose_name_plural = '02 - Navbar Sections'
 
 
 class NavbarItem(models.Model):
-    section = models.ForeignKey(NavbarSection, related_name="items", on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=200)       # Ej: "Formato hoja documentos oficiales INC"
-    url = models.URLField(blank=True, null=True)    # Para enlaces externos
-    archivo = models.FileField(upload_to="downloads/", blank=True, null=True)  # Para archivos internos
-    icono = models.CharField(max_length=50, default="fa fa-download")
-    target_blank = models.BooleanField(default=False)
-    orden = models.PositiveIntegerField(default=0)
+	section = models.ForeignKey(NavbarSection, related_name="items", on_delete=models.CASCADE)
+	titulo = models.CharField(max_length=200)       # Ej: "Formato hoja documentos oficiales INC"
+	url = models.URLField(blank=True, null=True)    # Para enlaces externos
+	archivo = models.FileField(upload_to="downloads/", blank=True, null=True)  # Para archivos internos
+	icono = models.CharField(max_length=50, default="fa fa-download")
+	target_blank = models.BooleanField(default=False, verbose_name="Abrir en nueva pestaña")
+	orden = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return self.titulo
+	def __str__(self):
+		return self.titulo
+	
+	class Meta:
+		verbose_name = '03 - Navbar Item'
+		verbose_name_plural = '03 - Navbar Items'
 
 
 class Aviso(models.Model):
