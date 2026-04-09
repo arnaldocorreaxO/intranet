@@ -8,26 +8,27 @@
       --primary-color: #004a99;
       --secondary-color: #6c757d;
       --bg-light: #f4f7f6;
+      --carousel-bg: #f1f3f5; /* Centralizamos el color aquí */
     }
     
     body {
       background-color: var(--bg-light);
     }
     
-    /* Carrusel de Alto Impacto */
     #myCarousel {
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      background: #212529; /* Fondo oscuro para resaltar imágenes */
+      background: var(--carousel-bg); /* Usamos la variable */
       padding: 15px;
     }
     
     .carousel-item img {
-      height: 500px; /* Altura mayor para que quepa toda la imagen */
-      object-fit: contain; /* Muestra la imagen completa sin recortes */
+      height: 500px;
+      object-fit: contain;
       width: 100%;
       transition: all 0.4s ease;
+      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.08));
     }
     
     /* Tarjetas Estilo Intranet Pro */
