@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>{% block title %}Intranet - INC{% endblock %}</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'bootstrap-4.3.1/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/bootstrap-select-1.13.1/css/bootstrap-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" />
+    <link rel="stylesheet" href="{% static '/gijgo-combined-1.9.13/css/gijgo.min.css' %}" />
+    
+    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/sweetalert2-9.10.0/sweetalert2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/carousel.css' %}" />
+
+    <style>
+        /* Navbar Futurista Unificado */
+        .navbar-futurista {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-bottom: 2px solid #5dade2;
+            box-shadow: 0 4px 10px rgba(93, 173, 226, 0.2);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand img {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        .navbar-futurista .nav-link,
+        .navbar-brand span {
+            color: #ecf0f1 !important;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .navbar-futurista .nav-link:hover {
+            color: #5dade2 !important;
+        }
+
+        /* Dropdowns */
+        .navbar-futurista .dropdown-menu {
+            background-color: #2c3e50;
+            border: 1px solid #5dade2;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            margin-top: 0.5rem;
+        }
+
+        .navbar-futurista .dropdown-item {
+            color: #ecf0f1;
+            padding: 0.6rem 1.2rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .navbar-futurista .dropdown-item i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .navbar-futurista .dropdown-item:hover {
+            background-color: #5dade2;
+            color: #fff;
+            padding-left: 1.5rem;
+        }
+
+        .dropdown-header {
+            color: #5dade2;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+
+        /* Utilidades */
+        .blinking {
+            animation: blinker 1.5s linear infinite;
+        }
+        @keyframes blinker { 50% { opacity: 0.5; } }
+
+        .img-profile {
+            border: 2px solid #5dade2;
+            padding: 2px;
+            background: #fff;
+        }
+
+        @media (max-width: 992px) {
+            .off { display: none; } /* Oculta texto en móviles para ahorrar espacio */
+        }
+    </style>
+
+    {% block extrahead %}{% endblock %}
+</head>
+
+<body id="page-top">
+
+    <nav class="navbar navbar-expand navbar-futurista static-top">
+        
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand mr-1" href="{% url 'publicacion:list' %}">
+                <img src="{% static 'img/logo_hd.png' %}" class="rounded-circle" height="45" />
+                <span class="ml-2 d-none d-sm-inline">Intranet</span>
+            </a>
+            <button class="btn btn-link btn-sm text-white" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="mx-auto d-none d-lg-block">
+            <a href="https://nube.inc.gov.py/s/xAe5LcWYercP9T8" target="_blank" 
+               class="badge badge-pill badge-primary blinking p-2 px-3" 
+               title="Manuales de Uso">
+                <i class="fas fa-book mr-1"></i> Manuales DIGITALIA!
+            </a>
+        </div>
+
+        <ul class="navbar-nav ml-auto align-items-center">
+            
+            {% for menu in navbar_menus %}
+                {% if menu.url %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ menu.url }}" {% if menu.target_blank %}target="_blank"{% endif %}>
+                            {% if menu.icono %}<i class="{{ menu.icono }}"></i>{% endif %}
+                            <span class="off ml-1">{{ menu.nombre }}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="menu{{ menu.id }}" data-toggle="dropdown">
+                            {% if menu.icono %}<i class="{{ menu.icono }}"></i>{% endif %}
+                            <span class="off ml-1">{{ menu.nombre }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            {% for section in menu.secciones.all %}
+                                <h6 class="dropdown-header">{{ section.titulo }}</h6>
+                                {% for item in section.items.all %}
+                                    <a class="dropdown-item" 
+                                       href="{% if item.archivo %}{{ item.archivo.url }}{% else %}{{ item.url }}{% endif %}"
+                                       {% if item.target_blank %}target="_blank"{% endif %}
+                                       {% if item.archivo %}download{% endif %}>
+                                        <i class="{{ item.icono }}"></i> {{ item.titulo }}
+                                    </a>
+                                {% endfor %}
+                                {% if not forloop.last %}<div class="dropdown-divider"></div>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" data-toggle="dropdown">
+                    <i class="fa fa-download"></i> <span class="off ml-1">Descargas</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <h6 class="dropdown-header">Formatos Oficiales</h6>
+                    <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC.docx' %}" download><i class="fa fa-file-word"></i> Hoja Oficial INC</a>
+                    <a class="dropdown-item" href="{% static 'download/Logos/Formato_Hoja_Membretada_INC_Guarania.docx' %}" download><i class="fa fa-file-word"></i> Hoja Guarania</a>
+                    
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Formularios</h6>
+                    <a class="dropdown-item" href="https://nube.inc.gov.py/s/9N6T4pXapK6GXGy" target="_blank"><i class="fa fa-user-plus"></i> Usuarios</a>
+                    <a class="dropdown-item" href="https://nube.inc.gov.py/s/RSaWAZ5ZTsDPgFt" target="_blank"><i class="fa fa-calendar-check"></i> Permiso Laboral</a>
+                    <a class="dropdown-item" href="{% static 'download/Formularios/pedido_de_utiles.pdf' %}" download><i class="fa fa-box"></i> Pedido Útiles</a>
+                    
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">Sistema de Gestión</h6>
+                    <a class="dropdown-item" href="https://nube.inc.gov.py/s/PFSjDoWeNtSiLHE" target="_blank"><i class="fa fa-laptop-code"></i> Gestión de TIC</a>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'interno-list' %}" title="Internos">
+                    <i class="fa fa-phone"></i> <span class="off ml-1">Internos</span>
+                </a>
+            </li>
+
+            <li class="nav-item dropdown no-arrow ml-2">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
+                    <img src="{% if request.user.perfil.foto %}{{ request.user.perfil.foto.url }}{% else %}{% static 'img/default-profile.png' %}{% endif %}" 
+                         class="rounded-circle img-profile" height="35" width="35" alt="User">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% if request.user.is_authenticated %}
+                        <div class="px-4 py-2 text-center text-white-50">
+                            <small>Hola,</small><br><strong>{{ request.user.first_name }}</strong>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'perfil-detail' request.user.id %}"><i class="fa fa-user-circle"></i> Mi Perfil</a>
+                        <a class="dropdown-item" href="{% url 'password_change' %}"><i class="fa fa-key"></i> Contraseña</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-warning" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fa fa-sign-out-alt"></i> Salir
+                        </a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'login2' %}?next={{ request.path }}">Ingresar</a>
+                        <a class="dropdown-item" href="{% url 'signup' %}">Registrarse</a>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="wrapper">
+        {% include 'base_navbar_left.html' %}
+
+        <div id="content-wrapper">
+            <main class="container-fluid py-4">
+                {% block container %}{% endblock %}
+            </main>
+
+            <footer class="sticky-footer bg-white shadow-sm">
+                <div class="container my-auto">
+                    <div class="text-center my-auto">
+                        <span class="text-muted small">&copy; 2026 Industria Nacional del Cemento - Gerencia TIC</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Cerrar sesión?</h5>
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">Seleccione "Salir" para finalizar su sesión actual.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Salir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static '/bootstrap-4.3.1/js/popper.min.js' %}"></script>
+    <script src="{% static '/bootstrap-4.3.1/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'js/sb-admin.min.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Auto-toggle sidebar on large screens
+            if ($(window).width() > 992) {
+                $('#sidebarToggle').click();
+            }
+
+            // DataTable Spanish
+            if ($('#dataTable1').length) {
+                $('#dataTable1').DataTable({
+                    language: { url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json' }
+                });
+            }
+
+            // Holiday Popup
+            {% if parametro_mostrar_felices_fiestas %}
+                if (!sessionStorage.getItem('popupShown')) {
+                    Swal.fire({
+                        title: '🎄 Felices Fiestas 🎅',
+                        html: '{{ parametro_mensaje_felices_fiestas|safe }}',
+                        icon: 'success',
+                        confirmButtonColor: '#d32f2f'
+                    });
+                    sessionStorage.setItem('popupShown', 'true');
+                }
+            {% endif %}
+        });
+    </script>
+    {% block js %}{% endblock %}
+</body>
+</html>

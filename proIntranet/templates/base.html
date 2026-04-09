@@ -113,7 +113,7 @@
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
 
-      <h3><a href="https://nube.inc.gov.py/s/xAe5LcWYercP9T8" target="_blank" class="badge badge-pill badge-primary blinking" title="Manuales de Uso y Buenas Prácticas del Sistema de Gestión Expedientes">Manuales DIGITALIA!</a></h3>
+      {% comment %} <h3><a href="https://nube.inc.gov.py/s/xAe5LcWYercP9T8" target="_blank" class="badge badge-pill badge-primary blinking" title="Manuales de Uso y Buenas Prácticas del Sistema de Gestión Expedientes">Manuales DIGITALIA!</a></h3> {% endcomment %}
 	
 	<ul class="navbar-nav ml-auto ml-md-4">
   {% for menu in navbar_menus %}
@@ -157,19 +157,19 @@
 </ul>
 
 
-      {% comment %}ZONA DE DESCARGAS{% endcomment %}
-      <ul class="navbar-nav ml-auto ml-md-4">
+      {% comment %} ZONA DE DESCARGAS {% endcomment %}
+      {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
         <li class="nav-item dropdown no-arrow mx-1">
           <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-download" aria-hidden="true"></i>
             <span class="off">Zona de Descargas</span>
-          </a>
+          </a> 
 
           <div class="dropdown-menu dropdown-menu-left" aria-labelledby="alertsDropdown">
             <h6 class="dropdown-header">Descargar Formatos Oficiales</h6>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC</a>
-            {% comment %} <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC_A_COLOR.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC a color</a> {% endcomment %}
+            <a class="dropdown-item" href="{% static 'download/Logos/Formato_hoja_documentos_oficiales_INC_A_COLOR.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC a color</a>
             <a class="dropdown-item" href="{% static 'download/Logos/Formato_Hoja_Membretada_INC_Guarania.docx' %}" download><i class="fa fa-download px-2" aria-hidden="true"></i>Formato hoja documentos oficiales INC Guarania</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">Reglamento Interno</h6>
@@ -198,7 +198,7 @@
             <a class="dropdown-item" href="https://nube.inc.gov.py/s/RsrSJm25QPg8fNN" download><i class="fa fa-download px-2" aria-hidden="true"></i>Descargar Formularios</a>
           </div>
         </li>
-      </ul>
+      </ul> {% endcomment %}
 
       <!-- REGLAMENTOS -->
       {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
@@ -222,14 +222,14 @@
         </li>
       </ul> {% endcomment %}
       <!-- LISTA DE INTERNOS -->
-      <ul class="navbar-nav ml-auto ml-md-4">
+      {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
         <li class="nav-item dropdown no-arrow mx-1">
           <a class="nav-link dropdown-toggle" href="{% url 'interno-list' %}" aria-expanded="false">
             <i class="fa fa-phone" aria-hidden="true"></i>
             <span class="off">Teléfonos Internos</span>
           </a>
         </li>
-      </ul>
+      </ul> {% endcomment %}
 
       <!-- GESTION DE USUARIOS SGDU -->
       {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
@@ -263,7 +263,7 @@
       </ul> {% endcomment %}
 
       <!-- SISTEMA DE GESTION - PROCEDIMIENTOS -->
-      <ul class="navbar-nav ml-auto ml-md-4">
+      {% comment %} <ul class="navbar-nav ml-auto ml-md-4">
         <li class="nav-item dropdown no-arrow mx-1">
           <a class="nav-link dropdown-toggle" href="#" id="downloadDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-book" aria-hidden="true"></i>
@@ -289,7 +289,7 @@
             <a class="dropdown-item" href="https://nube.inc.gov.py/s/z4LzCWr48nycLgA" target="_blank"><i class="fa fa-book px-2" aria-hidden="true"></i> Documentos Externos del SGC</a>
           </div>
         </li>
-      </ul>
+      </ul> {% endcomment %}
 
       <!-- Navbar Search -->
       <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
