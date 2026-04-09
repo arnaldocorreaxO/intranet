@@ -1,189 +1,224 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block head_content %}
-<title>Ver Recibo</title>
+  <title>Consultar Recibo | Intranet</title>
+  <style>
+    .card-consultar {
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: none;
+      overflow: hidden;
+    }
+    .card-header-recibo {
+      /* Los colores de Asistencia: #1a5276 y #2980b9 */
+      background: linear-gradient(45deg, #1a5276, #2980b9);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .form-section {
+      padding: 30px;
+    }
+    .opciones-avanzadas {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      border: 1px dashed #dee2e6;
+    }
+    .btn-consultar {
+      background-color: #1a5276; /* El azul oscuro de Asistencia */
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* Limita el ancho del menú desplegable y el buscador */
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+      padding: 4px 8px;
+      font-size: 0.9rem;
+    }
+    
+    .select2-dropdown {
+      max-width: 400px !important; /* Ajusta el ancho máximo que desees */
+      border: 1px solid #ced4da !important;
+    }
+    
+    /* Si usas bootstrap-select (selectpicker) */
+    .bootstrap-select .dropdown-menu {
+      max-width: 100% !important;
+    }
+    
+    .bootstrap-select .bs-searchbox input {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+  </style>
 {% endblock %}
-  
-{% if error %}
-    <p class="alert alert-danger">{{ error }}</p>
-{% endif %}
 
 {% block container %}
-
-<div class="row">
-<div class="col-md-12 text-center"><p></p></div>
-  <div class="col-md-4"></div>
-  <div class="col-md-4">
-    <h3 align="center"><b>Consultar Recibo</b></h3>
-    <form  class ="form-horizontal" action="{% url 'intranet:ver_recibo' %}" method="POST">
-        {% csrf_token %}  
-
-        {% if form.errors %}
-            <p class="alert alert-danger">{{ form.errors}}</p>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        {% if error %}
+          <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i> {{ error }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
         {% endif %}
-                
-        {{ form.as_p }}
 
-        <div class="form-group row">
-          <div class="col-sm-12 text-center">
-            <button type="submit" class="btn btn-primary">Ver Recibo</button>
+        <div class="card card-consultar">
+          <div class="card-header-recibo">
+            <i class="fas fa-file-invoice-dollar fa-3x mb-3"></i>
+            <h3 class="mb-0">Consultar Recibo</h3>
+          </div>
+
+          <div class="card-body form-section">
+            <form id="formRecibo" class="form-horizontal" action="{% url 'intranet:ver_recibo' %}" method="POST">
+              {% csrf_token %}
+
+              {% if form.errors %}
+                <div class="alert alert-warning small py-2">
+                  <i class="fas fa-exclamation-triangle"></i> Por favor verifique los datos ingresados.
+                </div>
+              {% endif %}
+
+              <div class="form-group mb-4">{{ form.as_p }}</div>
+
+              <div class="opciones-avanzadas mb-4">
+                <h6 class="text-muted small font-weight-bold mb-3">CONFIGURACIÓN DE BÚSQUEDA</h6>
+
+                <div class="custom-control custom-checkbox mb-2">
+                  <input type="checkbox" class="custom-control-input" id="id_mantenerEmpleado" />
+                  <label class="custom-control-label small" for="id_mantenerEmpleado">Recordar Empleado seleccionado</label>
+                </div>
+
+                {% if perms.auth.can_select_empleado %}
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_ifxEmpleado" />
+                    <label class="custom-control-label small text-primary" for="id_ifxEmpleado"><i class="fas fa-database mr-1"></i> Ver todos los Empleados (Informix)</label>
+                  </div>
+                {% endif %}
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-consultar shadow"><i class="fas fa-search mr-2"></i> Generar Recibo</button>
+            </form>
           </div>
         </div>
-    </form>
 
-     <!-- *********************************************************** -->
-    <!-- ESTE FORM ES AUXILIAR  -->
-    <!-- *********************************************************** -->
-    <form style="display: none">
-      <!-- style="display: none" -->
-      {# SEDE AUXILIAR #}
-        <div class="form-group" style="display: none">
-          <input id="id_pSedeAux" class="form-control" type="text" placeholder="Sede Auxiliar" name="id_pSedeAux"/>
-        </div>
-      {# LEGAJO AUXILIAR #}
-        <div class="form-group" style="display: none">
-          <input id="id_pLegajoAux" class="form-control" type="text" placeholder="Legajo Auxiliar" name="id_pLegajoAux"/>
-        </div>
-    </form>
-    <form>
-      {# RECORDAR EMPLEADO #}
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="id_mantenerEmpleado">
-          <label class="form-check-label" for="id_mantenerEmpleado">Recordar Empleado</label>
-        </div>
-      {# EMPLEADO FUENTE INFORMIX #}
-      {% if perms.auth.can_select_empleado %}
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="id_ifxEmpleado">
-          <label class="form-check-label" for="id_ifxEmpleado">Todos los Empleados</label>
-        </div>
-        {% endif %}
-    </form>
+        <input type="hidden" id="id_pSedeAux" />
+        <input type="hidden" id="id_pLegajoAux" />
+      </div>
+    </div>
   </div>
-  <div class="col-md-4"></div>
-</div>
-
 {% endblock %}
 
-<!-- JAVASCRIPT -->
-{% block js%}
-<script type="text/javascript">
-  //HABILITAR PARA EVITAR ERROR 
-  $('form').submit(function () {
-      $('#id_pLegajo').prop( "disabled", false );
-      $('#id_pSede').prop( "disabled", false );
-    });
+{% block js %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        const $sede = $('#id_pSede');
+        const $legajo = $('#id_pLegajo');
+        const $mantener = $('#id_mantenerEmpleado');
+        const $ifx = $('#id_ifxEmpleado'); // Check de Informix
+        const $sedeAux = $('#id_pSedeAux');
+        const $legajoAux = $('#id_pLegajoAux');
 
-  $(document).ready(function() {
-    var vSede  =  "{{usuario.sede}}";
-    var vCedula = {{usuario.cedula}};
-    var vLegajo = {{usuario.legajo}};
-    var vSedeAnt;
+        const usuarioActual = {
+            sede: "{{ usuario.sede }}",
+            legajo: "{{ usuario.legajo }}"
+        };
 
-    // MANTENER SEDE ANTERIOR EN LA SELECCION
-    
-    // console.log(vSede,vSedeAnt)
-    if (!vSedeAnt){
-      document.getElementById('id_pSede').value   = vSede;      
-      // console.log('72',vSede,vSedeAnt);
-    };
-     
-     
-     
-    // $("#id_pSede").on("change", getEmpleados); --Version corta del codigo de abajo
-    $('#id_pSede').change(function () {        
-      vSedeAnt = $("#id_pSede").val();
-      getEmpleados();        
-    });
-    // Dispara el evento change una vez en el document ready
-    $("#id_pSede").change();
+        // --- 1. CARGAR ESTADO PERSISTENTE (Magia aquí) ---
+        if (localStorage.getItem('mantener_empleado') === 'true') {
+            $mantener.prop('checked', true);
+            $sedeAux.val(localStorage.getItem('sede_guardada'));
+            $legajoAux.val(localStorage.getItem('legajo_guardado'));
+        }
 
-      //GUARDAMOS EL LEGAJO SELECCIONADO EN EL AUXILIAR
-      $('#id_pLegajo').change(function () {
-        document.getElementById('id_pLegajoAux').value = $('.selectpicker').val();        
-      });
+        // Recuperar si estaba marcado "Todos los Empleados (Informix)"
+        if (localStorage.getItem('usar_informix') === 'true') {
+            $ifx.prop('checked', true);
+        }
 
-      $('#id_ifxEmpleado').change(function () {
-        getEmpleados();        
-      });
-
-      $('#id_mantenerEmpleado').change(function () {
-        document.getElementById('id_pSedeAux').value = $('#id_pSede').val();
-        document.getElementById('id_pLegajoAux').value = $('#id_pLegajo').val();        
-      });
-      
-    
-  //PERMISOS ESPECIALES PARA SELECCIONAR SEDE Y/O EMPLEADO
-
-       {#{% if not request.user.is_staff %}  #}
-       {% if not perms.auth.can_select_sede %}           
-           $('#id_pSede').prop( "disabled", true );
-       {% endif %}
-       {% if not perms.auth.can_select_empleado %}           
-           $('#id_pLegajo').prop( "disabled", true );
-       {% endif %}
-//////////////////////////////////////////////////
-//            FILTRO PARA EMPLEADOS
-//////////////////////////////////////////////////
-        // $(document).ready(function() {
-        //     $("#id_pSede").on("change", getEmpleados);
-        //     // $("#id_estado").on("change", getLocalidades);
-        // });
-
-        function getEmpleados() {
-            var sedeId;
-            // = $("#id_pSede").val();
-            vChk = $("#id_mantenerEmpleado").is(":checked");
-            // console.log(vChk);
-            if (vChk){
-              sedeId = $("#id_pSedeAux").val();
-            }
-            else {
-              sedeId = $("#id_pSede").val();
-              // console.log(sedeId);
-            };
-
-            // SI ESTA SELECCIONADO CONSULTAR LA BASE DE DATOS DE INFORMIX
-            vChk1 = $("#id_ifxEmpleado").is(":checked");
-            //console.log(vChk1);
-            var vUrl = "{% url 'getEmpleados' %}"; //POR DEFAULT LOS USUARIOS DE INTRANET
-            if (vChk1){
-               vUrl = "{% url 'getifxEmpleados' %}";
-            };
-            
-            if (sedeId) {
-                // Eliminamos las opciones anteriores del select
-                $("#id_pLegajo").html("");
-                // $("#id_pLegajo option").remove();
-                var request = $.ajax({
-                    type: "GET",
-                    url: vUrl,
-                    data: {
-                        "sede_id": sedeId,
-                    },
-                });
-                request.done(function(response) {
-                  // console.log(response.empleados)
-
-                    // Agregamos los resultados al select
-                    $("#id_pLegajo").html(response.empleados);
-                    var vLegajoAnt = $("#id_pLegajoAux").val(); 
-                    if (!vLegajoAnt){
-                      $("#id_pLegajo option[value='"+ {{usuario.legajo}} +"']").attr("selected",true);
-                    }
-                    else{
-                      $("#id_pLegajo option[value='"+ vLegajoAnt +"']").attr("selected",true);
-                    }
-                    ;
-                    $("#id_pLegajo").selectpicker('refresh');
-                });
+        // --- 2. GESTIÓN DE MEMORIA ---
+        function actualizarMemoria() {
+            // Guardar estado de "Recordar"
+            if ($mantener.is(':checked')) {
+                localStorage.setItem('mantener_empleado', 'true');
+                localStorage.setItem('sede_guardada', $sede.val());
+                localStorage.setItem('legajo_guardado', $legajo.val());
+                $sedeAux.val($sede.val());
+                $legajoAux.val($legajo.val());
             } else {
-                $("#id_pLegajo").html("<option value='' selected='selected'>---------</option>");
-                // $("#id_pLegajo").trigger("change");
-                $("#id_pLegajo").selectpicker('refresh');
+                localStorage.removeItem('mantener_empleado');
+                localStorage.removeItem('sede_guardada');
+                localStorage.removeItem('legajo_guardado');
             }
-        }    
-} );
-</script>
 
-{% endblock js%}
+            // Guardar estado de "Informix"
+            if ($ifx.is(':checked')) {
+                localStorage.setItem('usar_informix', 'true');
+            } else {
+                localStorage.removeItem('usar_informix');
+            }
+        }
+
+        // --- 3. EVENTOS ---
+        $mantener.add($ifx).change(function() {
+            actualizarMemoria();
+            getEmpleados();
+        });
+
+        $sede.change(function() {
+            actualizarMemoria();
+            getEmpleados();
+        });
+
+        $legajo.change(actualizarMemoria);
+
+        $('#formRecibo').submit(function() {
+            actualizarMemoria();
+            $('#id_pLegajo, #id_pSede').prop("disabled", false);
+        });
+
+        // --- 4. AJAX ---
+        function getEmpleados() {
+            let sedeId = $mantener.is(':checked') ? ($sedeAux.val() || $sede.val()) : $sede.val();
+            
+            // Verificamos Informix DESDE el checkbox (que ya restauramos arriba)
+            let esInformix = $ifx.is(':checked');
+            let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
+
+            if (!sedeId) sedeId = usuarioActual.sede;
+
+            $.ajax({
+                type: "GET",
+                url: vUrl,
+                data: { "sede_id": sedeId },
+                success: function(response) {
+                    $legajo.html(response.empleados);
+
+                    let targetLegajo;
+                    if ($mantener.is(':checked')) {
+                        targetLegajo = $legajoAux.val();
+                    } else if (!esInformix) {
+                        targetLegajo = usuarioActual.legajo;
+                    }
+
+                    $legajo.val(targetLegajo);
+                    $legajo.selectpicker('refresh');
+                }
+            });
+        }
+
+        // --- 5. PERMISOS ---
+        {% if not perms.auth.can_select_sede %} $sede.prop("disabled", true); {% endif %}
+        {% if not perms.auth.can_select_empleado %} $legajo.prop("disabled", true); {% endif %}
+
+        // Ejecución inicial (Ahora ya sabe si debe usar Informix o no)
+        getEmpleados();
+    });
+</script>
+{% endblock %}

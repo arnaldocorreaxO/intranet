@@ -241,6 +241,9 @@ def cargarAsistenciaVallemi(**Kwargs):
     conn =dbmssql.conectar()
 
     cursor = conn.cursor()
+    
+    cursor.execute("SET DATEFORMAT ymd")
+
     sql = """SELECT 'VMI' AS sede,
     e.legajo AS lega,
     e.nombre AS nomb,
@@ -265,7 +268,7 @@ def cargarAsistenciaVallemi(**Kwargs):
     AND t.fecha <='{pFechaHasta}'
     ORDER BY t.fecha
     """.format(**Kwargs)
-    #print(vSql)
+    print(sql)
     cursor.execute(sql)
   except Exception as e:
     print ('ERROR: Connect failed MSSQL SERVER')
