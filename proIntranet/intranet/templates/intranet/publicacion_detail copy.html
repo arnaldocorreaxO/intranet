@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+
+{% block head_content %}
+<title>Publicaciones</title>	
+<style type="text/css">
+	/*MUESTRA FORMATEADO EL PARRAFO <p> DE CONTENIDO*/
+	#contenido {
+	background-color: rgb(230,230,230);
+	overflow-x: scroll;
+	height: 400px;
+	white-space: pre-line;
+	font-size: 14px;
+	}
+</style>
+{% endblock%}
+
+{% load static %}
+
+<!-- CONTAINER -->
+{% block container %}
+ <!-- Main content -->
+    <div class="row"> 
+		<div class="col-md-12" style="padding-left: 50px; padding-bottom: 5px;">
+			<div class="row">
+			<div class="col-md-12 text-left" style="padding-bottom: 5px;">	
+				<form action="{% url 'publicacion:list' %}">
+					<button type="submit" class="btn btn-outline-secondary btn-sm">
+						<i class="fas fa-undo"></i> Volver
+					</button>
+				</form>
+			</div>
+			</div>	
+			<div class="card">				
+				<div class="card-header">
+					<div class="card mb-3" style="max-width: 1300px;">
+					  	<div class="row no-gutters">
+						    <div class="col-md-4">
+								{% if publicacion.imagen %}
+								<a href="{{publicacion.imagen.url}}">
+									<img src="{{publicacion.imagen.url}}" alt="No Image" class="card-img" >
+								</a>	
+								{% else %}
+									<img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="card-img" >
+								{% endif %}	
+						    </div>
+						    <div class="col-md-8 text-justify">
+						      <div class="card-body">
+						        <h5 class="card-title">{{publicacion.titulo}}</h5>
+						        <p class="card-text"><small class="text-muted"><i class="fas fa-calendar-alt"></i>
+						         {{publicacion.fecha}}</small></p>
+						        <!-- <p class="card-text">{{publicacion.mensaje|slice:":100"}}</p> -->
+						        <p class="card-text">{{publicacion.descripcion}}</p>
+						        <a href="{{ publicacion.url }}" target="_blank">{{ publicacion.url }}</a>						      
+						        
+						      </div>
+						    </div>		
+						    						      	    		 
+							<div class="col-md-12 text-justify">
+							      <div id="contenido" class="card-body">	
+							        <p class="card-title">{{publicacion.contenido}}</p>
+							      </div>
+							</div>									
+						</div>
+					</div>
+				</div>
+			</div>
+ 		</div> 
+ 	</div> 
+  		
+{% endblock %}
+
+<!-- JAVASCRIPTS -->
+{% block js%}
+
+{% endblock js%}
+
