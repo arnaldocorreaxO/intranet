@@ -1,92 +1,98 @@
-{% extends "base.html" %}
-
-{% block extrahead %}   {# Extra Resources Start #}
-	{{ form.media }}        {# Form required JS and CSS #}
-{% endblock %}          {# Extra Resources End #}
-
-{% block head_content %}
-	<title>Publicaciones</title>
-{% endblock%}
-
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
 {% load static %}
 
-<!-- CONTAINER -->
+{% block extrahead %}
+  {{ form.media }}
+{% endblock %}
+
+{% block head_content %}
+  <title>Nueva Publicación | Intranet</title>
+  <style>
+    .card-primary {
+      border-top: 3px solid #004a99;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: white !important;
+      color: #004a99 !important;
+      border-bottom: 1px solid #eee;
+    }
+    .btn-success {
+      background-color: #28a745;
+      border: none;
+      padding: 10px 30px;
+      font-weight: bold;
+    }
+  </style>
+{% endblock %}
+
 {% block container %}
- <!-- Main content -->
-    <section class="content">
-    	
-    	
-		<div class="row">
-			<div class="col-md-11" style="padding-left: 50px; padding-bottom: 5px;">
-		  		<div class="card card-primary">
-		   	 		<div class="card-header">
-		     	 		<h5 class="card-title">Publicaciones</h5>
+  <section class="content py-4">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h5 class="card-title mb-0"><i class="fas fa-edit mr-2"></i> Gestión de Publicación</h5>
+            </div>
 
-		    		</div>
-		    <div class="card-body">
-		    	<!-- <form  class ="form-horizontal" action="{% url 'intranet:new' %}" method="POST" enctype="multipart/form-data"> -->
-		    		<!-- Si no le coloca el action el request sucede en el mismo lugar del que llamó -->
-				<form  class ="form-horizontal"  method="POST" enctype="multipart/form-data">
-					{% csrf_token %}  
-					{% if form.errors %}
-						<p class="alert alert-danger">{{ form.errors}}</p>
-					{% endif %}
-					<!-- CRISPY APLICA ESTILOS BOOTSTRAP DE UNA VEZ  -->
-					{{ form|crispy}}
-					
+            <div class="card-body px-5 py-4">
+              <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
+                {% if form.errors %}
+                  <div class="alert alert-danger shadow-sm">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> Por favor, corrija los errores a continuación.
+                  </div>
+                {% endif %}
 
-					<div class="form-group row">
-					    <div class="col-sm-6">
-					      <a class="btn btn-secondary float-left" href="#" data-toggle="modal" data-target="#cancelModal">Cancelar</a>
-					      <!-- <input type="submit" value="Publicar" class="btn btn-success float-right"> -->
-					    </div>
-					<!-- </div> -->
-					<!-- <div class="form-group"> -->
-						<div class="col-sm-6">
-							<button type="submit" class="btn btn-success float-right btn-block">Publicar!</button>
-						</div>
-					</div>
-				</form>
-		   
-		    </div>
-		    <!-- /.card-body -->
-		  </div>
-		  <!-- /.card -->
-		</div>
+                <div class="mb-4">{{ form|crispy }}</div>
 
-		</div>
-      
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+                <hr class="my-4" />
 
-   <!-- Cancelar Modal-->
-  <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">¿Está seguro que desea cancelar?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+                <div class="form-group row">
+                  <div class="col-sm-6 text-left">
+                    <a class="btn btn-outline-secondary px-4" href="#" data-toggle="modal" data-target="#cancelModal"><i class="fas fa-times mr-1"></i> Cancelar</a>
+                  </div>
+                  <div class="col-sm-6 text-right">
+                    <button type="submit" class="btn btn-success shadow-sm px-5"><i class="fas fa-paper-plane mr-1"></i> Publicar Ahora</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">Presione "Sí" para confirmar.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
-          <a class="btn btn-primary" href="{% url 'intranet:list' %}">Sí</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="cancelModalLabel">¿Confirmar cancelación?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <p>Se perderán todos los cambios realizados en esta publicación.</p>
+          <b class="text-muted">¿Desea salir de todas formas?</b>
+        </div>
+        <div class="modal-footer justify-content-center border-0 pb-4">
+          <button class="btn btn-secondary px-4" type="button" data-dismiss="modal">Seguir editando</button>
+          <a class="btn btn-danger px-4" href="{% url 'publicacion:list' %}">Sí, cancelar</a>
         </div>
       </div>
     </div>
   </div>
-		
 {% endblock %}
 
-<!-- JAVASCRIPTS -->
-{% block js%}
-
-{% endblock js%}
-
+{% block js %}
+  <script>
+    // Efecto sutil al cargar la página
+    $(document).ready(function () {
+      $('.card').hide().fadeIn(500)
+    })
+  </script>
+{% endblock %}
