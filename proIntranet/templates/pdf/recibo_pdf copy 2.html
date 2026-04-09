@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Recibo de Pago - INC</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" />
+
+    <style>
+      body {
+        background-color: #f8f9fc;
+        color: #333;
+      }
+      
+      .recibo-card {
+        background: white;
+        padding: 40px;
+        margin: 20px auto;
+        border-radius: 8px;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        border: 1px solid #e3e6f0;
+      }
+      
+      .header-logo {
+        max-width: 120px;
+      }
+      
+      .inst-name {
+        color: #1a5276;
+        font-size: 1.25rem;
+        line-height: 1.2;
+      }
+      
+      .table thead th {
+        background-color: #f1f4f9;
+        color: #2e59d9;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        vertical-align: middle !important;
+      }
+      
+      .info-box {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-left: 4px solid #1a5276;
+      }
+      
+      .neto-seccion {
+        color: #e74a3b;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+      
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .recibo-card {
+          box-shadow: none;
+          border: none;
+          margin: 0;
+          padding: 20px;
+          width: 100%;
+          max-width: 100%;
+        }
+        .container {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row no-print mt-3">
+        <div class="col-md-10 offset-md-1 text-right">
+          <a class="btn btn-sm btn-outline-primary" href="javascript:history.back()"><i class="fa fa-undo"></i> Atrás</a>
+          <button class="btn btn-sm btn-danger" onclick="window.print();"><i class="fa fa-print"></i> Imprimir Recibo</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="recibo-card">
+            <div class="row align-items-center mb-4">
+              <div class="col-2">
+                <img src="{% static 'img/logo_hd.png' %}" class="header-logo w-100" />
+              </div>
+              <div class="col-5">
+                <div class="inst-name font-weight-bold">
+                  INDUSTRIA NACIONAL <br />DEL CEMENTO
+                </div>
+                <div class="small text-muted">RUC: 80000089-7</div>
+              </div>
+              <div class="col-5 text-right">
+                <h4 class="m-0 font-weight-bold">RECIBO DE PAGO</h4>
+                <div class="badge badge-secondary mb-2">Original</div>
+                <div class="font-weight-bold text-dark">Mes {{ recibos.0.nombre_mes }} de {{ recibos.0.aano }}</div>
+                <div class="small">Fecha de Emisión: {{ recibos.0.fecha }}</div>
+                <div class="small">
+                  Sueldo Básico: <b>Gs. {{ recibos.0.suel_basi|floatformat:'0' }}</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-box shadow-sm">
+              <div class="row">
+                <div class="col-12">
+                  <span class="text-uppercase small text-muted font-weight-bold">Legajo y Funcionario</span>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ recibos.0.lega }} — {{ recibos.0.nomb }}, {{ recibos.0.apel }}</div>
+                  {% if recibos.0.mensaje %}
+                    <p class="m-0 mt-1 small font-weight-bold text-danger">{{ recibos.0.mensaje }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table id="dataTable1" class="table table-sm table-bordered table-hover" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th colspan="2" class="border-bottom-0"></th>
+                    <th colspan="2" class="text-center border-bottom-0">Haberes</th>
+                    <th colspan="1" class="border-bottom-0"></th>
+                  </tr>
+                  <tr>
+                    <th>Concepto / Descripción</th>
+                    <th class="text-center">Unidades</th>
+                    <th class="text-center">Deducibles</th>
+                    <th class="text-center">No deducibles</th>
+                    <th class="text-center">Deducciones</th>
+                    <th hidden="true">Todo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for recibo in recibos %}
+                    <tr>
+                      <td class="font-weight-bold">{{ recibo.conl }} -- {{ recibo.nomb_conl }}</td>
+                      <td class="text-center">
+                        {% if recibo.unid > '0.00' %}{{ recibo.unid }}{% endif %}
+                      </td>
+                      <td class="text-right">
+                        {% if recibo.dedu == 'S' %}{{ recibo.impo_oper|floatformat:'0' }}{% endif %}
+                      </td>
+                      <td class="text-right">
+                        {% if recibo.dedu == 'N' and recibo.impo_oper > '0' %}{{ recibo.impo_oper|floatformat:'0' }}{% endif %}
+                      </td>
+                      <td class="text-right text-danger font-weight-bold">
+                        {% if recibo.dbcr == 'D' %}{{ recibo.impo_oper|floatformat:'0'|cut:'-' }}{% endif %}
+                      </td>
+                      <td hidden="true">{{ recibo.impo_oper|floatformat:'0' }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot class="bg-light">
+                  <tr>
+                    <th colspan="1" class="text-right">TOTALES:</th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right neto-seccion"></th>
+                    <th hidden="true"></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="row mt-5 pt-4">
+              <div class="col-6">
+                <p class="small text-muted mb-5">Emitido por: {{ request.user.get_full_name }}</p>
+              </div>
+              <div class="col-6 text-center">
+                <div style="border-top: 1px solid #333; margin: 0 40px; padding-top: 5px;">
+                  <span class="small font-weight-bold text-uppercase">Firma del Funcionario</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+    </div>
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#dataTable1').DataTable({
+          paging: false,
+          ordering: false,
+          searching: false,
+          info: false,
+          language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+            decimal: '.',
+            thousands: ','
+          },
+          columnDefs: [
+            { className: 'text-right', targets: [2, 3, 4, 5] },
+            { className: 'text-center', targets: [1] },
+            { className: 'text-left', targets: [0] }
+          ],
+          footerCallback: function (row, data, start, end, display) {
+            var api = this.api()
+      
+            var intVal = function (i) {
+              return typeof i === 'string' ? i.replace(/[\$,.]/g, '') * 1 : typeof i === 'number' ? i : 0
+            }
+      
+            // Totales basados en tus índices de columna originales
+            var tot_dedu = api
+              .column(2)
+              .data()
+              .reduce(function (a, b) {
+                return intVal(a) + intVal(b)
+              }, 0)
+            var tot_nodedu = api
+              .column(3)
+              .data()
+              .reduce(function (a, b) {
+                return intVal(a) + intVal(b)
+              }, 0)
+            var tot_debi = api
+              .column(4)
+              .data()
+              .reduce(function (a, b) {
+                return intVal(a) + intVal(b)
+              }, 0)
+            var total_neto = api
+              .column(5)
+              .data()
+              .reduce(function (a, b) {
+                return intVal(a) + intVal(b)
+              }, 0)
+      
+            // Actualizar Footer
+            $(api.column(2).footer()).html(tot_dedu.format(0, 3, '.', ','))
+            $(api.column(3).footer()).html(tot_nodedu.format(0, 3, '.', ','))
+      
+            // Columna 4 muestra el total de deducciones y el neto resaltado
+            $(api.column(4).footer()).html(tot_debi.format(0, 3, '.', ',') + '<div class="mt-2 text-dark small font-weight-normal">Neto a Cobrar:</div>' + '<div class="text-danger">Gs. ' + total_neto.format(0, 3, '.', ',') + '</div>')
+      
+            // Columna oculta (5) para validación técnica si fuera necesaria
+            $(api.column(5).footer()).html('Gs.' + total_neto.format(0, 3, '.', ','))
+          }
+        })
+      })
+      
+      Number.prototype.format = function (n, x, s, c) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+          num = this.toFixed(Math.max(0, ~~n))
+        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','))
+      }
+    </script>
+  </body>
+</html>

@@ -165,6 +165,10 @@ def ver_asistencia(request):
             data['pFechaDesde'] = date(anio, mes, 1).strftime('%Y-%m-%d')
             data['pFechaHasta'] = date(anio, mes, ultimo_dia).strftime('%Y-%m-%d')
             # ----------------------------------
+            
+            # Esto es solo para mostrar en el template, no afecta a la consulta
+            data['pFechaDesdeDMY'] = date(anio, mes, 1).strftime('%d/%m/%Y')
+            data['pFechaHastaDMY'] = date(anio, mes, ultimo_dia).strftime('%d/%m/%Y')
 
             result = []
             can_select_empleado = request.user.has_perm('auth.can_select_empleado')

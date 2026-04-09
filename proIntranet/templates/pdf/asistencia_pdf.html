@@ -1,286 +1,324 @@
- 		<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      {% block title %}
+        Historial de Asistencia - INC
+      {% endblock %}
+    </title>
+    {% load static %}
+    <style>
+      /* Configuración de Impresión */
+      @page {
+        size: A4 landscape;
+        margin: 1cm;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+      }
+      
+      /* Contenedor Principal */
+      .report-container {
+        width: 100%;
+      }
+      
+      /* Botones (Ocultos en impresión) */
+      .no-print {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      
+      .btn {
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        border: 1px solid #ccc;
+      }
+      
+      .btn-print {
+        background: #dc3545;
+        color: white;
+        border: none;
+      }
+      .btn-back {
+        background: #6c757d;
+        color: white;
+        border: none;
+      }
+      
+      @media print {
+        .no-print {
+          display: none;
+        }
+        body {
+          margin: 0;
+        }
+      }
+      
+      /* Encabezado Institucional */
+      .header-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #005b9a;
+      }
+      
+      .header-logo {
+        width: 150px;
+      }
+      
+      .header-info {
+        text-align: center;
+        line-height: 1.2;
+      }
+      
+      .header-title {
+        color: #005b9a;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      
+      /* Tabla de Asistencia */
+      .asistencia-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      
+      .asistencia-table th {
+        background-color: #005b9a;
+        color: white;
+        padding: 10px 5px;
+        text-align: left;
+        text-transform: uppercase;
+      }
+      
+      .asistencia-table td {
+        padding: 8px 5px;
+        border-bottom: 1px solid #eee;
+      }
+      
+      /* Filas Alternadas */
+      .asistencia-table tbody tr:nth-child(even) {
+        background-color: #f2f7fa;
+      }
+      
+      .text-right {
+        text-align: right;
+      }
+      .text-center {
+        text-align: center;
+      }
+      
+      .ausencia-nota {
+        font-style: italic;
+        color: #d9534f;
+        font-size: 10px;
+        display: block;
+      }
+      
+      .footer-info {
+        margin-top: 20px;
+        font-size: 10px;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      /* Limita el ancho en pantalla para simular la hoja A4 */
+      .report-container {
+        width: 100%;
+        max-width: 1100px; /* Ancho aproximado de una A4 horizontal en pantalla */
+        margin: 0 auto; /* Centra el reporte */
+        padding: 20px;
+      }
+      
+      /* Compacta la tabla */
+      .asistencia-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10px; /* Reducimos un punto para que quepa más info */
+        table-layout: fixed; /* Ayuda a que las columnas no se estiren de más */
+      }
+      
+      /* Ajuste de columnas específicas para que no desperdicien espacio */
+      .asistencia-table th:nth-child(1) {
+        width: 60px;
+      } /* Legajo */
+      .asistencia-table th:nth-child(3) {
+        width: 80px;
+      } /* C. Costos */
+      .asistencia-table th:nth-child(4) {
+        width: 80px;
+      } /* Emisión */
+      .asistencia-table th:nth-child(8) {
+        width: 70px;
+      } /* Horas */
+      
+      .asistencia-table td {
+        padding: 5px 4px; /* Reducimos el padding interno */
+        word-wrap: break-word; /* Evita que el texto largo empuje la columna */
+      }
+      
+      /* Solo en la impresión quitamos los límites de pantalla */
+      @media print {
+        .report-container {
+          max-width: none;
+          padding: 0;
+        }
+        .asistencia-table {
+          font-size: 9pt; /* Tamaño óptimo para papel */
+        }
+      }
+      /* Estilos para que el detalle se vea nítido */
+      .asistencia-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px; /* Aumentado para mejor lectura */
+        color: #222; /* Negro más intenso para contraste */
+      }
+      
+      .asistencia-table th {
+        background-color: #005b9a;
+        color: white;
+        padding: 12px 8px; /* Más aire en el encabezado */
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #004a7d;
+      }
+      
+      .asistencia-table td {
+        padding: 10px 8px; /* Más espacio entre filas */
+        border: 1px solid #dee2e6; /* Bordes suaves para guiar la vista */
+        vertical-align: middle;
+      }
+      
+      /* Resaltar datos importantes */
+      .font-bold {
+        font-weight: bold;
+        color: #000;
+      }
+      
+      .ausencia-nota {
+        display: block;
+        color: #c0392b; /* Rojo más oscuro para que sea legible */
+        font-size: 11px;
+        margin-top: 3px;
+        font-weight: 500;
+      }
+      
+      @media print {
+        .asistencia-table {
+          font-size: 11pt; /* Tamaño estándar de documento profesional */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="report-container">
+      <div class="no-print">
+        <a href="javascript:history.back()" class="btn btn-back">Atrás</a>
+        <button onclick="window.print()" class="btn btn-print">Imprimir Reporte</button>
+      </div>
 
-<head>
+      {% block content %}
+        <table class="header-table">
+          <tr>
+            <td class="header-logo">
+              <img src="{% static 'img/logo_hd.png' %}" width="120" />
+            </td>
+            <td class="header-info">
+              <div class="header-title">INDUSTRIA NACIONAL DEL CEMENTO</div>
+              <div>RUC: 80000089-7</div>
+              <div style="margin-top: 10px; font-weight: bold;">HISTORIAL DE ASISTENCIA</div>
+            </td>
+            <td style="width: 150px; text-align: right; font-size: 12px;">
+              <strong>Periodo:</strong><br />
+              {{ data.pFechaDesdeDMY }} al {{ data.pFechaHastaDMY }}
+            </td>
+          </tr>
+        </table>
 
-  <meta charset="utf-8">
- 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+        <table class="asistencia-table">
+          <thead>
+            <tr>
+              <th>Legajo</th>
+              <th>Funcionario</th>
+              <th>Día</th>
+              <th>Emisión</th>
+              <th>Turno / Horario</th>
+              <th class="text-center">Entrada</th>
+              <th class="text-center">Salida</th>
+              <th class="text-right">Horas Trab.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for asistencia in asistencias %}
+              <tr>
+                <td>
+                  <strong>{{ asistencia.lega }}</strong>
+                </td>
+                <td>
+                  {{ asistencia.apel }}, {{ asistencia.nomb }}
+                  {% if asistencia.moti_ause %}
+                    <span class="ausencia-nota">{{ asistencia.conl }} - {{ asistencia.moti_ause }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ asistencia.ccos }}</td>
+                <td>{{ asistencia.fec_emision|date:'d/m/Y' }}</td>
+                <td>
+                  {% if asistencia.turn %}
+                    {{ asistencia.turn }} <small>({{ asistencia.hora_ent1 }} - {{ asistencia.hora_sal1 }})</small>
+                  {% else %}
+                    <span style="color: #999;">No definido</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if asistencia.sede %}
+                    {{ asistencia.hora_entr|date:'H:i' }}
+                  {% else %}
+                    {{ asistencia.hora_entr|date:'d/m H:i' }}
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if asistencia.sede %}
+                    {{ asistencia.hora_sali|date:'H:i' }}
+                  {% else %}
+                    {{ asistencia.hora_sali|date:'d/m H:i' }}
+                  {% endif %}
+                </td>
+                <td class="text-right font-weight-bold">{{ asistencia.hora_trab|floatformat:'2' }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8" class="text-center">No se encontraron registros de asistencia para este periodo.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
 
-
-
-  
-  {% load static %}
-  <!-- Custom fonts for this template-->
-  <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css">
-
-  <!-- Page level plugin CSS-->
-  <link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}">
-
-  <!-- Custom styles for this template-->
-  <link rel="stylesheet" href="{% static 'css/sb-admin.css' %}" >
-
-</head>
-<div><br></div>
-
-<div class="container">
-	<div class="row">	
-		
-			<div class="col-md-12">
-				<div class="row">
-					<div class="col text-right">
-						<a class="button btn btn-outline-primary" href="javascript:history.back()">
-							<i class="fa fa-undo" aria-hidden="true"></i> Atrás</a>
-						<button type="button" class="btn btn-outline-danger" onclick="window.print();">
-							<i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
-						<button type="button" class="btn btn-outline-success" id="btnExportExcel">
-							<i class="fa fa-file-excel" aria-hidden="true"></i> Descargar</button>
-						<!-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> -->
-					</div>
-				</div>
-				
-			
-				<div class="row">
-					<div class="col-2">
-						<img class="center" src="{% static 'img/logo_hd.png' %}" width="100%">
-					</div>
-					<div class="col-8">
-						<p class="text-center mt-5"><b>INDUSTRIA NACIONAL DEL CEMENTO</b><br><b>RUC: 80000089-7</b></p>
-					</div>
-					<div class="col-2"></div>
-					<div class="col-12 text-center">
-						<div><b>Historial de Asistencia</b></div>
-						<div><b>Periodo: Entre {{data.pFechaDesde|date:"d/m/Y"}} y {{data.pFechaHasta|date:"d/m/Y"}} </b></div>
-						<p style="color:#FF0000" ;>{{asistencias.0.mensaje}}</p>
-					</div>
-				</div>
-			
-			</div>
-
-				   	<div class="row">        
-						            <div class="table-responsive">
-						              <table id="DTAsistencia" class="table table-sm table-striped table-bordered" width="100%" cellspacing="0" >
-						                <thead>
-						                	<tr class="th-sm">						                		
-						                		<th class="th-sm">Legajo</th>
-							                    <th class="th-sm">Nombre</th>
-							                    <th class="th-sm" colspan="3" >Ccos</th>
-							                    <th class="th-sm">Entrada</th>
-							                    <th class="th-sm">Salida</th>
-							                    <th class="th-sm text-right">Horas</th>							                    
-							                  	<tr>
-							                  	<th class="th-sm"></th>
-							                    <th class="th-sm">Motivo Ausencia</th>
-							                    <th class="th-sm"></th>
-							                    <th class="th-sm">Emision</th>
-							                    <th class="th-sm">Turno</th>			                    
-							                    <th class="th-sm">Dia Hora</th>
-							                    <th class="th-sm">Dia Hora</th>
-							                    <th class="th-sm text-right">Trab.</th>							                    
-							                  	</tr>							                  	
-						                    </tr>
-						                  <!-- <tr><th class="th-sm" colspan="8">s</th></tr> -->
-
-						                </thead>
-						                
-						                <tbody>
-						                	
-						                	{% for asistencia in asistencias %}
-							                		
-							                	<tr>
-								                	<td>{{asistencia.lega}}</td>
-								                	<td>{{asistencia.apel}}, {{asistencia.nomb}} 
-									                	{% if asistencia.moti_ause %}
-														<!-- <tr>								                	 -->
-															<!-- <td colspan="8"> -->
-																<div>
-																	{{asistencia.conl}}-{{asistencia.moti_ause}}
-																</div>	
-															<!-- </td>								                	 -->
-														<!-- </tr> -->
-														{% endif %}
-
-								                	</td>
-								                	<td>{{asistencia.ccos}}</td>
-								                	<td>{{asistencia.fec_emision|date:"d/m/Y"}}</td>
-								                	<!-- TURNO -->
-								                	{% if asistencia.turn %}
-								                		<td>{{asistencia.turn}} {{asistencia.hora_ent1}} {{asistencia.hora_sal1}}</td>
-								                	{% else%}
-								                		<td>No Definido</td>
-								                	{% endif %}
-								                	{#VALLEMI#}
-								                	{% if asistencia.sede %}
-									                	<td>{{asistencia.hora_entr|date:"H:i"}}</td>
-									                	<td>{{asistencia.hora_sali|date:"H:i"}}</td>
-								                	{% else %}
-									                	<td>{{asistencia.hora_entr|date:"d/m/Y H:i"}}</td>
-									                	<td>{{asistencia.hora_sali|date:"d/m/Y H:i"}}</td>
-								                	{% endif %}
-								                	<td class="text-right" >{{asistencia.hora_trab|floatformat:"2"}}</td>
-													
-							                	</tr>
-							                	
-							                	
-							                	
-						                	{% endfor %}
-						                
-						              </table>
-						            </div>
-						             <div class="row">
-										<p class="col-sm-12">Usuario: {{request.user.get_full_name}}</p>
-									</div>
-					</div>
-				</div>		      
-			</div>	    
-			
-		</div>
-</div>
-
-<iframe id="txtArea1" style="display:none"></iframe> 
-
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-  <!-- Page level plugin JavaScript-->
-  <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-  <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
-  <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="{% static 'js/sb-admin.min.js' %}"></script>
-
-  <!-- Demo scripts for this page-->
-  <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
-  <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-
-  <script src="{% static 'js/utils.js' %}"></script>
-
-  <script type="text/javascript">
-
-		$(document).ready(function(){
-		$("#btnExportExcel").click(
-		            function () {
-		                tableToExcel('DTAsistencia','Asistencia','Asistencia');
-		            }            
-		        );
-		});
-
-
-		$(document).ready(function() {
-		    $('#DTAsistencia').DataTable( {
-				"paging": false,
-				"ordering": false,
-				"searching": false,
-				"language": {
-				"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
-				"decimal": ".",
-				"thousands": ",",
-
-		      },
-
-				  columnDefs: [
-				    // { className: 'text-right', targets: [7] },
-				    { className: 'text-left', targets: [1,2] },
-				    
-				  ],
-
-		        "footerCallback": function ( row, data, start, end, display ) {
-		            var api = this.api(), data;
-		 
-		            // Remove the formatting to get integer data for summation
-		            var intVal = function ( i ) {
-		                return typeof i === 'string' ?
-		                    i.replace(/[\$,.]/g, '')*1 :
-		                    typeof i === 'number' ?
-		                        i : 0;
-		            };
-		 
-		            // Total over all pages
-		            tot_dedu = api
-		                .column( 2 )
-		                .data()
-		                .reduce( function (a, b) {
-		                    return intVal(a) + intVal(b);
-		                }, 0 );
-
-		            tot_nodedu = api
-		                .column( 3 )
-		                .data()
-		                .reduce( function (a, b) {
-		                    return intVal(a) + intVal(b);
-		                }, 0 );
-		 			tot_debi = api
-		                .column( 4 )
-		                .data()
-		                .reduce( function (a, b) {
-		                    return intVal(a) + intVal(b);
-		                }, 0 );
-		            total = api
-		                .column( 5 )
-		                .data()
-		                .reduce( function (a, b) {
-		                    return intVal(a) + intVal(b);
-		                }, 0 );
-		 
-		            // Total over this page
-		            pageTotal = api
-		                .column( 5, { page: 'current'} )
-		                .data()
-		                .reduce( function (a, b) {
-		                    return intVal(a) + intVal(b);
-		                }, 0 );
-		 
-		            // Update footer
-		            /*$( api.column( 4 ).footer() ).html(
-		                'Gs.'+ pageTotal +' ( Gs.'+ total +' total)'
-		            );*/
-		            $( api.column( 2 ).footer() ).html(
-		                tot_dedu.format(0, 3, '.', ',')
-		            );
-		            $( api.column( 3 ).footer() ).html(
-		                tot_nodedu.format(0, 3, '.', ',')
-		            );
-		            $( api.column( 4 ).footer() ).html(
-		                 tot_debi.format(0, 3, '.', ',') 
-		                	  + '<br><br> Neto a Cobrar Gs.<br> '+ total.format(0, 3, '.', ',')
-		            );
-		            $( api.column( 5 ).footer() ).html(
-		                'Gs.'+ total.format(2, 3, '.', ',')
-		            );
-
-		        }
-		    } );
-
-
-		} );
-
-
-
-/**
- * Number.prototype.format(n, x, s, c)
- * 
- * @param integer n: length of decimal
- * @param integer x: length of whole part
- * @param mixed   s: sections delimiter
- * @param mixed   c: decimal delimiter
- */
-Number.prototype.format = function(n, x, s, c) {
-    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-        num = this.toFixed(Math.max(0, ~~n));
-
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-};
-
-</script>
-
+        <div class="footer-info">
+          <div>Generado por: {{ request.user.get_full_name|default:request.user.username }}</div>
+          <div>
+            Fecha de impresión:{% now 'd/m/Y H:i' %}
+          </div>
+          <div>Documento de uso interno - INC</div>
+        </div>
+      {% endblock %}
+    </div>
   </body>
 </html>
