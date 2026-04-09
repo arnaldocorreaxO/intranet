@@ -15,7 +15,7 @@ class pReciboForm(forms.Form):
     pSede   = forms.ChoiceField(label='Sede',
                                 widget=forms.Select(attrs={'class': 'form-control',
                                                            'data-toggle': 'select'}),
-                                choices=choiceSede(), 
+                                choices=[], # Lo dejamos vacío inicialmente 
                                 required=True)
 
     pLegajo   = forms.CharField(label='Empleado',
@@ -32,7 +32,7 @@ class pReciboForm(forms.Form):
     pMes    = forms.ChoiceField(label='Mes',
                                 widget=forms.Select(attrs={'class': 'form-control',
                                                            'data-toggle': 'select'}),
-                                choices=choiceMes(), 
+                                choices=choiceMes(), # Esta lista es estática, no hay problema
                                 required=True,
                                 initial=mesActual)
     pAnho   = forms.ChoiceField(label='Año',
@@ -40,8 +40,18 @@ class pReciboForm(forms.Form):
                                 #max_length=4,
                                 widget=forms.Select(attrs={'class': 'form-control',
                                                            'data-toggle': 'select'}),
-                                choices=choiceAnho(), 
+                                choices=[], # Lo dejamos vacío inicialmente
                                 required=True)
+    def __init__(self, *args, **kwargs):
+        super(pReciboForm, self).__init__(*args, **kwargs)
+         # Cargamos los años dinámicamente cada vez que se crea el form
+        self.fields['pAnho'].choices = choiceAnho()
+        # Aprovechamos para cargar las sedes también si vienen de DB
+        self.fields['pSede'].choices = choiceSede()
+        
+        # Opcional: Establecer el año actual como inicial dinámicamente
+        self.fields['pAnho'].initial = str(datetime.now().year)
+        self.fields['pMes'].initial = str(datetime.now().month)
 
                                 #widget=forms.TextInput(attrs={'class': 'form-control'}))
    
