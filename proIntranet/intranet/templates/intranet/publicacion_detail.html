@@ -6,6 +6,8 @@
   <style type="text/css">
     :root {
       --primary-blue: #004a99;
+      /* Gris muy suave para el fondo del contenedor de imagen */
+      --img-bg: #f1f3f5;
     }
     
     .article-container {
@@ -16,13 +18,31 @@
       margin-bottom: 30px;
     }
     
+    /* Contenedor flexible para la imagen */
+    .img-wrapper {
+      background-color: var(--img-bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center; /* Centrado vertical */
+      justify-content: center; /* Centrado horizontal */
+      overflow: hidden;
+      /* Altura fija para mantener consistencia visual en el diseño */
+      height: 450px;
+      border: 1px solid #e9ecef;
+    }
+    
     .detail-img {
+      /* ESTA ES LA CLAVE: Muestra la imagen completa sin cortes */
+      object-fit: contain;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      max-height: 500px;
-      border-radius: 10px;
+      /* Sombra suave a la imagen misma para darle profundidad */
+      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.08));
       transition: transform 0.3s ease;
+    }
+    
+    .detail-img:hover {
+      transform: scale(1.02);
     }
     
     /* Mejora del bloque de contenido */
@@ -53,11 +73,6 @@
       transition: all 0.3s;
     }
     
-    .btn-back:hover {
-      background-color: #6c757d;
-      color: white;
-    }
-    
     .external-link {
       display: inline-block;
       background: #e7f1ff;
@@ -82,11 +97,13 @@
     <div class="article-container">
       <div class="row no-gutters">
         <div class="col-lg-5 p-4">
-          {% if publicacion.imagen %}
-            <a href="{{ publicacion.imagen.url }}" target="_blank"><img src="{{ publicacion.imagen.url }}" alt="{{ publicacion.titulo }}" class="detail-img shadow" /></a>
-          {% else %}
-            <img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="detail-img opacity-2 shadow-sm" />
-          {% endif %}
+          <div class="img-wrapper shadow-sm">
+            {% if publicacion.imagen %}
+              <a href="{{ publicacion.imagen.url }}" target="_blank"><img src="{{ publicacion.imagen.url }}" alt="{{ publicacion.titulo }}" class="detail-img" /></a>
+            {% else %}
+              <img src="{% static 'img/logo_inc.png' %}" alt="No Image" class="detail-img opacity-2" />
+            {% endif %}
+          </div>
         </div>
 
         <div class="col-lg-7 p-4">
@@ -94,12 +111,12 @@
             <i class="fas fa-calendar-alt mr-2"></i> Publicado el {{ publicacion.fecha }}
           </div>
 
-          <h2 class="font-weight-bold text-dark mb-3" style="color: var(--primary-blue) !important;">{{ publicacion.titulo }}</h2>
+          <h2 class="font-weight-bold text-dark mb-3" style="color: var(--primary-blue) !important; line-height: 1.3;">{{ publicacion.titulo }}</h2>
 
           <p class="lead text-secondary">{{ publicacion.descripcion }}</p>
 
           {% if publicacion.url %}
-            <a href="{{ publicacion.url }}" target="_blank" class="external-link"><i class="fas fa-external-link-alt mr-2"></i> Ir al enlace oficial</a>
+            <a href="{{ publicacion.url }}" target="_blank" class="external-link shadow-sm"><i class="fas fa-external-link-alt mr-2"></i> Ir al enlace oficial</a>
           {% endif %}
         </div>
 
@@ -114,7 +131,6 @@
 
 {% block js %}
   <script>
-    // Pequeño script para asegurar que los enlaces largos no rompan el diseño
     $(document).ready(function () {
       console.log('Vista de detalle cargada correctamente.')
     })
