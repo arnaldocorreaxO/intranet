@@ -4,25 +4,23 @@ from .models import NavbarMenu
 from django.db.models import Prefetch
 from .models import NavbarMenu, NavbarSection, NavbarItem
 
+from django.db.models import Prefetch
+from .models import NavbarMenu, NavbarSection, NavbarItem
+
 def menu_navbar(request):
-    # Definimos el orden para las secciones
+    # 1. Definimos el prefetch de items ordenados
+    prefetch_items = Prefetch(
+        'items', 
+        queryset=NavbarItem.objects.all().order_by('orden')
+    )
+
+    # 2. Definimos el prefetch de secciones ordenadas, que a su vez trae los items
     prefetch_secciones = Prefetch(
         'secciones',
-        queryset=NavbarSection.objects.all().order_by('orden'),
-        to_attr='secciones_ordenadas'
+        queryset=NavbarSection.objects.all().order_by('orden').prefetch_related(prefetch_items)
     )
-    
-    # Definimos el orden para los items dentro de cada sección
-    # Nota: Esto requiere que el prefetch sea anidado o que el modelo 
-    # NavbarSeccion tenga definido el ordenamiento por defecto.
-    
+
+    # 3. Retornamos los menús con toda la jerarquía pre-cargada y ordenada
     return {
-        'navbar_menus': NavbarMenu.objects.all().order_by('orden').prefetch_related(
-            Prefetch(
-                'secciones',
-                queryset=NavbarSection.objects.all().order_by('orden').prefetch_related(
-                    Prefetch('items', queryset=NavbarItem.objects.all().order_by('orden'))
-                )
-            )
-        )
+        'navbar_menus': NavbarMenu.objects.all().order_by('orden').prefetch_related(prefetch_secciones)
     }
