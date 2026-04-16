@@ -1,0 +1,148 @@
+<style>
+  /* Configuración de Impresión */
+  @page {
+    size: A4 landscape;
+    margin: 1cm;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+  
+  .report-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Botones (Ocultos en impresión) */
+  .no-print {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    font-weight: 600;
+  }
+  
+  .btn-print {
+    background: #dc3545;
+    color: white;
+    border: none;
+  }
+  .btn-back {
+    background: #6c757d;
+    color: white;
+    border: none;
+  }
+  .btn-excel {
+    background: #217346;
+    color: white;
+    border: none;
+  }
+  
+  @media print {
+    .no-print {
+      display: none;
+    }
+    .report-container {
+      max-width: none;
+      padding: 0;
+    }
+    body {
+      margin: 0;
+    }
+  }
+  
+  /* Encabezado Institucional */
+  .header-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #005b9a;
+  }
+  
+  .header-logo {
+    width: 150px;
+  }
+  .header-info {
+    text-align: center;
+    line-height: 1.2;
+  }
+  .header-title {
+    color: #005b9a;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Tabla de Asistencia */
+  .asistencia-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    color: #222;
+  }
+  
+  .asistencia-table th {
+    background-color: #005b9a;
+    color: white;
+    padding: 8px 4px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #004a7d;
+    text-transform: uppercase;
+  }
+  
+  .asistencia-table td {
+    padding: 6px 4px;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+  }
+  
+  .asistencia-table tbody tr:nth-child(even) {
+    background-color: #f2f7fa;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .font-bold {
+    font-weight: bold;
+  }
+  
+  .ausencia-nota {
+    display: block;
+    color: #c0392b;
+    font-size: 10px;
+    font-style: italic;
+    margin-top: 2px;
+  }
+  
+  .footer-info {
+    margin-top: 20px;
+    font-size: 10px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>

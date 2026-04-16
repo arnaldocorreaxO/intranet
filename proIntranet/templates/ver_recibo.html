@@ -87,21 +87,21 @@
 
               <div class="form-group mb-4">{{ form.as_p }}</div>
 
-              <div class="opciones-avanzadas mb-4">
-                <h6 class="text-muted small font-weight-bold mb-3">CONFIGURACIÓN DE BÚSQUEDA</h6>
+              {% if perms.auth.can_select_empleado %}
+                <div class="opciones-avanzadas mb-4">
+                  <h6 class="text-muted small font-weight-bold mb-3">CONFIGURACIÓN DE BÚSQUEDA</h6>
 
-                <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="id_mantenerEmpleado" />
-                  <label class="custom-control-label small" for="id_mantenerEmpleado">Recordar Empleado seleccionado</label>
-                </div>
+                  <div class="custom-control custom-checkbox mb-2">
+                    <input type="checkbox" class="custom-control-input" id="id_mantenerEmpleado" />
+                    <label class="custom-control-label small" for="id_mantenerEmpleado">Recordar Empleado seleccionado</label>
+                  </div>
 
-                {% if perms.auth.can_select_empleado %}
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="id_ifxEmpleado" />
                     <label class="custom-control-label small text-primary" for="id_ifxEmpleado"><i class="fas fa-database mr-1"></i> Ver todos los Empleados (Informix)</label>
                   </div>
-                {% endif %}
-              </div>
+                </div>
+              {% endif %}
 
               <button type="submit" class="btn btn-primary btn-block btn-consultar shadow"><i class="fas fa-search mr-2"></i> Generar Recibo</button>
             </form>
@@ -117,108 +117,129 @@
 
 {% block js %}
   <script type="text/javascript">
-    $(document).ready(function() {
-        const $sede = $('#id_pSede');
-        const $legajo = $('#id_pLegajo');
-        const $mantener = $('#id_mantenerEmpleado');
-        const $ifx = $('#id_ifxEmpleado'); // Check de Informix
-        const $sedeAux = $('#id_pSedeAux');
-        const $legajoAux = $('#id_pLegajoAux');
+   $(document).ready(function() {
+    const $sede = $('#id_pSede');
+    const $legajo = $('#id_pLegajo');
+    const $mantener = $('#id_mantenerEmpleado');
+    const $ifx = $('#id_ifxEmpleado');
+    const $sedeAux = $('#id_pSedeAux');
+    const $legajoAux = $('#id_pLegajoAux');
 
-        const usuarioActual = {
-            sede: "{{ usuario.sede }}",
-            legajo: "{{ usuario.legajo }}"
-        };
+    // 1. DATOS PREFIJADOS (Siempre vienen de Django)
+    const usuarioActual = {
+        sede: "{{ usuario.sede }}",
+        legajo: "{{ usuario.legajo }}"
+    };
 
-        // --- 1. CARGAR ESTADO PERSISTENTE (Magia aquí) ---
+    // Permisos definidos por Django
+    const puedeCambiarSede = {% if perms.auth.can_select_sede %} true {% else %} false {% endif %};
+    const puedeCambiarEmpleado = {% if perms.auth.can_select_empleado %} true {% else %} false {% endif %};
+    const tienePermisosEspeciales = puedeCambiarSede && puedeCambiarEmpleado;
+
+    // 2. INICIALIZACIÓN DE VALORES
+    $sede.val(usuarioActual.sede);
+    let targetLegajo = usuarioActual.legajo;
+
+    // 3. LÓGICA DE MEMORIA (Solo si tiene AMBOS permisos)
+    if (tienePermisosEspeciales) {
         if (localStorage.getItem('mantener_empleado') === 'true') {
             $mantener.prop('checked', true);
-            $sedeAux.val(localStorage.getItem('sede_guardada'));
-            $legajoAux.val(localStorage.getItem('legajo_guardado'));
+            const sedeGuardada = localStorage.getItem('sede_guardada');
+            if (sedeGuardada) {
+                $sede.val(sedeGuardada);
+                $sedeAux.val(sedeGuardada);
+            }
+            targetLegajo = localStorage.getItem('legajo_guardado');
+            $legajoAux.val(targetLegajo);
         }
 
-        // Recuperar si estaba marcado "Todos los Empleados (Informix)"
-        if (localStorage.getItem('usar_informix') === 'true') {
+        if ($ifx.length && localStorage.getItem('usar_informix') === 'true') {
             $ifx.prop('checked', true);
         }
+    } else {
+        // Si NO tiene permisos, limpiamos cualquier rastro de storage previo por seguridad
+        localStorage.removeItem('mantener_empleado');
+        localStorage.removeItem('usar_informix');
+    }
 
-        // --- 2. GESTIÓN DE MEMORIA ---
-        function actualizarMemoria() {
-            // Guardar estado de "Recordar"
-            if ($mantener.is(':checked')) {
-                localStorage.setItem('mantener_empleado', 'true');
-                localStorage.setItem('sede_guardada', $sede.val());
-                localStorage.setItem('legajo_guardado', $legajo.val());
-                $sedeAux.val($sede.val());
-                $legajoAux.val($legajo.val());
-            } else {
-                localStorage.removeItem('mantener_empleado');
-                localStorage.removeItem('sede_guardada');
-                localStorage.removeItem('legajo_guardado');
-            }
+    // 4. GESTIÓN DE MEMORIA (Solo activa si tiene permisos)
+    function actualizarMemoria() {
+        if (!tienePermisosEspeciales) return; // Salir si es usuario común
 
-            // Guardar estado de "Informix"
+        if ($mantener.is(':checked')) {
+            localStorage.setItem('mantener_empleado', 'true');
+            localStorage.setItem('sede_guardada', $sede.val());
+            localStorage.setItem('legajo_guardado', $legajo.val());
+            $sedeAux.val($sede.val());
+            $legajoAux.val($legajo.val());
+        } else {
+            localStorage.removeItem('mantener_empleado');
+            localStorage.removeItem('sede_guardada');
+            localStorage.removeItem('legajo_guardado');
+        }
+
+        if ($ifx.length) {
             if ($ifx.is(':checked')) {
                 localStorage.setItem('usar_informix', 'true');
             } else {
                 localStorage.removeItem('usar_informix');
             }
         }
+    }
 
-        // --- 3. EVENTOS ---
-        $mantener.add($ifx).change(function() {
-            actualizarMemoria();
-            getEmpleados();
-        });
+    // 5. AJAX DE EMPLEADOS
+    function getEmpleados() {
+        let sedeId = $sede.val() || usuarioActual.sede;
+        
+        // El checkbox Informix solo afecta si existe y el usuario tiene permiso
+        let esInformix = ($ifx.length && tienePermisosEspeciales) ? $ifx.is(':checked') : false;
+        let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
 
-        $sede.change(function() {
-            actualizarMemoria();
-            getEmpleados();
-        });
+        $.ajax({
+            type: "GET",
+            url: vUrl,
+            data: { "sede_id": sedeId },
+            success: function(response) {
+                $legajo.html(response.empleados);
+                
+                // Si es común, targetLegajo siempre será el suyo
+                $legajo.val(targetLegajo);
+                $legajo.selectpicker('refresh');
 
-        $legajo.change(actualizarMemoria);
-
-        $('#formRecibo').submit(function() {
-            actualizarMemoria();
-            $('#id_pLegajo, #id_pSede').prop("disabled", false);
-        });
-
-        // --- 4. AJAX ---
-        function getEmpleados() {
-            let sedeId = $mantener.is(':checked') ? ($sedeAux.val() || $sede.val()) : $sede.val();
-            
-            // Verificamos Informix DESDE el checkbox (que ya restauramos arriba)
-            let esInformix = $ifx.is(':checked');
-            let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
-
-            if (!sedeId) sedeId = usuarioActual.sede;
-
-            $.ajax({
-                type: "GET",
-                url: vUrl,
-                data: { "sede_id": sedeId },
-                success: function(response) {
-                    $legajo.html(response.empleados);
-
-                    let targetLegajo;
-                    if ($mantener.is(':checked')) {
-                        targetLegajo = $legajoAux.val();
-                    } else if (!esInformix) {
-                        targetLegajo = usuarioActual.legajo;
-                    }
-
-                    $legajo.val(targetLegajo);
+                // Fallback de seguridad: si no se seleccionó nada, forzar el del logueo
+                if (!$legajo.val()) {
+                    $legajo.val(usuarioActual.legajo);
                     $legajo.selectpicker('refresh');
                 }
-            });
+            }
+        });
+    }
+
+    // --- EVENTOS ---
+    $mantener.add($ifx).add($sede).change(function() {
+        if (tienePermisosEspeciales) {
+            actualizarMemoria();
+            targetLegajo = $legajo.val(); 
         }
-
-        // --- 5. PERMISOS ---
-        {% if not perms.auth.can_select_sede %} $sede.prop("disabled", true); {% endif %}
-        {% if not perms.auth.can_select_empleado %} $legajo.prop("disabled", true); {% endif %}
-
-        // Ejecución inicial (Ahora ya sabe si debe usar Informix o no)
         getEmpleados();
     });
+
+    $legajo.change(function() {
+        if (tienePermisosEspeciales) actualizarMemoria();
+    });
+
+    $('#formRecibo').submit(function() {
+        if (tienePermisosEspeciales) actualizarMemoria();
+        $sede.prop("disabled", false);
+        $legajo.prop("disabled", false);
+    });
+
+    // --- BLOQUEO VISUAL ---
+    if (!puedeCambiarSede) $sede.prop("disabled", true);
+    if (!puedeCambiarEmpleado) $legajo.prop("disabled", true);
+
+    // Carga inicial
+    getEmpleados();
+});
 </script>
 {% endblock %}

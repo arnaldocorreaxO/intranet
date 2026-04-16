@@ -88,21 +88,21 @@
 
               <div class="form-group mb-4">{{ form.as_p }}</div>
 
-              <div class="opciones-busqueda mb-4">
-                <h6 class="text-muted small font-weight-bold mb-3 text-uppercase">Configuración de Búsqueda</h6>
+              {% if perms.auth.can_select_empleado %}
+                <div class="opciones-avanzadas mb-4">
+                  <h6 class="text-muted small font-weight-bold mb-3">CONFIGURACIÓN DE BÚSQUEDA</h6>
 
-                <div class="custom-control custom-checkbox mb-2">
-                  <input type="checkbox" class="custom-control-input" id="id_mantenerEmpleado" />
-                  <label class="custom-control-label small" for="id_mantenerEmpleado">Recordar Empleado seleccionado</label>
-                </div>
+                  <div class="custom-control custom-checkbox mb-2">
+                    <input type="checkbox" class="custom-control-input" id="id_mantenerEmpleado" />
+                    <label class="custom-control-label small" for="id_mantenerEmpleado">Recordar Empleado seleccionado</label>
+                  </div>
 
-                {% if perms.auth.can_select_empleado %}
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="id_ifxEmpleado" />
-                    <label class="custom-control-label small text-info" for="id_ifxEmpleado"><i class="fas fa-database mr-1"></i> Fuente: Todos los Empleados (Informix)</label>
+                    <label class="custom-control-label small text-primary" for="id_ifxEmpleado"><i class="fas fa-database mr-1"></i> Ver todos los Empleados (Informix)</label>
                   </div>
-                {% endif %}
-              </div>
+                </div>
+              {% endif %}
 
               <button type="submit" class="btn btn-primary btn-block btn-asistencia shadow"><i class="fas fa-calendar-alt mr-2"></i> Ver Reporte</button>
             </form>
@@ -118,103 +118,131 @@
 
 {% block js %}
   <script type="text/javascript">
-    $(document).ready(function() {
-        const $sede = $('#id_pSede');
-        const $legajo = $('#id_pLegajo');
-        const $mantener = $('#id_mantenerEmpleado');
-        const $ifx = $('#id_ifxEmpleado');
-        const $sedeAux = $('#id_pSedeAux');
-        const $legajoAux = $('#id_pLegajoAux');
+        $(document).ready(function() {
+          const $sede = $('#id_pSede');
+          const $legajo = $('#id_pLegajo');
+          const $mantener = $('#id_mantenerEmpleado');
+          const $ifx = $('#id_ifxEmpleado');
+          const $sedeAux = $('#id_pSedeAux');
+          const $legajoAux = $('#id_pLegajoAux');
 
-        const usuarioActual = {
-            sede: "{{ usuario.sede }}",
-            legajo: "{{ usuario.legajo }}"
-        };
+          // 1. PRIORIDAD: Datos del usuario logueado
+          const usuarioActual = {
+              sede: "{{ usuario.sede }}",
+              legajo: "{{ usuario.legajo }}"
+          };
 
-        // --- 1. RESTAURAR ESTADO DESDE LOCALSTORAGE ---
-        if (localStorage.getItem('mantener_asist') === 'true') {
-            $mantener.prop('checked', true);
-            $sedeAux.val(localStorage.getItem('asist_sede_val'));
-            $legajoAux.val(localStorage.getItem('asist_legajo_val'));
-        }
+          // Verificación de permisos desde Django
+          const puedeCambiarSede = {% if perms.auth.can_select_sede %} true {% else %} false {% endif %};
+          const puedeCambiarEmpleado = {% if perms.auth.can_select_empleado %} true {% else %} false {% endif %};
+          const tienePermisosEspeciales = puedeCambiarSede && puedeCambiarEmpleado;
 
-        if (localStorage.getItem('asist_use_ifx') === 'true') {
-            $ifx.prop('checked', true);
-        }
+          // Inicialización de valores base
+          $sede.val(usuarioActual.sede);
+          let targetLegajo = usuarioActual.legajo;
 
-        // --- 2. GESTIÓN DE PERSISTENCIA ---
-        function persistirDatos() {
-            if ($mantener.is(':checked')) {
-                localStorage.setItem('mantener_asist', 'true');
-                localStorage.setItem('asist_sede_val', $sede.val());
-                localStorage.setItem('asist_legajo_val', $legajo.val());
-                $sedeAux.val($sede.val());
-                $legajoAux.val($legajo.val());
-            } else {
-                localStorage.removeItem('mantener_asist');
-                localStorage.removeItem('asist_sede_val');
-                localStorage.removeItem('asist_legajo_val');
-            }
+          // 2. LÓGICA DE PERSISTENCIA (Solo si tiene permisos)
+          if (tienePermisosEspeciales) {
+              if (localStorage.getItem('mantener_asist') === 'true') {
+                  $mantener.prop('checked', true);
+                  const sedeGuardada = localStorage.getItem('asist_sede_val');
+                  if (sedeGuardada) {
+                      $sede.val(sedeGuardada);
+                      $sedeAux.val(sedeGuardada);
+                  }
+                  targetLegajo = localStorage.getItem('asist_legajo_val');
+                  $legajoAux.val(targetLegajo);
+              }
 
-            if ($ifx.is(':checked')) {
-                localStorage.setItem('asist_use_ifx', 'true');
-            } else {
-                localStorage.removeItem('asist_use_ifx');
-            }
-        }
+              if ($ifx.length && localStorage.getItem('asist_use_ifx') === 'true') {
+                  $ifx.prop('checked', true);
+              }
+          } else {
+              // Usuario común: Limpiar rastro de storage previo por seguridad
+              localStorage.removeItem('mantener_asist');
+              localStorage.removeItem('asist_sede_val');
+              localStorage.removeItem('asist_legajo_val');
+              localStorage.removeItem('asist_use_ifx');
+          }
 
-        // --- 3. EVENTOS ---
-        $mantener.add($ifx).change(function() {
-            persistirDatos();
-            getEmpleados();
-        });
+          // 3. FUNCIÓN PARA PERSISTIR
+          function persistirDatos() {
+              if (!tienePermisosEspeciales) return;
 
-        $sede.change(function() {
-            persistirDatos();
-            getEmpleados();
-        });
+              if ($mantener.is(':checked')) {
+                  localStorage.setItem('mantener_asist', 'true');
+                  localStorage.setItem('asist_sede_val', $sede.val());
+                  localStorage.setItem('asist_legajo_val', $legajo.val());
+                  $sedeAux.val($sede.val());
+                  $legajoAux.val($legajo.val());
+              } else {
+                  localStorage.removeItem('mantener_asist');
+                  localStorage.removeItem('asist_sede_val');
+                  localStorage.removeItem('asist_legajo_val');
+              }
 
-        $legajo.change(persistirDatos);
+              if ($ifx.length) {
+                  if ($ifx.is(':checked')) {
+                      localStorage.setItem('asist_use_ifx', 'true');
+                  } else {
+                      localStorage.removeItem('asist_use_ifx');
+                  }
+              }
+          }
 
-        $('#formAsistencia').submit(function() {
-            persistirDatos();
-            $legajo.add($sede).prop("disabled", false);
-        });
+          // 4. AJAX DE EMPLEADOS
+          function getEmpleados() {
+              let sedeId = $sede.val() || usuarioActual.sede;
+              
+              // Determinar si usar Informix (Checkbox existe Y tiene permiso)
+              let esInformix = ($ifx.length && tienePermisosEspeciales) ? $ifx.is(':checked') : false;
+              let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
 
-        // --- 4. AJAX DE EMPLEADOS ---
-        function getEmpleados() {
-            let sedeId = $mantener.is(':checked') ? ($sedeAux.val() || $sede.val()) : $sede.val();
-            let esInformix = $ifx.is(':checked');
-            let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
+              $.ajax({
+                  type: "GET",
+                  url: vUrl,
+                  data: { "sede_id": sedeId },
+                  success: function(response) {
+                      $legajo.html(response.empleados);
+                      
+                      // Aplicar el legajo objetivo (actual o recuperado)
+                      $legajo.val(targetLegajo);
+                      $legajo.selectpicker('refresh');
 
-            if (!sedeId) sedeId = usuarioActual.sede;
+                      // Fallback: Si el legajo no existe en el combo (ej. cambio de sede), poner el del usuario
+                      if (!$legajo.val()) {
+                          $legajo.val(usuarioActual.legajo);
+                          $legajo.selectpicker('refresh');
+                      }
+                  }
+              });
+          }
 
-            $.ajax({
-                type: "GET",
-                url: vUrl,
-                data: { "sede_id": sedeId },
-                success: function(response) {
-                    $legajo.html(response.empleados);
+          // --- EVENTOS ---
+          $mantener.add($ifx).add($sede).change(function() {
+              if (tienePermisosEspeciales) {
+                  persistirDatos();
+                  targetLegajo = $legajo.val(); 
+              }
+              getEmpleados();
+          });
 
-                    let targetLegajo;
-                    if ($mantener.is(':checked')) {
-                        targetLegajo = $legajoAux.val();
-                    } else if (!esInformix) {
-                        targetLegajo = usuarioActual.legajo;
-                    }
+          $legajo.change(function() {
+              if (tienePermisosEspeciales) persistirDatos();
+          });
 
-                    $legajo.val(targetLegajo);
-                    $legajo.selectpicker('refresh');
-                }
-            });
-        }
+          $('#formAsistencia').submit(function() {
+              if (tienePermisosEspeciales) persistirDatos();
+              // Habilitar para que el POST de Django reciba los datos
+              $legajo.add($sede).prop("disabled", false);
+          });
 
-        // --- 5. PERMISOS ---
-        {% if not perms.auth.can_select_sede %} $sede.prop("disabled", true); {% endif %}
-        {% if not perms.auth.can_select_empleado %} $legajo.prop("disabled", true); {% endif %}
+          // --- BLOQUEO DE COMBOS SEGÚN PERMISO ---
+          if (!puedeCambiarSede) $sede.prop("disabled", true);
+          if (!puedeCambiarEmpleado) $legajo.prop("disabled", true);
 
-        // Ejecución inicial
-        getEmpleados();
-    });
+          // Carga inicial al entrar a la página
+          getEmpleados();
+      });
 </script>
 {% endblock %}
