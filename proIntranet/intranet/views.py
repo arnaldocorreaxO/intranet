@@ -112,7 +112,7 @@ def ver_recibo(request):
     """Sign up view."""
     usuario = None
     if request.method == 'POST':
-        form = pReciboForm(request.POST) 
+        form = pReciboForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             #print(data)

@@ -13,7 +13,7 @@ from bs.utils import *
 """Parametros Formulario Recibo"""
 class pReciboForm(forms.Form):
     pSede   = forms.ChoiceField(label='Sede',
-                                widget=forms.Select(attrs={'class': 'form-control',
+                                widget=forms.Select(attrs={'class': 'selectpicker form-control',
                                                            'data-toggle': 'select'}),
                                 choices=[], # Lo dejamos vacío inicialmente 
                                 required=True)
@@ -59,7 +59,8 @@ class pReciboForm(forms.Form):
 class pAsistenciaForm(forms.Form):
     pSede = forms.ChoiceField(
         label='Sede',
-        widget=forms.Select(attrs={'class': 'form-control', 'data-toggle': 'select'}),
+        widget=forms.Select(attrs={'class': 'selectpicker form-control', 
+                                   'data-toggle': 'select'}),
         choices=[], # Lo dejamos vacío inicialmente
         required=True
     )

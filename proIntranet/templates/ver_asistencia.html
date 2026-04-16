@@ -79,7 +79,7 @@
           </div>
 
           <div class="card-body form-section">
-            <form id="formAsistencia" class="form-horizontal" action="{% url 'intranet:ver_asistencia' %}" method="POST">
+            <form id="formAsistencia" class="form-horizontal" action="{% url 'intranet:ver_asistencia' %}" method="POST" autocomplete="off">
               {% csrf_token %}
 
               {% if form.errors %}
@@ -139,6 +139,7 @@
 
           // Inicialización de valores base
           $sede.val(usuarioActual.sede);
+          $sede.selectpicker('refresh');
           let targetLegajo = usuarioActual.legajo;
 
           // 2. LÓGICA DE PERSISTENCIA (Solo si tiene permisos)
@@ -148,6 +149,7 @@
                   const sedeGuardada = localStorage.getItem('asist_sede_val');
                   if (sedeGuardada) {
                       $sede.val(sedeGuardada);
+                      $sede.selectpicker('refresh');
                       $sedeAux.val(sedeGuardada);
                   }
                   targetLegajo = localStorage.getItem('asist_legajo_val');

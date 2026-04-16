@@ -76,7 +76,14 @@
           </div>
 
           <div class="card-body form-section">
-            <form id="formRecibo" class="form-horizontal" action="{% url 'intranet:ver_recibo' %}" method="POST">
+            <form id="formRecibo" class="form-horizontal" action="{% url 'intranet:ver_recibo' %}" method="POST" autocomplete="off">
+              {% csrf_token %}
+
+              {% if form.errors %}
+                <div class="alert alert-warning small py-2">
+                  <i class="fas fa-exclamation-triangle"></i> Por favor verifique los datos ingresados.
+                </div>
+              {% endif %}
               {% csrf_token %}
 
               {% if form.errors %}
@@ -137,7 +144,8 @@
     const tienePermisosEspeciales = puedeCambiarSede && puedeCambiarEmpleado;
 
     // 2. INICIALIZACIÓN DE VALORES
-    $sede.val(usuarioActual.sede);
+    $sede.val(usuarioActual.sede)
+    $sede.selectpicker('refresh');    
     let targetLegajo = usuarioActual.legajo;
 
     // 3. LÓGICA DE MEMORIA (Solo si tiene AMBOS permisos)
@@ -146,7 +154,7 @@
             $mantener.prop('checked', true);
             const sedeGuardada = localStorage.getItem('sede_guardada');
             if (sedeGuardada) {
-                $sede.val(sedeGuardada);
+                $sede.selectpicker('val', sedeGuardada);
                 $sedeAux.val(sedeGuardada);
             }
             targetLegajo = localStorage.getItem('legajo_guardado');
@@ -170,7 +178,7 @@
             localStorage.setItem('mantener_empleado', 'true');
             localStorage.setItem('sede_guardada', $sede.val());
             localStorage.setItem('legajo_guardado', $legajo.val());
-            $sedeAux.val($sede.val());
+            $sedeAux.val($sede.val());            
             $legajoAux.val($legajo.val());
         } else {
             localStorage.removeItem('mantener_empleado');
@@ -190,7 +198,6 @@
     // 5. AJAX DE EMPLEADOS
     function getEmpleados() {
         let sedeId = $sede.val() || usuarioActual.sede;
-        
         // El checkbox Informix solo afecta si existe y el usuario tiene permiso
         let esInformix = ($ifx.length && tienePermisosEspeciales) ? $ifx.is(':checked') : false;
         let vUrl = esInformix ? "{% url 'getifxEmpleados' %}" : "{% url 'getEmpleados' %}";
@@ -229,9 +236,9 @@
     });
 
     $('#formRecibo').submit(function() {
-        if (tienePermisosEspeciales) actualizarMemoria();
         $sede.prop("disabled", false);
-        $legajo.prop("disabled", false);
+        $legajo.prop("disabled", false);      
+        if (tienePermisosEspeciales) actualizarMemoria();
     });
 
     // --- BLOQUEO VISUAL ---
@@ -240,6 +247,8 @@
 
     // Carga inicial
     getEmpleados();
+
+    
 });
 </script>
 {% endblock %}
