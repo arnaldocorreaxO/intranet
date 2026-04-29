@@ -1,6 +1,7 @@
 #Django
 from django.shortcuts import render
 import json as simplejson
+from intranet.services import SIIService
 
 #Models
 from .models import *
@@ -48,5 +49,6 @@ def getPersona(request):
 	vCi = str(request.GET.get('ci','X'))
 	print('*'*10)
 	print(vCi)
-	persona = getIdentificaciones(vCedula=vCi)
+	service = SIIService()
+	persona = service.consultar_cedula(vCi)
 	return HttpResponse(simplejson.dumps(persona), content_type='application/json')

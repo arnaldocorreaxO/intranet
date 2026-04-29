@@ -95,8 +95,8 @@ def recibo(**Kwargs):
 def asistencia(**Kwargs):
   vSede = Kwargs['pSede']
   #print(vSede)
-  if (vSede=='VMI'):     
-    return cargarAsistenciaVallemi(**Kwargs)
+  if (vSede!='CEN'):     
+    return getAsistencia2(**Kwargs)
   else:
     return cargarAsistencia(**Kwargs)
 
@@ -238,17 +238,19 @@ def ver_asistencia(request):
 
 
 ###########################################
-#      CARGAR ASISTENCIA DE VALLEMI 
+# CARGAR ASISTENCIA DE VILLETA Y VALLEMI 
 ###########################################
-def cargarAsistenciaVallemi(**Kwargs): 
+def cargarAsistencia2(**Kwargs): 
+  pSede = Kwargs['pSede']  
+  
   try:
-    conn =dbmssql.conectar()
+    conn =dbmssql.conectar(pSede)
 
     cursor = conn.cursor()
     
     cursor.execute("SET DATEFORMAT ymd")
 
-    sql = """SELECT 'VMI' AS sede,
+    sql = """SELECT '{pSede}' AS sede,
     e.legajo AS lega,
     e.nombre AS nomb,
     e.apellido AS apel,
