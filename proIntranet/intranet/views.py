@@ -96,7 +96,7 @@ def asistencia(**Kwargs):
   vSede = Kwargs['pSede']
   #print(vSede)
   if (vSede!='CEN'):     
-    return getAsistencia2(**Kwargs)
+    return cargarAsistencia2(**Kwargs)
   else:
     return cargarAsistencia(**Kwargs)
 
