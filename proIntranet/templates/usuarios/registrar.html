@@ -113,11 +113,11 @@
                         'ci': vCi       
                         },
                         success: function (result) {
-                            // console.log(result);
-                            $('#nombre').val(result[0].per_nombres);
-                            $('#apellido').val(result[0].per_apynom);
-                            $('#fec_nacimiento').val(result[0].per_fchnaci);
-                            $('#estado_civil').val(result[0].civ_codeciv);                                              
+                            console.log(result);
+                            $('#nombre').val(result.nombres);
+                            $('#apellido').val(result.apellido);
+                            $('#fec_nacimiento').val(result.fechNacim.split('T')[0]);
+                            $('#estado_civil').val(result.estadoCivil);                                              
                         }
                         });
 

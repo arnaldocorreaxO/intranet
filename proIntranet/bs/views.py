@@ -50,5 +50,7 @@ def getPersona(request):
 	print('*'*10)
 	print(vCi)
 	service = SIIService()
-	persona = service.consultar_cedula(vCi)
+	resultado_api = service.consultar_cedula(vCi)
+	persona = resultado_api["obtenerPersonaPorNroCedulaResponse"]["return"]
+	print(persona)
 	return HttpResponse(simplejson.dumps(persona), content_type='application/json')

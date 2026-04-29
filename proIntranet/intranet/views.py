@@ -202,40 +202,6 @@ def ver_asistencia(request):
         template_name='ver_asistencia.html',
         context={'form': form, 'usuario': usuario}
     )
-# def ver_asistencia(request):
-#     """Sign up view."""
-#     usuario = None
-#     if request.method == 'POST':
-#         form = pAsistenciaForm(request.POST) 
-#         if form.is_valid():
-#             data = form.cleaned_data
-#             result=[]
-#             can_select_empleado = request.user.has_perm('auth.can_select_empleado')
-#             #CONTROLAR QUE SOLO LOS USUARIOS CON PERMISO PUEDAN CONSULTAR OTRAS ASISTENCIAS
-#             if not can_select_empleado and data['pLegajo']!= str(request.user.perfil.legajo):
-#                 result = [{'mensaje':'Permisos Insuficientes para consultar otras asistencias'}]
-#             else:    
-#                 result = asistencia(**data)
-#             #print(result)
-#             # return render_to_response('pdf/asistencia_pdf.html',{'asistencias':result, 'data':data})
-#             vTemplateName = 'pdf/asistencia_pdf.html'
-#             if (data['pSede']=='VMI'):
-#               vTemplateName = 'pdf/asistencia_pdf_vmi.html'
-
-#             return render(
-#               request=request,
-#               template_name=vTemplateName,
-#               context={'asistencias':result, 'data':data})
-#     else:
-#         form = pAsistenciaForm()
-#         usuario = {'sede':str(request.user.perfil.sede),'cedula':request.user.username, 'legajo':str(request.user.perfil.legajo)}
-#     return render(
-#         request=request,
-#         template_name='ver_asistencia.html',
-#         context={'form': form,'usuario':usuario}
-#     )    
-
-
 
 ###########################################
 # CARGAR ASISTENCIA DE VILLETA Y VALLEMI 
